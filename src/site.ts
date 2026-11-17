@@ -2,7 +2,7 @@
 export const SITE = {
   name: 'Howty',
   tagline: 'Set up any board game, step by step.',
-  repo: '',
+  repo: 'https://github.com/sasgroundzero/howty',
 }
 /** Games shown first on the home page. */
 export const FEATURED = ['catan', 'chess', 'ticket-to-ride', 'azul', 'wingspan', 'pandemic', 'monopoly', 'carcassonne', 'mtg']
