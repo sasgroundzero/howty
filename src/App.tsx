@@ -13,7 +13,10 @@ import { Scene, type Nav } from './engine/Engine'
 import { audio, unlockAudio } from './engine/audio'
 import { hoverStore } from './engine/hover'
 import { canListen, hush, listen, speak, voice } from './engine/voice'
-import { GAMES } from './data/games'
+import { CATALOG } from './data/games/catalog'
+import { loadGame, loaded } from './data/games/load'
+import type { GameDef, GameInfo } from './engine/types'
+import { ShareSheet } from './ui/ShareSheet'
 import { CustomGameModal } from './custom/CustomGameModal'
 import { SITE } from './site'
 import { Cover, PlayerPicker } from './ui/Cover'
@@ -49,9 +52,12 @@ export default function App() {
   const first = useMemo(readRoute, [])
   const [customs, setCustoms] = useState<CustomEntry[]>(loadCustoms)
   const [sharedNote, setSharedNote] = useState('')
-  const games = useMemo(() => [...GAMES, ...customs.map(toGameDef)], [customs])
+  const customDefs = useMemo(() => customs.map(toGameDef), [customs])
+  /** Everything the library lists. Built-in games' 3D setups are fetched on demand (see data/games/load.ts). */
+  const games: GameInfo[] = useMemo(() => [...CATALOG, ...customDefs], [customDefs])
+  const full = (id: string): GameDef | undefined => customDefs.find((g) => g.id === id) ?? loaded(id)
   const known = (id: string | null): id is string => !!id && games.some((g) => g.id === id)
-  const puzzle = useMemo(() => dailyPuzzle(GAMES), [])
+  const puzzle = useMemo(() => dailyPuzzle(CATALOG), [])
   const me = useMe()
   const guessed = me.daily?.day === today()
   const [gameId, setGameId] = useState(() => (first.view === 'daily' ? puzzle.answer.id : known(first.id) ? first.id : 'catan'))
@@ -64,7 +70,8 @@ export default function App() {
   useEffect(() => {
     lastDepth.current = depth
   }, [depth])
-  const def = games.find((g) => g.id === gameId) ?? games[0]
+  // main.tsx fetches the first game before the app starts, and every switch waits for its game to arrive
+  const def = full(gameId) ?? loaded('catan')!
   const [players, setPlayers] = useState(() => clamp(first.players || def.meta.defaultPlayers, def.meta.players[0], def.meta.players[1]))
   const game = useMemo(() => def.build(players), [def, players])
   const { setupCount } = game
@@ -93,7 +100,8 @@ export default function App() {
   const [playing, setPlaying] = useState(false)
   const [showList, setShowList] = useState(false)
   const [adding, setAdding] = useState(false)
-  const [copied, setCopied] = useState(false)
+  const [sharing, setSharing] = useState(false)
+  const [teaching, setTeaching] = useState(false)
 
   const step = Math.min(nav.step, total - 1)
   const s = game.steps[step]
@@ -114,8 +122,8 @@ export default function App() {
   const say = useCallback(() => speak(`${s.title}. ${s.instruction}`), [s])
 
   /** Shows a game: its cover page, or straight into the steps when switching from the step view. */
-  const pickGame = (id: string, to: View = started ? 'play' : 'cover', n = 0) => {
-    const g = games.find((x) => x.id === id) ?? games[0]
+  const pickGame = async (id: string, to: View = started ? 'play' : 'cover', n = 0) => {
+    const g = full(id) ?? (await loadGame(id))
     const count = clamp(n || g.meta.defaultPlayers, g.meta.players[0], g.meta.players[1])
     hoverStore.clear()
     hush()
@@ -135,7 +143,7 @@ export default function App() {
     if (view === 'daily' && !guessed) {
       setGameId('catan')
       setPlayers(4)
-      setNav({ step: GAMES[0].build(4).setupCount - 1, dir: -1, jump: true })
+      setNav({ step: loaded('catan')!.build(4).setupCount - 1, dir: -1, jump: true })
     } else setNav({ step: setupCount - 1, dir: -1, jump: true })
   }
   const openDaily = () => {
@@ -158,6 +166,15 @@ export default function App() {
       setPlaying(true)
     })
   }
+  /** Teach mode: every setup step plays by itself and is read aloud, then the first turn runs. */
+  const teach = () => {
+    unlockAudio()
+    voice.on = true
+    setNarrate(true)
+    setView('play')
+    setNav({ step: 0, dir: -1, jump: true })
+    setTeaching(true)
+  }
   const watch = () => {
     setView('play')
     simulate()
@@ -173,6 +190,21 @@ export default function App() {
     const t = window.setTimeout(() => (step < total - 1 ? go(step + 1) : setPlaying(false)), (s.duration ?? 6) * 1000)
     return () => window.clearTimeout(t)
   }, [inSim, playing, step, total, s, go])
+
+  /* Teach mode moves on after roughly the time it takes to read the step aloud */
+  useEffect(() => {
+    if (!started) return setTeaching(false)
+    if (!teaching || inSim) return
+    const words = `${s.title} ${s.instruction}`.split(/\s+/).length
+    const t = window.setTimeout(() => {
+      if (step < setupCount - 1) go(step + 1)
+      else {
+        setTeaching(false)
+        simulate()
+      }
+    }, Math.max(4500, words * 400 + 1800))
+    return () => window.clearTimeout(t)
+  }, [teaching, started, inSim, step, setupCount, s, go]) // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Remember what you have followed: steps walked, and setups seen through to the end */
   const seen = useRef('')
@@ -280,7 +312,7 @@ export default function App() {
     document.title = view === 'home' ? `${SITE.name}: ${SITE.tagline.toLowerCase().replace(/\.$/, '')}` : view === 'daily' ? `Daily table #${puzzle.number} | ${SITE.name}` : `How to set up ${def.meta.title} | ${SITE.name}`
   }, [pending, view, started, gameId, step, players, setupCount, range, def, packed])
   useEffect(() => {
-    const onPop = () => {
+    const onPop = async () => {
       const r = readRoute()
       if (r.view === 'daily') {
         where.current = 'daily'
@@ -289,22 +321,13 @@ export default function App() {
       const g = games.find((x) => x.id === r.id)
       where.current = g ? `${r.view}:${g.id}` : 'home:' + gameId
       if (!g) return goHome()
-      pickGame(g.id, r.view, r.players)
+      await pickGame(g.id, r.view, r.players)
       if (r.view === 'play') setNav({ step: Math.max(0, r.step - 1), dir: 0, jump: true })
     }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const share = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 1600)
-    } catch {
-      window.prompt('Copy this link', window.location.href)
-    }
-  }
 
   const addCustom = (e: CustomEntry) => {
     const list = [...customs.filter((c) => c.id !== e.id), e]
@@ -338,7 +361,7 @@ export default function App() {
   return (
     <div className="relative h-full w-full select-none bg-paper text-ink">
       {createPortal(
-        <Canvas shadows camera={{ position: [2, 25, 20], fov: 40, near: 0.1, far: 400 }} dpr={[1, 2]} onPointerMissed={() => hoverStore.clear()}>
+        <Canvas shadows gl={{ preserveDrawingBuffer: true }} camera={{ position: [2, 25, 20], fov: 40, near: 0.1, far: 400 }} dpr={[1, 2]} onPointerMissed={() => hoverStore.clear()}>
           <Scene game={game} gameKey={gameId} nav={{ ...nav, step }} nonce={nonce} idle={!started} quiet={view === 'daily' && !guessed} backdrop={started ? '#e7e5e4' : '#f5f5f4'} />
         </Canvas>,
         host,
@@ -357,8 +380,8 @@ export default function App() {
                 demoPlayers={players}
                 demoSteps={setupCount}
                 table={setSlot}
-                onDemo={(id) => {
-                  const g = games.find((x) => x.id === id) ?? games[0]
+                onDemo={async (id) => {
+                  const g = full(id) ?? (await loadGame(id))
                   hoverStore.clear()
                   setGameId(g.id)
                   setPlayers(g.meta.defaultPlayers)
@@ -380,7 +403,7 @@ export default function App() {
                   {view === 'daily' ? (
                     <Daily puzzle={puzzle} onOpen={(id) => pickGame(id, 'cover')} onHome={goHome} />
                   ) : (
-                    <Cover def={def} game={game} players={players} note={sharedNote} copied={copied} onPlayers={changePlayers} onStart={start} onWatch={watch} onHome={goHome} onShare={() => void share()} onRemove={removeCustom} />
+                    <Cover def={def} game={game} players={players} note={sharedNote} onPlayers={changePlayers} onStart={start} onTeach={teach} onWatch={watch} onHome={goHome} onShare={() => setSharing(true)} onRemove={removeCustom} />
                   )}
                 </div>
               </div>
@@ -389,6 +412,7 @@ export default function App() {
         </div>
       )}
       {adding && <CustomGameModal onClose={() => setAdding(false)} onCreate={addCustom} />}
+      {sharing && <ShareSheet url={window.location.href} title={def.meta.title} onClose={() => setSharing(false)} />}
 
       {started && (
         <>
@@ -473,7 +497,7 @@ export default function App() {
               <IconButton icon="mic" on={listening} label={listening ? 'Listening' : 'Voice control'} title='Voice commands: say "Next", "Back" or "Repeat"' onClick={() => setListening(!listening)} />
             )}
             <IconButton icon="target" label="Recenter" onClick={() => setNonce((n) => n + 1)} />
-            <IconButton icon="link" label={copied ? 'Copied!' : 'Share'} on={copied} title={def.custom ? 'Copy a link that includes this game’s rules, so a friend can open it' : 'Copy a link to this step'} onClick={() => void share()} />
+            <IconButton icon="share" label="Share" title={def.custom ? 'Share a link that includes this game’s rules, or a QR code for the table' : 'Share this step, or show a QR code for the table'} onClick={() => setSharing(true)} />
           </div>
 
           {/* Bottom: the step. Its one focal point is the instruction and the Next button. */}
@@ -521,7 +545,11 @@ export default function App() {
                       <Button icon="back" onClick={() => go(step - 1)} disabled={step === 0}>
                         Back
                       </Button>
-                      {step < setupCount - 1 ? (
+                      {teaching ? (
+                        <Button kind="primary" icon="pause" onClick={() => setTeaching(false)} className="flex-1 sm:flex-none">
+                          Pause
+                        </Button>
+                      ) : step < setupCount - 1 ? (
                         <Button kind="primary" iconRight="arrow" onClick={() => go(step + 1)} className="flex-1 sm:flex-none">
                           Next
                         </Button>

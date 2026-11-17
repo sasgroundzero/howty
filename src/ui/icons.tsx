@@ -18,6 +18,10 @@ const PATHS = {
   replay: 'M4 12a8 8 0 1 0 2.6-5.9 M4 4v4.5h4.5',
   list: 'M8 6h12 M8 12h12 M8 18h12 M4 6h.01 M4 12h.01 M4 18h.01',
   x: 'M6 6l12 12 M18 6L6 18',
+  share: 'M12 15V3 M7 8l5-5 5 5 M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7',
+  qr: 'M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h2v2h-2z M18 18h2v2h-2z M14 18h2 M18 14h2',
+  print: 'M7 9V3h10v6 M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2 M7 14h10v7H7z',
+  teach: 'M3 8l9-4 9 4-9 4z M7 10v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5 M21 8v6',
 } as const
 export type IconName = keyof typeof PATHS
 

@@ -252,8 +252,9 @@ export function compose(gameId: string, n: number, spec: Spec): GameSetup {
   /* Table size and camera */
   const live = () => [...rects.entries()].filter(([, r]) => r.piece && !r.gone)
   const ext = (axis: 'x' | 'z') => Math.max(...live().map(([, r]) => Math.abs(r[axis]) + (axis === 'x' ? r.w : r.d) / 2))
-  const table = { w: Math.max(30, ext('x') * 2 + 4), d: Math.max(20, ext('z') * 2 + 3.5) }
-  bounds('all', 0, 0, table.w - 4, table.d - 2.5)
+  // a small game gets a smaller table, and the overview camera frames what is on it rather than the bare wood
+  const table = { w: Math.max(20, ext('x') * 2 + 4), d: Math.max(14, ext('z') * 2 + 3.5) }
+  bounds('all', 0, 0, Math.max(11, ext('x') * 2 + 1.5), Math.max(8, ext('z') * 2 + 1.5))
   const focus = (k: FocusKey): Focus => {
     if (typeof k !== 'string') return k
     const r = rect(k)

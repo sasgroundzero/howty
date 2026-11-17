@@ -4,30 +4,32 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/prerender.mjs",
+    "build": "node scripts/gen-catalog.mjs && tsc --noEmit && vite build && node scripts/prerender.mjs",
     "preview": "vite preview",
     "check": "node scripts/check.mjs",
     "test": "node scripts/check.mjs",
-    "index": "node scripts/gen-index.mjs"
+    "index": "node scripts/gen-index.mjs && node scripts/gen-catalog.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.18.0",
+    "qrcode-generator": "^1.4.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "three": "^0.169.0"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@types/three": "^0.169.0",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.6.2",
+    "esbuild": "^0.21.5",
     "postcss": "^8.5.32",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3",
-    "vite": "^5.4.21",
-    "esbuild": "^0.21.5"
+    "vite": "^5.4.21"
   },
   "description": "Step-by-step 3D setup guides for board and card games.",
   "license": "MIT"

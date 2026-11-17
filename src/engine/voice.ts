@@ -1,12 +1,15 @@
 /** Web Speech API wrappers: narration (speech synthesis) and voice commands (recognition). */
 export const voice = { on: false }
 
-export function speak(text: string) {
-  if (!voice.on || !('speechSynthesis' in window)) return
+/** Reads text aloud if narration is on. `onEnd` runs when it finishes (not at all if speech is unavailable). */
+export function speak(text: string, onEnd?: () => void) {
+  if (!voice.on || !('speechSynthesis' in window)) return false
   window.speechSynthesis.cancel()
   const u = new SpeechSynthesisUtterance(text)
   u.rate = 1.02
+  if (onEnd) u.onend = onEnd
   window.speechSynthesis.speak(u)
+  return true
 }
 export const hush = () => 'speechSynthesis' in window && window.speechSynthesis.cancel()
 

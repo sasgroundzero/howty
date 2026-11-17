@@ -134,9 +134,13 @@ export interface GameMeta {
   swatch: string[]
 }
 
-export interface GameDef {
+/** What the library lists about a game, without its 3D setup (see src/data/games/catalog.ts). */
+export interface GameInfo {
   id: string
   meta: GameMeta
   custom?: boolean
+}
+
+export interface GameDef extends GameInfo {
   build: (players: number) => GameSetup
 }

@@ -3,8 +3,8 @@
  * It lives in this browser's localStorage and is never sent anywhere.
  */
 import { useSyncExternalStore } from 'react'
-import { CARD_IDS } from '../data/games/more'
-import type { GameDef } from '../engine/types'
+import { DAILY_IDS } from '../data/games/catalog'
+import type { GameInfo } from '../engine/types'
 
 export type Status = 'own' | 'want' | 'taught'
 export const STATUS: Record<Status, string> = { own: 'Own it', want: 'Want to learn', taught: 'Taught it' }
@@ -67,21 +67,10 @@ function rng(seed: string) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296
   }
 }
-/**
- * Games whose table does not spell out their own name (on a board label, a mat or a card).
- * Playing-card games are left out too: one table of ordinary cards looks much like another.
- */
-function fairPool(games: GameDef[]) {
-  return games.filter((g) => {
-    if (g.custom || CARD_IDS.has(g.id)) return false
-    const drawn = JSON.stringify(g.build(g.meta.defaultPlayers).pieces.map((p) => p.props)).toLowerCase()
-    return !g.meta.title.toLowerCase().split(/[^a-z0-9]+/).some((w) => w.length > 3 && !['game', 'card', 'board', 'the'].includes(w) && [w, w.replace(/ies$/, 'y'), w.replace(/s$/, '')].some((v) => v.length > 3 && drawn.includes(v)))
-  })
-}
-let pool: GameDef[] | null = null
+let pool: GameInfo[] | null = null
 /** Today's mystery game and four shuffled choices; the same for everyone on the same date. */
-export function dailyPuzzle(games: GameDef[], day = today()) {
-  pool ??= fairPool(games).sort((a, b) => a.id.localeCompare(b.id))
+export function dailyPuzzle(games: GameInfo[], day = today()) {
+  pool ??= games.filter((g) => DAILY_IDS.has(g.id)).sort((a, b) => a.id.localeCompare(b.id))
   const r = rng(`howty-${day}`)
   for (let i = 0; i < 8; i++) r()
   // shuffle the whole pool for the day: the first game is the answer, the next three the decoys

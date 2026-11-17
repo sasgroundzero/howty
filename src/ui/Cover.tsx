@@ -1,7 +1,10 @@
 /** A game's cover page. Its one job is the "Start setup" button. */
+import { createPortal } from 'react-dom'
+import { VERIFIED } from '../data/games/verified'
 import type { GameDef, GameSetup } from '../engine/types'
 import { SITE } from '../site'
 import { playersLabel } from './Home'
+import { Icon } from './icons'
 import { Button, Chip, Eyebrow, H2, Note, cx } from './kit'
 import { STATUS, update, useMe, type Status } from './me'
 
@@ -19,11 +22,13 @@ export function PlayerPicker({ range, value, onChange }: { range: [number, numbe
 }
 
 export function Cover({
-  def, game, players, note, copied, onPlayers, onStart, onWatch, onHome, onShare, onRemove,
+  def, game, players, note, onPlayers, onStart, onTeach, onWatch, onHome, onShare, onRemove,
 }: {
-  def: GameDef; game: GameSetup; players: number; note: string; copied: boolean
-  onPlayers: (n: number) => void; onStart: () => void; onWatch: () => void; onHome: () => void; onShare: () => void; onRemove: () => void
+  def: GameDef; game: GameSetup; players: number; note: string
+  onPlayers: (n: number) => void; onStart: () => void; onTeach: () => void; onWatch: () => void; onHome: () => void; onShare: () => void; onRemove: () => void
 }) {
+  const check = VERIFIED[def.id]
+  const issue = (template: string, title: string) => `${SITE.repo}/issues/new?template=${template}&title=${encodeURIComponent(title)}`
   const setup = game.steps.slice(0, game.setupCount)
   const needs = [...new Set(setup.flatMap((s) => s.needs ?? []))].slice(0, 12)
   const range = def.meta.players
@@ -83,16 +88,42 @@ export function Cover({
         </div>
       )}
 
+      <details className="group mt-8 border-t border-line pt-4">
+        <summary className="flex cursor-pointer list-none items-center justify-between text-ui font-medium text-ink">
+          Setup checklist, {setup.length} steps
+          <span className="text-stone-500 transition group-open:rotate-90">
+            <Icon name="arrow" />
+          </span>
+        </summary>
+        <ol className="mt-4 space-y-3">
+          {setup.map((st, i) => (
+            <li key={i} className="flex gap-3 text-ui text-stone-600">
+              <span className="w-4 shrink-0 text-right text-stone-400">{i + 1}</span>
+              <span>
+                <span className="font-medium text-ink">{st.title}.</span> {st.instruction}
+              </span>
+            </li>
+          ))}
+        </ol>
+        <Button kind="quiet" size="sm" icon="print" onClick={() => window.print()} className="-ml-3 mt-2">
+          Print checklist
+        </Button>
+      </details>
+      {createPortal(<PrintSheet def={def} game={game} players={players} />, document.body)}
+
       <div className="mt-auto pt-12">
         <Button kind="primary" size="lg" iconRight="arrow" onClick={onStart} className="w-full justify-between shadow-soft">
           Start setup
         </Button>
         <div className="-mx-3 mt-2 flex flex-wrap items-center">
-          <Button kind="quiet" size="sm" icon="play" onClick={onWatch}>
-            Skip to the first turn
+          <Button kind="quiet" size="sm" icon="teach" onClick={onTeach} title="Plays every step by itself and reads it aloud, then the first turn">
+            Teach it hands-free
           </Button>
-          <Button kind="quiet" size="sm" icon={copied ? 'check' : 'link'} onClick={onShare}>
-            {copied ? 'Link copied' : 'Copy link'}
+          <Button kind="quiet" size="sm" icon="play" onClick={onWatch}>
+            First turn
+          </Button>
+          <Button kind="quiet" size="sm" icon="share" onClick={onShare}>
+            Share
           </Button>
           {def.custom && (
             <Button kind="quiet" size="sm" icon="x" onClick={onRemove}>
@@ -100,18 +131,68 @@ export function Cover({
             </Button>
           )}
         </div>
-        <p className="mt-4 text-meta text-stone-500">
+        {!def.custom && (
+          <p className="mt-4 flex items-start gap-2 text-meta text-stone-600">
+            {check ? (
+              <>
+                <span className="mt-px text-accent">
+                  <Icon name="check" />
+                </span>
+                <span>
+                  Checked against the rulebook ({check.edition}){check.by && ` by ${check.by}`}.
+                </span>
+              </>
+            ) : (
+              <span>
+                Not yet checked against a printed rulebook.{' '}
+                {SITE.repo && (
+                  <a href={issue('verify.md', `[Verify] ${def.meta.title}`)} target="_blank" rel="noreferrer" className="text-stone-700 underline underline-offset-4 hover:text-ink">
+                    Have the box? Help check it
+                  </a>
+                )}
+              </span>
+            )}
+          </p>
+        )}
+        <p className="mt-2 text-meta text-stone-500">
           Unofficial fan-made guide, not affiliated with the publisher. Editions differ, so keep your rulebook handy.
           {SITE.repo && !def.custom && (
             <>
               {' '}
-              <a href={`${SITE.repo}/issues/new/choose`} target="_blank" rel="noreferrer" className="text-stone-700 underline underline-offset-4 hover:text-ink">
+              <a href={issue('rules-error.md', `[Rules] ${def.meta.title}: `)} target="_blank" rel="noreferrer" className="text-stone-700 underline underline-offset-4 hover:text-ink">
                 Report a rules error
               </a>
             </>
           )}
         </p>
       </div>
+    </div>
+  )
+}
+
+/** A plain one-page checklist, only visible when printing (see the print rules in index.css). */
+function PrintSheet({ def, game, players }: { def: GameDef; game: GameSetup; players: number }) {
+  const setup = game.steps.slice(0, game.setupCount)
+  const turn = game.steps.slice(game.setupCount)
+  const row = (st: GameSetup['steps'][number], i: number) => (
+    <li key={i}>
+      <b>{st.title}.</b> {st.instruction} {st.detail && <i>{st.detail}</i>}
+    </li>
+  )
+  return (
+    <div className="print-sheet">
+      <h1>{def.meta.title}: setup checklist</h1>
+      <p>
+        {players} players · {def.meta.playTime} · from {window.location.host}/g/{def.id}
+      </p>
+      <ol>{setup.map(row)}</ol>
+      {turn.length > 0 && (
+        <>
+          <h2>First turn</h2>
+          <ol>{turn.map(row)}</ol>
+        </>
+      )}
+      <p className="print-foot">Unofficial fan-made guide. Check your rulebook.</p>
     </div>
   )
 }

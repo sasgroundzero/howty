@@ -1,7 +1,8 @@
 /** The home page. Its one job is to get you to your game, so the search box is the loudest thing on it. */
 import { useMemo, useState } from 'react'
-import type { GameDef } from '../engine/types'
-import { CARD_IDS } from '../data/games/more'
+import type { GameInfo } from '../engine/types'
+import { CARD_IDS } from '../data/games/catalog'
+import { ALIASES, TAGS, type Tag } from '../data/games/tags'
 import { DISCLAIMER, FEATURED, SITE, TRY } from '../site'
 import { ArtFind, ArtFollow, ArtWatch } from './art'
 import { Icon, Logo } from './icons'
@@ -9,17 +10,30 @@ import { Button, Chip, H2, Note, Stats, cx, surface } from './kit'
 import { STATUS, dayNumber, liveStreak, today, useMe, type Status } from './me'
 
 export const playersLabel = ([a, b]: [number, number]) => (a === b ? `${a} player${a > 1 ? 's' : ''}` : `${a}–${b} players`)
-const mins = (g: GameDef) => Math.max(...(g.meta.playTime.match(/\d+/g) ?? ['999']).map(Number))
+const mins = (g: GameInfo) => Math.max(...(g.meta.playTime.match(/\d+/g) ?? ['999']).map(Number))
+/** What a search term matched: the title (''), or the other name it matched, or null for no match. */
+const matchName = (g: GameInfo, term: string): string | null => {
+  if (!term || g.meta.title.toLowerCase().includes(term)) return ''
+  return ALIASES[g.id]?.find((a) => a.toLowerCase().includes(term)) ?? null
+}
 /** Lists are plain filters over each game's own facts, so they never go stale. */
-const LISTS: [string, string, (g: GameDef) => boolean][] = [
+const tagged = (t: Tag) => (g: GameInfo) => !!TAGS[g.id]?.includes(t)
+const LISTS: [string, string, (g: GameInfo) => boolean][] = [
   ['All', 'Everything', () => true],
-  ['Easy', 'Easy to learn', (g) => g.meta.difficulty === 'Easy'],
+  ['Party', 'Party games', tagged('party')],
+  ['Coop', 'Co-op', tagged('coop')],
+  ['Family', 'Family', tagged('family')],
+  ['Strategy', 'Strategy', tagged('strategy')],
+  ['Classic', 'Classics', tagged('classic')],
+  ['Deduction', 'Deduction and hidden roles', tagged('deduction')],
   ['Cards', 'A deck of cards', (g) => CARD_IDS.has(g.id)],
+  ['Trick', 'Trick-taking', tagged('trick')],
+  ['Casino', 'Poker and casino', tagged('casino')],
   ['Two', 'Works with two', (g) => g.meta.players[0] <= 2 && g.meta.players[1] >= 2],
   ['Solo', 'Playable solo', (g) => g.meta.players[0] === 1],
   ['Crowd', 'Six or more', (g) => g.meta.players[1] >= 6],
   ['Quick', 'Under 30 minutes', (g) => mins(g) <= 30],
-  ['Hard', 'Big-brain games', (g) => g.meta.difficulty === 'Hard'],
+  ['Easy', 'Easy to learn', (g) => g.meta.difficulty === 'Easy'],
 ]
 const dark = (hex: string) => {
   const n = parseInt(hex.slice(1), 16)
@@ -34,7 +48,7 @@ const open = (id: string, onOpen: (id: string) => void) => ({
 })
 
 /** Every game drifting past as a drawn "box lid" in its own colors. Each row is doubled so the loop is seamless. */
-function Marquee({ games, onOpen }: { games: GameDef[]; onOpen: (id: string) => void }) {
+function Marquee({ games, onOpen }: { games: GameInfo[]; onOpen: (id: string) => void }) {
   const rows = [0, 1, 2].map((r) => games.filter((_, i) => i % 3 === r))
   return (
     <div className="marquee -mx-4 space-y-2 overflow-hidden py-1 sm:-mx-6" aria-label="All games">
@@ -62,7 +76,7 @@ function Marquee({ games, onOpen }: { games: GameDef[]; onOpen: (id: string) => 
   )
 }
 
-function GameCard({ g, onOpen }: { g: GameDef; onOpen: (id: string) => void }) {
+function GameCard({ g, onOpen }: { g: GameInfo; onOpen: (id: string) => void }) {
   return (
     <a {...open(g.id, onOpen)} className={cx(surface, 'block p-4 transition duration-150 ease-out hover:border-ink hover:shadow-soft')}>
       <div className="flex gap-1">
@@ -110,9 +124,9 @@ export function TopBar({ onHome, onDaily, onAdd }: { onHome: () => void; onDaily
 export function Home({
   games, note, demo, demoPlayers, demoSteps, table, onDemo, onOpen, onAdd, onDaily,
 }: {
-  games: GameDef[]; note: string
+  games: GameInfo[]; note: string
   /** the game on the live table, and the element the 3D canvas is mounted into */
-  demo: GameDef; demoPlayers: number; demoSteps: number; table: (el: HTMLElement | null) => void
+  demo: GameInfo; demoPlayers: number; demoSteps: number; table: (el: HTMLElement | null) => void
   onDemo: (id: string) => void; onOpen: (id: string) => void; onAdd: () => void; onDaily: () => void
 }) {
   const [q, setQ] = useState('')
@@ -123,14 +137,14 @@ export function Home({
   const term = q.trim().toLowerCase()
   const pass = LISTS.find((l) => l[0] === list)![2]
   const all = useMemo(
-    () => games.filter((g) => pass(g) && g.meta.title.toLowerCase().includes(term)).sort((a, b) => a.meta.title.replace(/^The /, '').localeCompare(b.meta.title.replace(/^The /, ''))),
+    () => games.filter((g) => pass(g) && matchName(g, term) !== null).sort((a, b) => a.meta.title.replace(/^The /, '').localeCompare(b.meta.title.replace(/^The /, ''))),
     [games, list, term], // eslint-disable-line react-hooks/exhaustive-deps
   )
-  const pickOf = (ids: string[]) => ids.map((id) => byId.get(id)).filter((g): g is GameDef => !!g)
+  const pickOf = (ids: string[]) => ids.map((id) => byId.get(id)).filter((g): g is GameInfo => !!g)
   const featured = pickOf(FEATURED).slice(0, 8)
   const tries = pickOf([...new Set([...TRY, 'pandemic'])])
   const mine = games.filter((g) => g.custom)
-  const onShelf = (g: GameDef) => (tab === 'done' ? !!me.done[g.id] : me.shelf[g.id] === tab)
+  const onShelf = (g: GameInfo) => (tab === 'done' ? !!me.done[g.id] : me.shelf[g.id] === tab)
   const streak = liveStreak(me)
   const played = me.daily?.day === today()
   const hasShelf = Object.keys(me.shelf).length + Object.keys(me.done).length > 0
@@ -303,7 +317,10 @@ export function Home({
           {all.map((g) => (
             <li key={g.id} className="border-b border-line">
               <a {...open(g.id, onOpen)} className="group flex items-baseline justify-between gap-3 py-3">
-                <span className="truncate text-body font-medium text-ink decoration-line underline-offset-4 group-hover:underline">{g.meta.title}</span>
+                <span className="min-w-0 truncate text-body font-medium text-ink decoration-line underline-offset-4 group-hover:underline">
+                  {g.meta.title}
+                  {matchName(g, term) && <span className="font-normal text-stone-500"> · {matchName(g, term)}</span>}
+                </span>
                 <span className="shrink-0 text-meta text-stone-500">
                   {playersLabel(g.meta.players)} · {g.meta.difficulty}
                 </span>
