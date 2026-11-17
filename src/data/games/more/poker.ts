@@ -8,7 +8,7 @@ const chip = (id: string, label: string, title: string, body: string, h = 0.08) 
 /** Where the k-th community card lands on the board zone. */
 const spot = (k: number) => at('board', 0.5 + ((k - 2) * 1.04) / 5.4, 0.5)
 
-export const poker = tabletop('poker', 'Poker', [2, 8], 6, '1–3 hr', 'Medium', 'No-Limit Texas Hold\'em: bet, bluff, show down.', ['#1f6b43', '#c0392b', '#e9e4d8'], (n) => {
+export const poker = tabletop('poker', 'Texas Hold\'em Poker', [2, 8], 6, '1–3 hr', 'Medium', 'No-Limit Texas Hold\'em: bet, bluff, show down.', ['#1f6b43', '#c0392b', '#e9e4d8'], (n) => {
   const dealer = n === 2 ? 0 : n - 1
   const folds: Act[] = Array.from({ length: Math.max(0, n - 2) }, (_, i) => i + 2).flatMap((s) => [hide(`hole.0@${s}`, 0.3), hide(`hole.1@${s}`, 0.3)])
   return {

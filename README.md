@@ -3,14 +3,14 @@
 # Howty
 
 **Set up any board game, step by step.** Pick the game on your table and Howty places every
-piece on a 3D table one step at a time, then plays a short first turn. 158 games, free, no account.
+piece on a 3D table one step at a time, then plays a short first turn. 176 games, free, no account.
 
 **Try it: [howty.vercel.app](https://howty.vercel.app)**
 
 <p align="center"><img src="docs/demo.gif" alt="Scrolling the home page, searching for Wingspan, opening its game page, stepping through setup and watching the first turn" width="840" /></p>
 
 - **Runs entirely in the browser.** No backend, no API keys, no AI calls, no tracking. It is a static site.
-- **158 games built in**, from Chess and Catan to Wingspan and Terraforming Mars, plus 45 classic card games from Hearts and Poker to Solitaire.
+- **176 games built in**, from Chess and Catan to Wingspan and Terraforming Mars, plus 63 card games: Hearts, Solitaire, Blackjack and 18 kinds of poker among them.
 - **Add your own.** Paste the setup section of any rulebook and get a 3D table. Share it with a link:
   the rules travel in the link itself, so nothing is uploaded.
 - **Hands-free.** Optional narration and "next / back / repeat" voice commands (where the browser supports them).
