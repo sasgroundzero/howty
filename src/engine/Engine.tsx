@@ -311,7 +311,7 @@ function Table({ table }: { table: TableDef }) {
   )
 }
 
-export function Scene({ game, gameKey, nav, nonce, idle }: { game: GameSetup; gameKey: string; nav: Nav; nonce: number; idle: boolean }) {
+export function Scene({ game, gameKey, nav, nonce, idle, quiet }: { game: GameSetup; gameKey: string; nav: Nav; nonce: number; idle: boolean; /** hide the hover cards (the daily table must not name its pieces) */ quiet?: boolean }) {
   const step = Math.min(nav.step, game.steps.length - 1)
   return (
     <NavContext.Provider value={nav}>
@@ -334,7 +334,7 @@ export function Scene({ game, gameKey, nav, nonce, idle }: { game: GameSetup; ga
       {game.pieces.map((p) => (
         <AnimatedPiece key={`${gameKey}:${p.id}`} spec={p} />
       ))}
-      <Tooltip />
+      {!quiet && <Tooltip />}
       <OrbitControls
         makeDefault
         enableDamping

@@ -16,19 +16,22 @@ import { GAMES } from './data/games'
 import { CustomGameModal } from './custom/CustomGameModal'
 import { SITE } from './site'
 import { Cover, PlayerPicker } from './ui/Cover'
+import { Daily } from './ui/Daily'
 import { Home, playersLabel } from './ui/Home'
+import { dailyPuzzle, today, update, useMe } from './ui/me'
 import { Icon, Logo, type IconName } from './ui/icons'
 import { decodeShare, encodeShare, loadCustoms, saveCustoms, toGameDef, type CustomEntry } from './custom/parser'
 
 const panel = 'rounded-2xl border border-stone-900/10 bg-[#fbf7ef]/90 shadow-lg backdrop-blur-md'
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n))
 
-type View = 'home' | 'cover' | 'play'
+type View = 'home' | 'cover' | 'play' | 'daily'
 /** "/" is home, "/g/azul" a cover page, "/g/azul?step=3&players=4" a step. Old "?game=azul" links still work. */
 function readRoute() {
   const q = new URLSearchParams(window.location.search)
   const id = window.location.pathname.match(/^\/g\/([\w-]+)\/?$/)?.[1] ?? q.get('game')
   const step = Number(q.get('step')) || 0
+  if (/^\/daily\/?$/.test(window.location.pathname)) return { id: null, step: 0, players: 0, view: 'daily' as View }
   return { id, step, players: Number(q.get('players')) || 0, view: (id ? (step ? 'play' : 'cover') : 'home') as View }
 }
 
@@ -53,8 +56,11 @@ export default function App() {
   const [sharedNote, setSharedNote] = useState('')
   const games = useMemo(() => [...GAMES, ...customs.map(toGameDef)], [customs])
   const known = (id: string | null): id is string => !!id && games.some((g) => g.id === id)
-  const [gameId, setGameId] = useState(() => (known(first.id) ? first.id : 'catan'))
-  const [view, setView] = useState<View>(() => (known(first.id) ? first.view : 'home'))
+  const puzzle = useMemo(() => dailyPuzzle(GAMES), [])
+  const me = useMe()
+  const guessed = me.daily?.day === today()
+  const [gameId, setGameId] = useState(() => (first.view === 'daily' ? puzzle.answer.id : known(first.id) ? first.id : 'catan'))
+  const [view, setView] = useState<View>(() => (first.view === 'daily' || known(first.id) ? first.view : 'home'))
   const started = view === 'play'
   const def = games.find((g) => g.id === gameId) ?? games[0]
   const [players, setPlayers] = useState(() => clamp(first.players || def.meta.defaultPlayers, def.meta.players[0], def.meta.players[1]))
@@ -112,7 +118,16 @@ export default function App() {
     setPlaying(false)
     setSharedNote('')
     setView('home')
-    setNav({ step: setupCount - 1, dir: -1, jump: true })
+    // leaving an unanswered daily table must not leave its game showing on the home page
+    if (view === 'daily' && !guessed) {
+      setGameId('catan')
+      setPlayers(4)
+      setNav({ step: GAMES[0].build(4).setupCount - 1, dir: -1, jump: true })
+    } else setNav({ step: setupCount - 1, dir: -1, jump: true })
+  }
+  const openDaily = () => {
+    pickGame(puzzle.answer.id, 'daily')
+    setSharedNote('')
   }
   const start = () => {
     unlockAudio()
@@ -145,6 +160,17 @@ export default function App() {
     const t = window.setTimeout(() => (step < total - 1 ? go(step + 1) : setPlaying(false)), (s.duration ?? 6) * 1000)
     return () => window.clearTimeout(t)
   }, [inSim, playing, step, total, s, go])
+
+  /* Remember what you have followed: steps walked, and setups seen through to the end */
+  const seen = useRef('')
+  useEffect(() => {
+    if (!started || inSim) return
+    const key = `${gameId}:${step}`
+    if (seen.current === key) return
+    const fresh = seen.current.split(':')[0] === gameId && step > Number(seen.current.split(':')[1])
+    seen.current = key
+    if (fresh) update((m) => ({ ...m, steps: m.steps + 1, done: step === setupCount - 1 ? { ...m.done, [gameId]: (m.done[gameId] ?? 0) + 1 } : m.done }))
+  }, [started, inSim, gameId, step, setupCount])
 
   /* Narration */
   useEffect(() => {
@@ -233,16 +259,20 @@ export default function App() {
     const q = new URLSearchParams()
     if (started) q.set('step', String(Math.min(step, setupCount - 1) + 1))
     if (view !== 'home' && range[0] !== range[1] && (started || players !== def.meta.defaultPlayers)) q.set('players', String(players))
-    const url = view === 'home' ? '/' : `/g/${gameId}${q.size ? `?${q}` : ''}${def.custom && packed ? `#rules=${packed}` : ''}`
-    const key = `${view}:${gameId}`
+    const url = view === 'home' ? '/' : view === 'daily' ? '/daily' : `/g/${gameId}${q.size ? `?${q}` : ''}${def.custom && packed ? `#rules=${packed}` : ''}`
+    const key = view === 'daily' ? 'daily' : `${view}:${gameId}`
     if (where.current && where.current !== key) window.history.pushState(null, '', url)
     else window.history.replaceState(null, '', url)
     where.current = key
-    document.title = view === 'home' ? `${SITE.name}: ${SITE.tagline.toLowerCase().replace(/\.$/, '')}` : `How to set up ${def.meta.title} | ${SITE.name}`
+    document.title = view === 'home' ? `${SITE.name}: ${SITE.tagline.toLowerCase().replace(/\.$/, '')}` : view === 'daily' ? `Daily table #${puzzle.number} | ${SITE.name}` : `How to set up ${def.meta.title} | ${SITE.name}`
   }, [pending, view, started, gameId, step, players, setupCount, range, def, packed])
   useEffect(() => {
     const onPop = () => {
       const r = readRoute()
+      if (r.view === 'daily') {
+        where.current = 'daily'
+        return openDaily()
+      }
       const g = games.find((x) => x.id === r.id)
       where.current = g ? `${r.view}:${g.id}` : 'home:' + gameId
       if (!g) return goHome()
@@ -297,7 +327,7 @@ export default function App() {
       {/* The 3D table fills the screen while playing; on the home and cover pages it sits beside (or above) the text. */}
       <div className={started ? 'absolute inset-0' : 'absolute inset-x-0 top-0 h-[34dvh] lg:inset-y-0 lg:left-[46%] lg:h-auto'}>
         <Canvas shadows camera={{ position: [2, 25, 20], fov: 40, near: 0.1, far: 400 }} dpr={[1, 2]} onPointerMissed={() => hoverStore.clear()}>
-          <Scene game={game} gameKey={gameId} nav={{ ...nav, step }} nonce={nonce} idle={!started} />
+          <Scene game={game} gameKey={gameId} nav={{ ...nav, step }} nonce={nonce} idle={!started} quiet={view === 'daily' && !guessed} />
         </Canvas>
         {view === 'home' && (
           <button onClick={() => pickGame(gameId, 'cover')} className={`absolute bottom-3 left-3 flex items-center gap-2 px-3 py-2 text-sm font-semibold hover:bg-white ${panel}`}>
@@ -308,7 +338,9 @@ export default function App() {
       {!started && (
         <main className="absolute inset-x-0 bottom-0 top-[34dvh] select-text overflow-y-auto rounded-t-3xl bg-[#fbf7ef] shadow-[0_-8px_30px_rgba(0,0,0,0.12)] lg:inset-y-0 lg:right-auto lg:w-[46%] lg:rounded-none lg:shadow-[8px_0_30px_rgba(0,0,0,0.08)]">
           {view === 'home' ? (
-            <Home games={games} note={sharedNote} onOpen={(id) => pickGame(id, 'cover')} onAdd={() => setAdding(true)} />
+            <Home games={games} note={sharedNote} onOpen={(id) => pickGame(id, 'cover')} onAdd={() => setAdding(true)} onDaily={openDaily} />
+          ) : view === 'daily' ? (
+            <Daily puzzle={puzzle} onOpen={(id) => pickGame(id, 'cover')} onHome={goHome} />
           ) : (
             <Cover def={def} game={game} players={players} note={sharedNote} copied={copied} onPlayers={changePlayers} onStart={start} onWatch={watch} onHome={goHome} onShare={() => void share()} onRemove={removeCustom} />
           )}

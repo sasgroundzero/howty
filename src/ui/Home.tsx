@@ -3,9 +3,20 @@ import { useMemo, useState } from 'react'
 import type { GameDef } from '../engine/types'
 import { DISCLAIMER, FEATURED, SITE, TRY } from '../site'
 import { Icon, Logo } from './icons'
+import { STATUS, dayNumber, liveStreak, today, useMe, type Status } from './me'
 
 export const playersLabel = ([a, b]: [number, number]) => (a === b ? `${a} player${a > 1 ? 's' : ''}` : `${a}–${b} players`)
-const LEVELS = ['All', 'Easy', 'Medium', 'Hard'] as const
+const mins = (g: GameDef) => Math.max(...(g.meta.playTime.match(/\d+/g) ?? ['999']).map(Number))
+/** Lists are plain filters over each game's own facts, so they never go stale. */
+const LISTS: [string, string, (g: GameDef) => boolean][] = [
+  ['All', 'Everything', () => true],
+  ['Easy', 'Easy to learn', (g) => g.meta.difficulty === 'Easy'],
+  ['Two', 'Works with two', (g) => g.meta.players[0] <= 2 && g.meta.players[1] >= 2],
+  ['Solo', 'Playable solo', (g) => g.meta.players[0] === 1],
+  ['Crowd', 'Six or more', (g) => g.meta.players[1] >= 6],
+  ['Quick', 'Under 30 minutes', (g) => mins(g) <= 30],
+  ['Hard', 'Big-brain games', (g) => g.meta.difficulty === 'Hard'],
+]
 
 const dark = (hex: string) => {
   const n = parseInt(hex.slice(1), 16)
@@ -71,14 +82,17 @@ function GameCard({ g, onOpen }: { g: GameDef; onOpen: (id: string) => void }) {
   )
 }
 
-export function Home({ games, note, onOpen, onAdd }: { games: GameDef[]; note: string; onOpen: (id: string) => void; onAdd: () => void }) {
+export function Home({ games, note, onOpen, onAdd, onDaily }: { games: GameDef[]; note: string; onOpen: (id: string) => void; onAdd: () => void; onDaily: () => void }) {
   const [q, setQ] = useState('')
-  const [level, setLevel] = useState<(typeof LEVELS)[number]>('All')
+  const [list, setList] = useState('All')
+  const [tab, setTab] = useState<Status | 'done'>('want')
+  const me = useMe()
+  const pass = LISTS.find((l) => l[0] === list)![2]
   const byId = useMemo(() => new Map(games.map((g) => [g.id, g])), [games])
   const term = q.trim().toLowerCase()
   const all = useMemo(
-    () => games.filter((g) => (level === 'All' || g.meta.difficulty === level) && g.meta.title.toLowerCase().includes(term)).sort((a, b) => a.meta.title.replace(/^The /, '').localeCompare(b.meta.title.replace(/^The /, ''))),
-    [games, level, term],
+    () => games.filter((g) => pass(g) && g.meta.title.toLowerCase().includes(term)).sort((a, b) => a.meta.title.replace(/^The /, '').localeCompare(b.meta.title.replace(/^The /, ''))),
+    [games, list, term], // eslint-disable-line react-hooks/exhaustive-deps
   )
   const featured = FEATURED.map((id) => byId.get(id)).filter((g): g is GameDef => !!g)
   const mine = games.filter((g) => g.custom)
@@ -92,7 +106,10 @@ export function Home({ games, note, onOpen, onAdd }: { games: GameDef[]; note: s
           <span className="font-display text-2xl font-bold tracking-tight">howty</span>
         </div>
         <nav className="flex items-center gap-1 text-sm font-semibold text-stone-600">
-          <a href="#all" className="rounded-full px-3 py-1.5 hover:bg-stone-900/5">
+          <button onClick={onDaily} className="rounded-full px-3 py-1.5 hover:bg-stone-900/5">
+            Daily
+          </button>
+          <a href="#all" className="hidden rounded-full px-3 py-1.5 hover:bg-stone-900/5 sm:block">
             Browse
           </a>
           <button onClick={onAdd} className="rounded-full px-3 py-1.5 hover:bg-stone-900/5">
@@ -150,6 +167,53 @@ export function Home({ games, note, onOpen, onAdd }: { games: GameDef[]; note: s
       {!term && <Marquee games={games} onOpen={onOpen} />}
 
       {!term && (
+        <button onClick={onDaily} className="mt-8 flex w-full items-center gap-4 rounded-2xl border border-stone-900 bg-stone-900 p-4 text-left text-white transition hover:bg-stone-800">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-500 font-display text-2xl font-bold text-stone-900">?</span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-400">Daily table #{dayNumber()}</span>
+            <span className="block font-display text-xl font-bold leading-tight">{me.daily?.day === today() ? (me.daily.won ? 'You named today’s game' : 'See today’s answer') : 'Can you name the game from its setup?'}</span>
+            <span className="block text-[13px] text-stone-300">{liveStreak(me) > 0 ? `Streak: ${liveStreak(me)} day${liveStreak(me) > 1 ? 's' : ''}. ` : ''}One table, one guess, new every day.</span>
+          </span>
+          <Icon name="arrow" size={22} className="shrink-0" />
+        </button>
+      )}
+
+      {!term && (Object.keys(me.shelf).length > 0 || Object.keys(me.done).length > 0) && (
+        <>
+          <h2 className="mt-12 font-display text-2xl font-bold">Your shelf</h2>
+          <dl className="mt-4 grid grid-cols-4 gap-3 rounded-2xl border border-stone-200 bg-white p-4 text-center">
+            {[
+              ['On shelf', Object.keys(me.shelf).length],
+              ['Set up', Object.keys(me.done).length],
+              ['Steps', me.steps],
+              ['Streak', liveStreak(me)],
+            ].map(([k, v]) => (
+              <div key={k}>
+                <dd className="font-display text-2xl font-bold">{v}</dd>
+                <dt className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">{k}</dt>
+              </div>
+            ))}
+          </dl>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {([...(Object.keys(STATUS) as Status[]), 'done'] as const).map((t) => {
+              const n = t === 'done' ? Object.keys(me.done).length : Object.values(me.shelf).filter((s) => s === t).length
+              return (
+                <button key={t} onClick={() => setTab(t)} aria-pressed={tab === t} className={`${chip} ${tab === t ? 'border-stone-900 bg-stone-900 text-white' : 'border-stone-300 bg-white text-stone-700 hover:border-stone-900'}`}>
+                  {t === 'done' ? 'Set up' : STATUS[t]} · {n}
+                </button>
+              )
+            })}
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {games.filter((g) => (tab === 'done' ? me.done[g.id] : me.shelf[g.id] === tab)).map((g) => (
+              <GameCard key={g.id} g={g} onOpen={onOpen} />
+            ))}
+          </div>
+          {!games.some((g) => (tab === 'done' ? me.done[g.id] : me.shelf[g.id] === tab)) && <p className="mt-1 text-sm text-stone-500">Nothing here yet. Open a game and tag it from its cover page.</p>}
+        </>
+      )}
+
+      {!term && (
         <>
           <h2 className="mt-10 font-display text-2xl font-bold">How it works</h2>
           <ol className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -187,14 +251,14 @@ export function Home({ games, note, onOpen, onAdd }: { games: GameDef[]; note: s
       )}
 
       <div id="all" className="mt-12 flex flex-wrap items-end justify-between gap-3">
-        <h2 className="font-display text-2xl font-bold">{term ? `${all.length} match${all.length === 1 ? '' : 'es'}` : `All ${games.length} games`}</h2>
-        <div className="flex gap-1.5">
-          {LEVELS.map((l) => (
-            <button key={l} onClick={() => setLevel(l)} aria-pressed={level === l} className={`${chip} ${level === l ? 'border-stone-900 bg-stone-900 text-white' : 'border-stone-300 bg-white text-stone-700 hover:border-stone-900'}`}>
-              {l}
-            </button>
-          ))}
-        </div>
+        <h2 className="font-display text-2xl font-bold">{term ? `${all.length} match${all.length === 1 ? '' : 'es'}` : list === 'All' ? `All ${games.length} games` : `${LISTS.find((l) => l[0] === list)![1]} · ${all.length}`}</h2>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {LISTS.map(([key, label, test]) => (
+          <button key={key} onClick={() => setList(key)} aria-pressed={list === key} className={`${chip} ${list === key ? 'border-stone-900 bg-stone-900 text-white' : 'border-stone-300 bg-white text-stone-700 hover:border-stone-900'}`}>
+            {label} <span className="opacity-60">{games.filter(test).length}</span>
+          </button>
+        ))}
       </div>
       <ul className="mt-4 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
         {all.map((g) => (
@@ -231,6 +295,7 @@ export function Home({ games, note, onOpen, onAdd }: { games: GameDef[]; note: s
         <div className="flex flex-wrap gap-x-5 gap-y-1 text-[13px] font-semibold text-stone-700">
           <span>Free and open source</span>
           <span>No account, no tracking</span>
+          <span>Your shelf and streak stay in this browser</span>
           {SITE.repo && (
             <a href={SITE.repo} target="_blank" rel="noreferrer" className="underline hover:text-amber-700">
               Source code

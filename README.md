@@ -14,6 +14,11 @@ piece on a 3D table one step at a time, then plays a short first turn. 113 games
 - **Add your own.** Paste the setup section of any rulebook and get a 3D table. Share it with a link:
   the rules travel in the link itself, so nothing is uploaded.
 - **Hands-free.** Optional narration and "next / back / repeat" voice commands (where the browser supports them).
+- **Daily table.** A finished setup with the name hidden: one guess, a new table every day, a streak, and a
+  result you can share ([/daily](https://howty.vercel.app/daily)).
+- **Your shelf.** Tag games as "own it", "want to learn" or "taught it" and see what you have set up. It is
+  saved in your browser only.
+- **Lists.** Filter the library to easy games, two-player games, solo games, quick games and more.
 - **A page per game** (`/g/azul`), with a link to any step (`/g/azul?step=3&players=4`).
 
 ## Run it

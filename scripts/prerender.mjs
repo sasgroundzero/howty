@@ -32,6 +32,18 @@ for (const g of GAMES) {
   mkdirSync(resolve(dist, 'g', g.id), { recursive: true })
   writeFileSync(resolve(dist, 'g', g.id, 'index.html'), html)
 }
-writeFileSync(resolve(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${['', ...GAMES.map((g) => `g/${g.id}`)].map((p) => `  <url><loc>${site}/${p}</loc></url>`).join('\n')}\n</urlset>\n`)
+const dailyTitle = 'Daily table: name the game from its setup | Howty'
+const dailyDesc = 'A finished board-game setup with the name hidden. One guess, a new table every day, and a streak to keep.'
+mkdirSync(resolve(dist, 'daily'), { recursive: true })
+writeFileSync(
+  resolve(dist, 'daily', 'index.html'),
+  shell
+    .replace(/<title>.*?<\/title>/, `<title>${dailyTitle}</title>`)
+    .replace(/(<meta name="description" content=")[^"]*/, `$1${dailyDesc}`)
+    .replace(/(<meta property="og:title" content=")[^"]*/, `$1${dailyTitle}`)
+    .replace(/(<meta property="og:description" content=")[^"]*/, `$1${dailyDesc}`)
+    .replace('</head>', `    <link rel="canonical" href="${site}/daily" />\n  </head>`),
+)
+writeFileSync(resolve(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${['', 'daily', ...GAMES.map((g) => `g/${g.id}`)].map((p) => `  <url><loc>${site}/${p}</loc></url>`).join('\n')}\n</urlset>\n`)
 writeFileSync(resolve(dist, 'robots.txt'), `User-agent: *\nAllow: /\n${site ? `Sitemap: ${site}/sitemap.xml\n` : ''}`)
 console.log(`prerendered ${GAMES.length} game pages${site ? ` for ${site}` : ' (no SITE_URL set: links are relative)'}`)

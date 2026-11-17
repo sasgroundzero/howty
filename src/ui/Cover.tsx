@@ -3,6 +3,7 @@ import type { GameDef, GameSetup } from '../engine/types'
 import { SITE } from '../site'
 import { Icon } from './icons'
 import { playersLabel } from './Home'
+import { STATUS, update, useMe, type Status } from './me'
 
 export function PlayerPicker({ range, value, onChange }: { range: [number, number]; value: number; onChange: (n: number) => void }) {
   return (
@@ -25,6 +26,15 @@ export function Cover({
   const setup = game.steps.slice(0, game.setupCount)
   const needs = [...new Set(setup.flatMap((s) => s.needs ?? []))].slice(0, 14)
   const range = def.meta.players
+  const me = useMe()
+  const status = me.shelf[def.id]
+  const setStatus = (s: Status) =>
+    update((m) => {
+      const shelf = { ...m.shelf }
+      if (shelf[def.id] === s) delete shelf[def.id]
+      else shelf[def.id] = s
+      return { ...m, shelf }
+    })
   const fact = (k: string, v: string) => (
     <div>
       <dt className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">{k}</dt>
@@ -58,6 +68,17 @@ export function Cover({
           <PlayerPicker range={range} value={players} onChange={onPlayers} />
         </div>
       )}
+
+      <div className="mt-5 flex flex-wrap items-center gap-2">
+        <span className="text-sm font-semibold text-stone-700">Your shelf</span>
+        {(Object.keys(STATUS) as Status[]).map((s) => (
+          <button key={s} onClick={() => setStatus(s)} aria-pressed={status === s} className={`rounded-full border px-3 py-1 text-[13px] font-semibold transition ${status === s ? 'border-stone-900 bg-stone-900 text-white' : 'border-stone-300 bg-white text-stone-700 hover:border-stone-900'}`}>
+            {status === s ? '✓ ' : ''}
+            {STATUS[s]}
+          </button>
+        ))}
+        {!!me.done[def.id] && <span className="text-[12px] font-medium text-green-800">Set up {me.done[def.id]} time{me.done[def.id] > 1 ? 's' : ''}</span>}
+      </div>
 
       <h2 className="mt-7 font-display text-xl font-bold">Before you start</h2>
       <ul className="mt-2 space-y-1.5 text-[15px] text-stone-700">
