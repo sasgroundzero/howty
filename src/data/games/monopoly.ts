@@ -52,4 +52,4 @@ function build(n: number) {
   return b.done({ w: 40, d: 23 })
 }
 
-export const monopoly = game('monopoly', 'Monopoly', [2, 8], 4, '60–180 min', 'Medium', 'Buy property and bankrupt your rivals.', ['#d3e8d6', '#d63031', '#2c4fa3'], build)
+export const monopoly = game('monopoly', 'Monopoly', [2, 6], 4, '60–180 min', 'Medium', 'Buy property and bankrupt your rivals.', ['#d3e8d6', '#d63031', '#2c4fa3'], build)
