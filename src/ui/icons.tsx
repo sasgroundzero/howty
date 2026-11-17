@@ -38,8 +38,8 @@ export function Logo({ size = 28 }: { size?: number }) {
       <rect x="2" y="2" width="28" height="28" rx="8" fill="#1c1917" />
       <circle cx="11" cy="11" r="2.6" fill="#f59e0b" />
       <circle cx="21" cy="21" r="2.6" fill="#f59e0b" />
-      <circle cx="21" cy="11" r="2.6" fill="#fbf7ef" />
-      <circle cx="11" cy="21" r="2.6" fill="#fbf7ef" />
+      <circle cx="21" cy="11" r="2.6" fill="#ffffff" />
+      <circle cx="11" cy="21" r="2.6" fill="#ffffff" />
     </svg>
   )
 }

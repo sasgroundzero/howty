@@ -4,7 +4,7 @@
  */
 const INK = '#1c1917'
 const frame = { viewBox: '0 0 200 120', fill: 'none', stroke: INK, strokeWidth: 2, strokeLinejoin: 'round', strokeLinecap: 'round', 'aria-hidden': true } as const
-const [WHITE, PALE, SHADE, AMBER] = ['#ffffff', '#f4efe5', '#e6dccb', '#f2b24a']
+const [WHITE, PALE, SHADE, AMBER] = ['#ffffff', '#f5f5f4', '#e7e5e4', '#f2b24a']
 
 /** 1. Find your game: a game box under a magnifying glass. */
 export function ArtFind({ className }: { className?: string }) {

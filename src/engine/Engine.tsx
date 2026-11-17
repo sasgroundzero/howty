@@ -313,7 +313,7 @@ function Table({ table }: { table: TableDef }) {
   )
 }
 
-export function Scene({ game, gameKey, nav, nonce, idle, quiet, backdrop = '#d9cfc0' }: { game: GameSetup; gameKey: string; nav: Nav; nonce: number; idle: boolean; /** background color behind the table */ backdrop?: string; /** hide the hover cards (the daily table must not name its pieces) */ quiet?: boolean }) {
+export function Scene({ game, gameKey, nav, nonce, idle, quiet, backdrop = '#e7e5e4' }: { game: GameSetup; gameKey: string; nav: Nav; nonce: number; idle: boolean; /** background color behind the table */ backdrop?: string; /** hide the hover cards (the daily table must not name its pieces) */ quiet?: boolean }) {
   const step = Math.min(nav.step, game.steps.length - 1)
   return (
     <NavContext.Provider value={nav}>

@@ -50,7 +50,7 @@ from a given step onward. The engine drops, slides, flips and hides pieces to ma
 
 ## The design
 
-Howty is laid out to do one thing per screen, in warm neutral colors with a single amber accent.
+Howty is laid out to do one thing per screen, on a pure white page with neutral grays and a single amber accent.
 
 **Home** is one wide column: the headline and search, a live 3D table you can swap between games,
 "How it works" in three columns with line drawings made for Howty, then the library, with every

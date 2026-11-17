@@ -339,7 +339,7 @@ export default function App() {
     <div className="relative h-full w-full select-none bg-paper text-ink">
       {createPortal(
         <Canvas shadows camera={{ position: [2, 25, 20], fov: 40, near: 0.1, far: 400 }} dpr={[1, 2]} onPointerMissed={() => hoverStore.clear()}>
-          <Scene game={game} gameKey={gameId} nav={{ ...nav, step }} nonce={nonce} idle={!started} quiet={view === 'daily' && !guessed} backdrop={started ? '#d9cfc0' : '#f4efe5'} />
+          <Scene game={game} gameKey={gameId} nav={{ ...nav, step }} nonce={nonce} idle={!started} quiet={view === 'daily' && !guessed} backdrop={started ? '#e7e5e4' : '#f5f5f4'} />
         </Canvas>,
         host,
       )}

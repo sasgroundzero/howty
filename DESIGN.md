@@ -63,7 +63,7 @@ Six sizes, and no arbitrary `text-[13px]`:
 
 ## 4. Color: neutrals, and one accent that means something
 
-- The page is warm neutrals: `paper` background, `ink` text, `stone-*` grays, `line` borders.
+- The page is pure white (`paper`, #FFFFFF) with neutral grays: `mist` behind a 3D table, `ink` text, `stone-*` grays, `line` borders.
 - `accent` (amber) appears only on: step progress, keyboard focus, the "Watch the first turn"
   button, the daily-table tile, and the tick on a correct answer. Never on headlines, backgrounds or plain links.
 - No gradients for decoration. The only strong color on a page belongs to the games themselves
@@ -87,7 +87,7 @@ Six sizes, and no arbitrary `text-[13px]`:
 - **Icons:** the inline set in `src/ui/icons.tsx`, 2px stroke, at 16 or 20 only. No emoji and no
   text glyphs standing in for icons.
 - **Illustrations:** the drawings in `src/ui/art.tsx`. They follow the icon rules at a larger size: 2px ink
-  strokes, warm neutral fills, a soft ground shadow, and amber on the one object the drawing is about.
+  strokes, white and light gray fills, a soft ground shadow, and amber on the one object the drawing is about.
   New artwork is drawn in that style, never pulled from a stock set.
 
 ## 7. Motion: from where you acted

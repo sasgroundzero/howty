@@ -7,7 +7,8 @@ export default {
       fontFamily: { display: ['Fraunces', 'Georgia', 'serif'], sans: ['"DM Sans"', 'system-ui', 'sans-serif'] },
       colors: {
         ink: '#1c1917', // text and primary buttons
-        paper: '#fbf7ef', // page background (a warm neutral, tinted toward the accent)
+        paper: '#ffffff', // page background: pure white
+        mist: '#f5f5f4', // the quiet gray behind a 3D table panel
         line: 'rgba(28, 25, 23, 0.12)', // every border
         accent: '#d97706', // used sparingly: progress, focus, the first-turn button
       },
@@ -21,8 +22,8 @@ export default {
         hero: ['clamp(38px, 5.2vw, 56px)', { lineHeight: '1.04', letterSpacing: '-0.03em' }],
       },
       boxShadow: {
-        soft: '0 1px 2px rgba(60, 40, 10, 0.06), 0 8px 24px -10px rgba(60, 40, 10, 0.14)',
-        lift: '0 2px 4px rgba(60, 40, 10, 0.06), 0 16px 40px -12px rgba(60, 40, 10, 0.22)',
+        soft: '0 1px 2px rgba(28, 25, 23, 0.05), 0 8px 24px -10px rgba(28, 25, 23, 0.12)',
+        lift: '0 2px 4px rgba(28, 25, 23, 0.05), 0 16px 40px -12px rgba(28, 25, 23, 0.18)',
       },
     },
   },
