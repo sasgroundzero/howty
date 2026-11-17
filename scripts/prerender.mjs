@@ -4,7 +4,8 @@
  * Set SITE_URL (e.g. https://howty.app) for absolute links; on Vercel the production domain is used automatically.
  */
 import { build } from 'esbuild'
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { gameImage } from './og.mjs'
@@ -78,4 +79,9 @@ writeFileSync(
 )
 writeFileSync(resolve(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${['', 'daily', ...GAMES.map((g) => `g/${g.id}`)].map((p) => `  <url><loc>${site}/${p}</loc></url>`).join('\n')}\n</urlset>\n`)
 writeFileSync(resolve(dist, 'robots.txt'), `User-agent: *\nAllow: /\n${site ? `Sitemap: ${site}/sitemap.xml\n` : ''}`)
+// the offline worker: saves the app shell and every built file, under a version that changes with them
+const assets = readdirSync(resolve(dist, 'assets')).map((f) => `/assets/${f}`)
+const files = ['/', '/manifest.webmanifest', '/favicon.svg', '/icon-192.png', ...assets]
+const version = createHash('sha256').update(assets.join()).digest('hex').slice(0, 12)
+writeFileSync(resolve(dist, 'sw.js'), readFileSync(resolve(root, 'scripts/sw-template.js'), 'utf8').replace('__VERSION__', version).replace('__FILES__', JSON.stringify(files)))
 console.log(`prerendered ${GAMES.length} game pages${site ? ` for ${site}` : ' (no SITE_URL set: links are relative)'}`)

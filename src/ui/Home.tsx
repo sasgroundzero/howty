@@ -11,6 +11,8 @@ import { STATUS, dayNumber, liveStreak, today, useMe, type Status } from './me'
 
 export const playersLabel = ([a, b]: [number, number]) => (a === b ? `${a} player${a > 1 ? 's' : ''}` : `${a}–${b} players`)
 const mins = (g: GameInfo) => Math.max(...(g.meta.playTime.match(/\d+/g) ?? ['999']).map(Number))
+/** A prefilled GitHub issue asking for a game. */
+const request = (name: string) => `${SITE.repo}/issues/new?template=game-request.md&title=${encodeURIComponent(`[Request] ${name.trim() || 'Game name'}`)}`
 /** What a search term matched: the title (''), or the other name it matched, or null for no match. */
 const matchName = (g: GameInfo, term: string): string | null => {
   if (!term || g.meta.title.toLowerCase().includes(term)) return ''
@@ -328,7 +330,20 @@ export function Home({
             </li>
           ))}
         </ul>
-        {all.length === 0 && <p className="mt-4 text-ui text-stone-600">No game matches “{q}”. You can add it yourself below.</p>}
+        {all.length === 0 && (
+          <p className="mt-4 text-ui text-stone-600">
+            No game matches “{q}”. You can add it yourself below
+            {SITE.repo && (
+              <>
+                , or{' '}
+                <a href={request(q)} target="_blank" rel="noreferrer" className="text-ink underline underline-offset-4">
+                  ask for it to be built
+                </a>
+              </>
+            )}
+            .
+          </p>
+        )}
       </section>
 
       <button onClick={onAdd} className="mt-8 flex w-full items-center gap-4 rounded-2xl border border-dashed border-stone-400 p-4 text-left transition duration-150 ease-out hover:border-ink hover:bg-white active:scale-[0.99] sm:p-6">
@@ -340,6 +355,19 @@ export function Home({
           <span className="block text-ui text-stone-500">Paste its setup rules to get a 3D table and a link you can send to friends.</span>
         </span>
       </button>
+      {SITE.repo && (
+        <p className="mt-3 text-ui text-stone-600">
+          Rather we built it properly?{' '}
+          <a href={request(q)} target="_blank" rel="noreferrer" className="text-ink underline underline-offset-4">
+            Request a game
+          </a>{' '}
+          or{' '}
+          <a href={`${SITE.repo}/issues?q=is%3Aissue+is%3Aopen+label%3Agame-request+sort%3Areactions-%2B1-desc`} target="_blank" rel="noreferrer" className="text-ink underline underline-offset-4">
+            vote on what is next
+          </a>
+          . The most-wanted games are built first.
+        </p>
+      )}
 
       <footer className="mt-16 grid gap-8 border-t border-line pt-8 text-meta text-stone-500 sm:grid-cols-[1.4fr_1fr]">
         <div>
