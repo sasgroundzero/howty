@@ -29,7 +29,7 @@ export const ticketToRide = tabletop('ticket-to-ride', 'Ticket to Ride', [2, 5],
     S('Ready to play', 'The rules suggest the most experienced traveller goes first, then play passes clockwise.', 'all', [], 'On each turn you do exactly one thing: draw train cards, claim a route, or draw destination tickets.'),
   ],
   turn: [
-    T('Draw train cards', 'You take one face-up card, which is replaced from the deck straight away, and then the top card of the deck.', 'r', [
+    T('Draw train cards', 'You take one face-up card, which is replaced from the deck straight away, and then the top card of the deck. A face-up locomotive is the exception: taking one is your whole draw.', 'r', [
       mv('open.1', at('hand.3', 1.15, 0.5, 0.02)),
       draw('traindeck', by('open.0', 1.04, 0), CAR[2]),
       draw('traindeck', at('hand.3', 1.8, 0.5, 0.04)),

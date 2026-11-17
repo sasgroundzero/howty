@@ -6,11 +6,13 @@ comment, and space the posts out over a week or two rather than all on one day.
 
 Before posting, check:
 
-- [ ] The live site works on a real phone (search, a game page, Teach it, Share with QR, the daily table)
-- [ ] A handful of popular guides (Catan, Ticket to Ride, Wingspan, Azul, Pandemic) have been checked
-      against the rulebook and marked verified, since rules accuracy is the first thing people will test
-- [ ] Vercel Web Analytics is switched on, so you can see what each post brings in
-- [ ] Optional: a short custom domain
+- [x] Works in iPhone Safari (checked in the iOS simulator: home, a game page, setup steps, Share with
+      QR and the iOS share sheet, the daily table). Still worth one pass on a real phone, for touch feel
+      and scanning the QR with a second phone
+- [x] Catan, Ticket to Ride, Wingspan, Azul and Pandemic checked step by step against the publishers'
+      published rules and marked on their pages (1 error and 3 omissions fixed, 2026-11-17)
+- [x] Vercel Web Analytics is recording page views
+- [ ] Optional: a short custom domain (steps below)
 
 ## Show HN (news.ycombinator.com)
 
@@ -32,8 +34,9 @@ Best on a weekday morning, US Eastern time. The title has to be plain; the comme
 > prerendered with the steps as plain text, and preview images are drawn from each game's layout at
 > build time. It works offline after one visit.
 >
-> The honest weak spot: the guides haven't been checked against printed rulebooks yet, and every page
-> says so. If you own a game, checking its guide is the most useful contribution.
+> The honest weak spot: only the five most popular guides have been checked step by step against the
+> published rules so far, and every page says whether it has been. If you own a game, checking its
+> guide is the most useful contribution.
 >
 > Code (MIT): https://github.com/sasgroundzero/howty
 
@@ -65,8 +68,8 @@ Check the subreddit's self-promotion rules first; some weeks it only allows this
 >
 > I've built Howty, an open-source site that places each setup step on a 3D table and then plays a short
 > first turn. It covers 113 board games and 63 traditional card games. The guides were written from
-> public rules references and have not been checked against the printed rulebooks, which is where I'd
-> value this community's help: each page has a "help check it" link, and checked guides are marked with
+> public rules references; the five most popular have been checked against the published rules, and the
+> rest is where I'd value this community's help: each page has a "help check it" link, and checked guides are marked with
 > the edition they were checked against. https://howty.vercel.app
 
 ## Short post (X, Bluesky, Threads)
@@ -76,3 +79,16 @@ Check the subreddit's self-promotion rules first; some weeks it only allows this
 > howty.vercel.app
 
 Attach `docs/demo.gif`, or a screen recording from a phone.
+
+## Custom domain
+
+Nothing in the app names the address, so a domain is a settings change, not a code change.
+
+1. Buy the domain from any registrar (short options worth checking: howty.app, howty.games, gethowty.com).
+2. In Vercel: Project, then Settings, then Domains, then Add, and enter the domain. Vercel shows the DNS
+   records to add at the registrar. Make it the production domain.
+3. Redeploy once. The build reads Vercel's production domain, so page links, `og:image` preview images and
+   the canonical tags switch to the new domain by themselves. Setting `SITE_URL` is only needed when
+   building somewhere other than Vercel.
+4. In the Domains list, set howty.vercel.app to redirect (308) to the new domain, so old links keep working.
+5. Replace howty.vercel.app in README.md and in the drafts above.

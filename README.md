@@ -93,9 +93,10 @@ sides and in front of each player, and it positions everything, sizes the table 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [scripts/AUTHORING.md](scripts/AUTHORING.md).
 
 **Rules checks are the most valuable contribution.** The guides were written from memory or from
-public rules references, and none has yet been checked step by step against a printed rulebook. Each game
-page says so and links to a "Verify" issue: if you have the box, check the guide and report back, and the
-page is marked "Checked against the rulebook" with your edition (see `src/data/games/verified.ts`).
+public rules references. Five (Catan, Ticket to Ride, Wingspan, Azul and Pandemic) have been checked step
+by step against the published rules; the rest have not. Each unchecked page says so and links to a "Verify"
+issue: if you have the box, check the guide and report back, and the page is marked "Checked against the
+published rules" with your edition (see `src/data/games/verified.ts`).
 Spotted a mistake? Open a "Rules error" issue or a pull request.
 
 **Want a game added?** [Request it](https://github.com/sasgroundzero/howty/issues/new?template=game-request.md), or

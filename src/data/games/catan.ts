@@ -434,7 +434,7 @@ function buildCatan(n: number): GameSetup {
 
   turn({
     title: 'Watch out for 7',
-    instruction: 'If a 7 is rolled, nobody collects: the roller moves the robber to any hex and steals a card from a player there.',
+    instruction: 'If a 7 is rolled, nobody collects. Anyone holding more than 7 cards discards half (rounded down), then the roller moves the robber to another hex and steals a card from a player there.',
     focus: FOCUS.robber,
   })
 

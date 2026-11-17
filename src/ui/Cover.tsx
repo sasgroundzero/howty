@@ -1,4 +1,5 @@
 /** A game's cover page. Its one job is the "Start setup" button. */
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { VERIFIED } from '../data/games/verified'
 import type { GameDef, GameSetup } from '../engine/types'
@@ -28,6 +29,16 @@ export function Cover({
   onPlayers: (n: number) => void; onStart: () => void; onTeach: () => void; onWatch: () => void; onHome: () => void; onShare: () => void; onRemove: () => void
 }) {
   const check = VERIFIED[def.id]
+  // on a phone the start button sits below the fold; show a pinned copy until the real one scrolls into view
+  const startRef = useRef<HTMLDivElement>(null)
+  const [startHidden, setStartHidden] = useState(false)
+  useEffect(() => {
+    const el = startRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(([e]) => setStartHidden(!e.isIntersecting))
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
   const issue = (template: string, title: string) => `${SITE.repo}/issues/new?template=${template}&title=${encodeURIComponent(title)}`
   const setup = game.steps.slice(0, game.setupCount)
   const needs = [...new Set(setup.flatMap((s) => s.needs ?? []))].slice(0, 12)
@@ -112,9 +123,19 @@ export function Cover({
       {createPortal(<PrintSheet def={def} game={game} players={players} />, document.body)}
 
       <div className="mt-auto pt-12">
-        <Button kind="primary" size="lg" iconRight="arrow" onClick={onStart} className="w-full justify-between shadow-soft">
-          Start setup
-        </Button>
+        <div ref={startRef}>
+          <Button kind="primary" size="lg" iconRight="arrow" onClick={onStart} className="w-full justify-between shadow-soft">
+            Start setup
+          </Button>
+        </div>
+        {startHidden && createPortal(
+          <div className="fixed inset-x-0 bottom-0 z-30 bg-gradient-to-t from-white via-white/90 to-transparent px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 lg:hidden">
+            <Button kind="primary" size="lg" iconRight="arrow" onClick={onStart} className="w-full justify-between shadow-soft">
+              Start setup
+            </Button>
+          </div>,
+          document.body,
+        )}
         <div className="-mx-3 mt-2 flex flex-wrap items-center">
           <Button kind="quiet" size="sm" icon="teach" onClick={onTeach} title="Plays every step by itself and reads it aloud, then the first turn">
             Teach it hands-free
@@ -139,7 +160,7 @@ export function Cover({
                   <Icon name="check" />
                 </span>
                 <span>
-                  Checked against the rulebook ({check.edition}){check.by && ` by ${check.by}`}.
+                  Checked against the published rules ({check.edition}){check.by && ` by ${check.by}`}.
                 </span>
               </>
             ) : (
