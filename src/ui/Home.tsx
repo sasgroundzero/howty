@@ -1,6 +1,7 @@
 /** The home page. Its one job is to get you to your game, so the search box is the loudest thing on it. */
 import { useMemo, useState } from 'react'
 import type { GameDef } from '../engine/types'
+import { CARD_IDS } from '../data/games/more'
 import { DISCLAIMER, FEATURED, SITE, TRY } from '../site'
 import { ArtFind, ArtFollow, ArtWatch } from './art'
 import { Icon, Logo } from './icons'
@@ -13,6 +14,7 @@ const mins = (g: GameDef) => Math.max(...(g.meta.playTime.match(/\d+/g) ?? ['999
 const LISTS: [string, string, (g: GameDef) => boolean][] = [
   ['All', 'Everything', () => true],
   ['Easy', 'Easy to learn', (g) => g.meta.difficulty === 'Easy'],
+  ['Cards', 'A deck of cards', (g) => CARD_IDS.has(g.id)],
   ['Two', 'Works with two', (g) => g.meta.players[0] <= 2 && g.meta.players[1] >= 2],
   ['Solo', 'Playable solo', (g) => g.meta.players[0] === 1],
   ['Crowd', 'Six or more', (g) => g.meta.players[1] >= 6],

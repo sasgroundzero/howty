@@ -23,7 +23,8 @@ type Made = { kind: string; props: Record<string, unknown>; tumble?: boolean }
 export interface Item {
   id: string; w: number; d: number; top: number; title: string; body: string
   n: number; cols: number; gap: number; stagger?: boolean; ghost?: boolean; cluster?: boolean
-  make: (playerColor: string, k: number) => Made
+  /** `seat` is '@0' for you, '@1', '@2'... for the other players, and '' for a shared item. */
+  make: (playerColor: string, k: number, seat?: string) => Made
 }
 interface Opt { n?: number; cols?: number; gap?: number; /** shift every other row half a step, for hex tiles */ stagger?: boolean }
 const mk = (id: string, w: number, d: number, top: number, title: string, body: string, make: Item['make'], o: Opt = {}): Item => ({
@@ -185,7 +186,7 @@ export function compose(gameId: string, n: number, spec: Spec): GameSetup {
         : [((k % it.cols) - (it.cols - 1) / 2 + (it.stagger && Math.floor(k / it.cols) % 2 ? 0.5 : 0)) * (it.w + it.gap), (Math.floor(k / it.cols) - (rows - 1) / 2) * (it.stagger ? it.d * 0.75 + it.gap : it.d + it.gap)]
       const id = it.id + (it.n > 1 ? `.${k}` : '') + suffix
       if (pieces.has(id)) fail(`duplicate id "${id}"`)
-      const m = it.make(pc, k)
+      const m = it.make(pc, k, suffix)
       const pos: V3 = [cx + s * dx, y, cz + s * dz]
       const piece = { id, kind: m.kind, props: m.props, tumble: m.tumble, spawnFrom: from, info: { title: it.title, body: it.body }, keys: [{ step, pos, rotY: rot, delay: delay ?? Math.min(1.4, (order++ % 24) * 0.06) }] } as unknown as AnyPiece
       pieces.set(id, b.add(piece as never) as AnyPiece)

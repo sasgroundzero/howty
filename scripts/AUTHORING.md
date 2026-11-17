@@ -10,6 +10,16 @@ Read first (all short):
   `src/components/pieces/boardArt.ts` – board art ids `g:style:arg:bg:accent:label` and the matching UV helpers
   (`cityUV`, `hexUV`, `gridUV`, `slotUV`, `loopUV`, `laneUV`). The label must not contain a colon.
 
+## Games played with ordinary playing cards
+- Import the card helpers from `src/data/games/playing.ts` (read it: it is short) and follow `src/data/games/more/hearts.ts`.
+- `hand(id, 'A♠ 10♥ K♦', ...)` in a `P(...)` row is face up for you and face down for everyone else. When another
+  player plays a card, turn it over as it moves: `flip('hand.1@1'), mv('hand.1@1', at('trick', 0.2, 0.5))`.
+- `stock(id, count, ...)` is a face-down pack; `draw('stock', at(...), pc('7♣'), 'newId')` turns its top card up.
+  `shown(...)` is face up for everyone, `hidden(...)` face down for everyone, `slot(k, cols, rows)` is the UV of a hand card.
+- Wrap hands of more than 7 cards with `{ cols: 7 }`. Suits are written ♠ ♥ ♦ ♣ and tens as `10`.
+- Say in the first step exactly which cards are used (52, a stripped pack, two packs, jokers or not) and deal the
+  number of cards that is right for `n` players.
+
 ## What each game needs
 - `tabletop(id, title, [minPlayers, maxPlayers], defaultPlayers, playTime, 'Easy'|'Medium'|'Hard', blurb, [3 swatch colors], (n) => ({ setup, turn }))`.
   Use the exact `id` you were given. Max players is capped at 8 (and solo games may start at 1); if the real game
