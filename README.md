@@ -9,17 +9,28 @@ piece on a 3D table one step at a time, then plays a short first turn. 176 games
 
 <p align="center"><img src="docs/demo.gif" alt="Scrolling the home page, searching for Wingspan, opening its game page, stepping through setup and watching the first turn" width="840" /></p>
 
-- **Runs entirely in the browser.** No backend, no API keys, no AI calls, no tracking. It is a static site.
 - **176 games built in**, from Chess and Catan to Wingspan and Terraforming Mars, plus 63 card games: Hearts, Solitaire, Blackjack and 18 kinds of poker among them.
+- **Teach it hands-free.** One button plays every step by itself and reads it aloud, then the first turn,
+  so the person explaining the game can watch the table instead of the rulebook. Voice commands
+  ("next", "back", "repeat") work too, where the browser supports them.
+- **Bring the whole table in.** Share opens your phone's share sheet and shows a QR code, so everyone can
+  follow the same guide on their own phone.
+- **Works offline.** After one visit every guide opens without a connection, and phones can add Howty to the
+  home screen like an app. Handy in basements and cabins.
+- **Print a checklist.** Every game has a one-page setup checklist, on screen or on paper.
+- **Find it by any name.** Search knows other names (Thirty-One, Klondike, Scum, Settlers), and the library
+  can be browsed by kind: party, co-op, family, strategy, classics, trick-taking, poker and casino.
 - **Add your own.** Paste the setup section of any rulebook and get a 3D table. Share it with a link:
   the rules travel in the link itself, so nothing is uploaded.
-- **Hands-free.** Optional narration and "next / back / repeat" voice commands (where the browser supports them).
 - **Daily table.** A finished setup with the name hidden: one guess, a new table every day, a streak, and a
-  result you can share ([/daily](https://howty.vercel.app/daily)).
+  result you can share as a picture ([/daily](https://howty.vercel.app/daily)).
 - **Your shelf.** Tag games as "own it", "want to learn" or "taught it" and see what you have set up. It is
   saved in your browser only.
-- **Lists.** Filter the library to easy games, two-player games, solo games, quick games and more.
-- **A page per game** (`/g/azul`), with a link to any step (`/g/azul?step=3&players=4`).
+- **A page per game** (`/g/azul`), with a link to any step (`/g/azul?step=3&players=4`). Each page carries its
+  steps as plain text and its own preview image, so search engines and link previews show the real guide.
+- **Runs entirely in the browser.** No backend, no account, no API keys, no AI calls, no cookies. The only
+  measurement is Vercel Web Analytics' anonymous page counts.
+- **Light.** Each game's 3D setup is its own small file, fetched when you open it.
 
 ## Run it
 
@@ -40,10 +51,10 @@ every board, card face and sound is drawn or synthesised in code.
 | --- | --- |
 | `src/engine/` | Game-agnostic engine: schema types, piece animation, camera, audio, voice |
 | `src/components/pieces/` | Reusable 3D primitives (card, stack, die, token, board...) and drawn board art |
-| `src/data/games/` | One file per game. `more/` holds the games written with the table composer |
+| `src/data/games/` | One file per game. `more/` holds the games written with the table composer; `catalog.ts` (generated) lists them all and loads each on demand; `tags.ts` has other names and kinds |
 | `src/custom/` | The rulebook reader behind "Add your own game", and share-link packing |
 | `src/ui/` | Home page, game page, daily table, shared components, icons and illustrations |
-| `scripts/` | Layout checker, index generator, per-game page writer, authoring guide |
+| `scripts/` | Layout checker, index and catalog generators, per-game page and preview-image writer, offline worker, authoring guide |
 
 A game is plain data: a list of steps and a list of pieces, where each piece says where it rests
 from a given step onward. The engine drops, slides, flips and hides pieces to match.
@@ -81,9 +92,15 @@ Most games are about 50 lines using the table composer: you say what goes in the
 sides and in front of each player, and it positions everything, sizes the table and aims the camera.
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [scripts/AUTHORING.md](scripts/AUTHORING.md).
 
-**Rules corrections are the most valuable contribution.** The guides were written from memory and
-have not all been checked against the printed rulebooks; where a number was uncertain the text says
-"check your rulebook". If you spot a mistake, open a "Rules error" issue or a pull request.
+**Rules checks are the most valuable contribution.** The guides were written from memory or from
+public rules references, and none has yet been checked step by step against a printed rulebook. Each game
+page says so and links to a "Verify" issue: if you have the box, check the guide and report back, and the
+page is marked "Checked against the rulebook" with your edition (see `src/data/games/verified.ts`).
+Spotted a mistake? Open a "Rules error" issue or a pull request.
+
+**Want a game added?** [Request it](https://github.com/sasgroundzero/howty/issues/new?template=game-request.md), or
+[vote on open requests](https://github.com/sasgroundzero/howty/issues?q=is%3Aissue+is%3Aopen+label%3Agame-request+sort%3Areactions-%2B1-desc)
+with a thumbs-up. The most-wanted games are built first.
 
 ## Unofficial
 

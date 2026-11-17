@@ -1,0 +1,78 @@
+# Launch drafts
+
+Drafts for announcing Howty. Nothing here has been posted. Read each community's rules first: most
+dislike self-promotion from new accounts, so post from an account that already takes part, answer every
+comment, and space the posts out over a week or two rather than all on one day.
+
+Before posting, check:
+
+- [ ] The live site works on a real phone (search, a game page, Teach it, Share with QR, the daily table)
+- [ ] A handful of popular guides (Catan, Ticket to Ride, Wingspan, Azul, Pandemic) have been checked
+      against the rulebook and marked verified, since rules accuracy is the first thing people will test
+- [ ] Vercel Web Analytics is switched on, so you can see what each post brings in
+- [ ] Optional: a short custom domain
+
+## Show HN (news.ycombinator.com)
+
+Best on a weekday morning, US Eastern time. The title has to be plain; the comment does the explaining.
+
+**Title:** Show HN: Howty – 3D step-by-step setup guides for 176 board and card games
+
+**First comment:**
+
+> I kept losing the first 20 minutes of game night to the setup page of the rulebook, so I built Howty.
+> Pick a game and every piece lands on a 3D table one step at a time, then it plays a short first turn.
+> There's a hands-free mode that reads each step aloud, and a QR code so the whole table can follow on
+> their phones.
+>
+> It's a static site: React, React Three Fiber and Tailwind, no backend, no account, no cookies. Each game
+> is about 50 lines of data written against a small "table composer" that lays out zones, sizes the table
+> and aims the camera, and a checker builds every game at every player count and fails on overlapping
+> pieces. Every board and card is drawn in code; there are no image or model files. Pages are
+> prerendered with the steps as plain text, and preview images are drawn from each game's layout at
+> build time. It works offline after one visit.
+>
+> The honest weak spot: the guides haven't been checked against printed rulebooks yet, and every page
+> says so. If you own a game, checking its guide is the most useful contribution.
+>
+> Code (MIT): https://github.com/sasgroundzero/howty
+
+## r/boardgames
+
+Check the subreddit's self-promotion rules first; some weeks it only allows this in a weekly thread.
+
+**Title:** I made a free site that shows board game setup step by step on a 3D table (176 games, no account)
+
+**Body:**
+
+> Setup is the part of game night nobody enjoys explaining, so I made Howty: pick the game, and each
+> setup step plays out on a 3D table, then it walks through a first turn. There's a hands-free mode that
+> reads the steps aloud, a QR code so everyone can follow on their own phone, a printable checklist, and
+> it works offline.
+>
+> It's free and open source, with no ads and no account. There's also a daily puzzle where you guess the
+> game from a finished setup.
+>
+> These are unofficial, fan-made guides and I'm sure some have mistakes. Every page has a link to report
+> one, and if you have the box I'd love help checking the guides you know well. Which games should I
+> add next?
+>
+> https://howty.vercel.app
+
+## BoardGameGeek (General Gaming forum)
+
+> **Free 3D setup walkthroughs for 176 games, looking for help checking them**
+>
+> I've built Howty, an open-source site that places each setup step on a 3D table and then plays a short
+> first turn. It covers 113 board games and 63 traditional card games. The guides were written from
+> public rules references and have not been checked against the printed rulebooks, which is where I'd
+> value this community's help: each page has a "help check it" link, and checked guides are marked with
+> the edition they were checked against. https://howty.vercel.app
+
+## Short post (X, Bluesky, Threads)
+
+> Spent 20 minutes reading the Catan setup page again? I made Howty: pick a game and every piece lands on
+> a 3D table step by step, then it plays your first turn. 176 games, free, works offline, open source.
+> howty.vercel.app
+
+Attach `docs/demo.gif`, or a screen recording from a phone.
