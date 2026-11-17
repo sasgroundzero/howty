@@ -86,6 +86,9 @@ Six sizes, and no arbitrary `text-[13px]`:
   Both are two soft layers; never a single heavy blur.
 - **Icons:** the inline set in `src/ui/icons.tsx`, 2px stroke, at 16 or 20 only. No emoji and no
   text glyphs standing in for icons.
+- **Illustrations:** the drawings in `src/ui/art.tsx`. They follow the icon rules at a larger size: 2px ink
+  strokes, warm neutral fills, a soft ground shadow, and amber on the one object the drawing is about.
+  New artwork is drawn in that style, never pulled from a stock set.
 
 ## 7. Motion: from where you acted
 

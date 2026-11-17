@@ -372,7 +372,7 @@ export default function App() {
           ) : (
             /* A game page: the table on the left, what to do on the right */
             <div className="mx-auto grid max-w-6xl gap-4 px-4 py-4 sm:px-6 lg:h-[calc(100dvh-3.5rem)] lg:grid-cols-[1.5fr_1fr]">
-              <div className={cx(surface, 'relative h-[40dvh] min-h-[260px] overflow-hidden shadow-soft lg:h-auto')}>
+              <div className={cx(surface, 'relative h-[34dvh] min-h-[240px] overflow-hidden shadow-soft lg:h-auto')}>
                 <div ref={setSlot} className="absolute inset-0" />
               </div>
               <div className={cx(surface, 'overflow-x-hidden p-6 shadow-soft lg:overflow-y-auto')}>
@@ -411,7 +411,11 @@ export default function App() {
                 ))}
                 <option value="+">Add a game…</option>
               </select>
-              {range[0] !== range[1] && <PlayerPicker range={range} value={players} onChange={changePlayers} />}
+              {range[0] !== range[1] && (
+                <div className="hidden sm:block">
+                  <PlayerPicker range={range} value={players} onChange={changePlayers} />
+                </div>
+              )}
             </div>
             <div className="flex gap-2">
               <button onClick={() => setShowList((v) => !v)} aria-expanded={showList} className={cx(panel, 'flex h-8 items-center gap-2 px-3 text-ui font-medium text-ink transition duration-150 ease-out hover:bg-white active:scale-[0.98]')}>

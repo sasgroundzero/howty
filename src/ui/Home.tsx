@@ -2,6 +2,7 @@
 import { useMemo, useState } from 'react'
 import type { GameDef } from '../engine/types'
 import { DISCLAIMER, FEATURED, SITE, TRY } from '../site'
+import { ArtFind, ArtFollow, ArtWatch } from './art'
 import { Icon, Logo } from './icons'
 import { Button, Chip, H2, Note, Stats, cx, surface } from './kit'
 import { STATUS, dayNumber, liveStreak, today, useMe, type Status } from './me'
@@ -47,7 +48,7 @@ function Marquee({ games, onOpen }: { games: GameDef[]; onOpen: (id: string) => 
                 tabIndex={i < row.length ? 0 : -1}
                 aria-hidden={i >= row.length}
                 className="flex h-20 w-32 shrink-0 flex-col justify-end rounded-xl border border-line p-3 transition duration-150 ease-out hover:-translate-y-0.5 hover:shadow-soft"
-                style={{ background: `linear-gradient(35deg, ${a} 0%, ${a} 66%, ${b ?? a} 66%, ${b ?? a} 83%, ${c ?? b ?? a} 83%)`, color: ink }}
+                style={{ background: `linear-gradient(180deg, ${b ?? a} 0, ${b ?? a} 10px, ${c ?? b ?? a} 10px, ${c ?? b ?? a} 18px, ${a} 18px)`, color: ink }}
               >
                 <span className="font-display text-ui font-bold leading-[1.15]">{g.meta.title.replace(/: .*/, '')}</span>
               </a>
@@ -172,7 +173,7 @@ export function Home({
       {!term && (
         <>
           {/* The live table: a real setup you can turn around, with tabs to swap the game */}
-          <section className={cx(surface, 'relative mt-12 h-[52dvh] max-h-[560px] min-h-[320px] overflow-hidden shadow-soft')}>
+          <section className={cx(surface, 'relative mt-12 h-[44dvh] max-h-[560px] min-h-[300px] overflow-hidden shadow-soft sm:h-[52dvh]')}>
             <div ref={table} className="absolute inset-0" />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 sm:p-6">
               <div>
@@ -197,15 +198,20 @@ export function Home({
           <section className="mt-16">
             <H2 className="sm:text-page">How it works</H2>
             <ol className="mt-6 grid border-t border-line sm:grid-cols-3 sm:divide-x sm:divide-line">
-              {[
-                ['Find your game', 'Search by the name on the box. If we do not have it, paste its setup rules and Howty builds the table for you.'],
-                ['Follow each step', 'Pieces land on the table one step at a time. Drag to look from any side, and tap a piece to see what it is.'],
-                ['Watch a first turn', 'A short walkthrough plays an opening turn, so nobody has to read the rulebook aloud.'],
-              ].map(([t, d], i) => (
-                <li key={t} className="border-b border-line py-6 sm:border-b-0 sm:px-6 sm:first:pl-0 sm:last:pr-0">
+              {(
+                [
+                  [ArtFind, 'Find your game', 'Search by the name on the box. If we do not have it, paste its setup rules and Howty builds the table for you.'],
+                  [ArtFollow, 'Follow each step', 'Pieces land on the table one step at a time. Drag to look from any side, and tap a piece to see what it is.'],
+                  [ArtWatch, 'Watch a first turn', 'A short walkthrough plays an opening turn, so nobody has to read the rulebook aloud.'],
+                ] as const
+              ).map(([Art, t, d], i) => (
+                <li key={t} className="flex items-start gap-4 border-b border-line py-6 sm:block sm:border-b-0 sm:px-6 sm:first:pl-0 sm:last:pr-0">
                   <div className="font-display text-page font-bold text-ink">{i + 1}</div>
-                  <div className="mt-6 text-body font-semibold text-ink">{t}</div>
-                  <p className="mt-1 max-w-[36ch] text-ui text-stone-600">{d}</p>
+                  <Art className="order-last h-20 w-auto shrink-0 sm:mt-4 sm:h-28" />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-body font-semibold text-ink sm:mt-4">{t}</div>
+                    <p className="mt-1 max-w-[36ch] text-ui text-stone-600">{d}</p>
+                  </div>
                 </li>
               ))}
             </ol>
@@ -232,7 +238,7 @@ export function Home({
           <button onClick={onDaily} className={cx(surface, 'mt-16 flex w-full items-center gap-4 p-4 text-left transition duration-150 ease-out hover:border-ink hover:shadow-soft active:scale-[0.99] sm:p-6')}>
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent font-display text-title font-bold text-white">?</span>
             <span className="min-w-0 flex-1">
-              <span className="block font-display text-title font-bold text-ink">{played ? (me.daily!.won ? 'You named today’s game' : 'See today’s answer') : 'Name the game from its setup'}</span>
+              <span className="block font-display text-body font-bold text-ink sm:text-title">{played ? (me.daily!.won ? 'You named today’s game' : 'See today’s answer') : 'Name the game from its setup'}</span>
               <span className="block text-ui text-stone-500">
                 Daily table #{dayNumber()}: one table, one guess{streak > 0 && `, ${streak}-day streak`}
               </span>
@@ -311,7 +317,7 @@ export function Home({
           <Icon name="plus" size={20} />
         </span>
         <span>
-          <span className="block font-display text-title font-bold text-ink">Add a game we do not have</span>
+          <span className="block font-display text-body font-bold text-ink sm:text-title">Add a game we do not have</span>
           <span className="block text-ui text-stone-500">Paste its setup rules to get a 3D table and a link you can send to friends.</span>
         </span>
       </button>

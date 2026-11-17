@@ -64,9 +64,9 @@ export function Cover({
             <PlayerPicker range={range} value={players} onChange={onPlayers} />
           </div>
         )}
-        <div className="flex items-center justify-between gap-4">
-          <span className="text-ui font-medium text-ink">Your shelf</span>
-          <div className="flex flex-wrap justify-end gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <span className="shrink-0 text-ui font-medium text-ink">Your shelf</span>
+          <div className="flex flex-wrap gap-2 sm:justify-end">
             {(Object.keys(STATUS) as Status[]).map((s) => (
               <Chip key={s} on={status === s} onClick={() => setStatus(s)}>
                 {STATUS[s]}
