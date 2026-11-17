@@ -226,7 +226,7 @@ function AnimatedPiece({ spec }: { spec: AnyPiece }) {
 type Controls = { target: THREE.Vector3; update: () => void; addEventListener: (t: string, f: () => void) => void; removeEventListener: (t: string, f: () => void) => void }
 
 /** Glides the camera to each step's focus, then hands control back to the user. */
-function CameraRig({ focus, nonce }: { focus: Focus; nonce: number }) {
+function CameraRig({ focus, nonce, back = 1 }: { focus: Focus; nonce: number; /** extra pull-back, for showing the whole table in a page panel */ back?: number }) {
   const camera = useThree((s) => s.camera)
   const size = useThree((s) => s.size)
   const controls = useThree((s) => s.controls) as unknown as Controls | null
@@ -234,7 +234,7 @@ function CameraRig({ focus, nonce }: { focus: Focus; nonce: number }) {
   const first = useRef(true)
   const fkey = focus.pos.join(',') + focus.target.join(',')
   // Narrow (portrait) screens see less of the table, so pull the camera back to compensate
-  const pull = Math.min(3, Math.max(1, 1.45 / (size.width / size.height)))
+  const pull = Math.min(3, Math.max(1, 1.45 / (size.width / size.height))) * back
 
   useEffect(() => {
     if (!controls) return
@@ -313,12 +313,12 @@ function Table({ table }: { table: TableDef }) {
   )
 }
 
-export function Scene({ game, gameKey, nav, nonce, idle, quiet }: { game: GameSetup; gameKey: string; nav: Nav; nonce: number; idle: boolean; /** hide the hover cards (the daily table must not name its pieces) */ quiet?: boolean }) {
+export function Scene({ game, gameKey, nav, nonce, idle, quiet, backdrop = '#d9cfc0' }: { game: GameSetup; gameKey: string; nav: Nav; nonce: number; idle: boolean; /** background color behind the table */ backdrop?: string; /** hide the hover cards (the daily table must not name its pieces) */ quiet?: boolean }) {
   const step = Math.min(nav.step, game.steps.length - 1)
   return (
     <NavContext.Provider value={nav}>
-      <color attach="background" args={['#d9cfc0']} />
-      <fog attach="fog" args={['#d9cfc0', 110, 230]} />
+      <color attach="background" args={[backdrop]} />
+      <fog attach="fog" args={[backdrop, 110, 230]} />
       <hemisphereLight args={['#fff4e2', '#8c6b4a', 0.75]} />
       <directionalLight
         position={[9, 22, 12]}
@@ -348,7 +348,7 @@ export function Scene({ game, gameKey, nav, nonce, idle, quiet }: { game: GameSe
         autoRotateSpeed={0.5}
       />
       <ViewOffset on={!idle} />
-      <CameraRig focus={game.steps[step].focus} nonce={nonce} />
+      <CameraRig focus={game.steps[step].focus} nonce={nonce} back={idle ? 1.3 : 1} />
     </NavContext.Provider>
   )
 }

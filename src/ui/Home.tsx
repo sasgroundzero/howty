@@ -34,7 +34,7 @@ const open = (id: string, onOpen: (id: string) => void) => ({
 function Marquee({ games, onOpen }: { games: GameDef[]; onOpen: (id: string) => void }) {
   const rows = [0, 1, 2].map((r) => games.filter((_, i) => i % 3 === r))
   return (
-    <div className="marquee -mx-6 space-y-2 overflow-hidden py-1 sm:-mx-8" aria-label="All games">
+    <div className="marquee -mx-4 space-y-2 overflow-hidden py-1 sm:-mx-6" aria-label="All games">
       {rows.map((row, r) => (
         <div key={r} className="marquee-row flex w-max gap-2" style={{ animationDuration: `${row.length * 4.2}s`, animationDirection: r % 2 ? 'reverse' : 'normal' }}>
           {[...row, ...row].map((g, i) => {
@@ -75,7 +75,43 @@ function GameCard({ g, onOpen }: { g: GameDef; onOpen: (id: string) => void }) {
   )
 }
 
-export function Home({ games, note, onOpen, onAdd, onDaily }: { games: GameDef[]; note: string; onOpen: (id: string) => void; onAdd: () => void; onDaily: () => void }) {
+/** The bar across the top of every page outside the step view. */
+export function TopBar({ onHome, onDaily, onAdd }: { onHome: () => void; onDaily: () => void; onAdd: () => void }) {
+  return (
+    <header className="sticky top-0 z-30 border-b border-line bg-paper/85 backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <div className="flex items-center gap-4">
+          <a href="/" onClick={(e) => (e.preventDefault(), onHome())} className="flex items-center gap-2 transition duration-150 ease-out active:scale-[0.98]">
+            <Logo size={24} />
+            <span className="font-display text-title font-bold text-ink">howty</span>
+          </a>
+          <nav className="flex items-center">
+            <Button kind="quiet" size="sm" onClick={onDaily}>
+              Daily
+            </Button>
+            <Button kind="quiet" size="sm" onClick={onAdd}>
+              Add a game
+            </Button>
+          </nav>
+        </div>
+        {SITE.repo && (
+          <a href={SITE.repo} target="_blank" rel="noreferrer" className="inline-flex h-8 items-center gap-2 rounded-full border border-line bg-white px-3 text-ui font-semibold text-ink transition duration-150 ease-out hover:border-ink">
+            <Icon name="star" /> Star
+          </a>
+        )}
+      </div>
+    </header>
+  )
+}
+
+export function Home({
+  games, note, demo, demoPlayers, demoSteps, table, onDemo, onOpen, onAdd, onDaily,
+}: {
+  games: GameDef[]; note: string
+  /** the game on the live table, and the element the 3D canvas is mounted into */
+  demo: GameDef; demoPlayers: number; demoSteps: number; table: (el: HTMLElement | null) => void
+  onDemo: (id: string) => void; onOpen: (id: string) => void; onAdd: () => void; onDaily: () => void
+}) {
   const [q, setQ] = useState('')
   const [list, setList] = useState('All')
   const [tab, setTab] = useState<Status | 'done'>('want')
@@ -87,44 +123,27 @@ export function Home({ games, note, onOpen, onAdd, onDaily }: { games: GameDef[]
     () => games.filter((g) => pass(g) && g.meta.title.toLowerCase().includes(term)).sort((a, b) => a.meta.title.replace(/^The /, '').localeCompare(b.meta.title.replace(/^The /, ''))),
     [games, list, term], // eslint-disable-line react-hooks/exhaustive-deps
   )
-  const featured = FEATURED.slice(0, 6).map((id) => byId.get(id)).filter((g): g is GameDef => !!g)
+  const pickOf = (ids: string[]) => ids.map((id) => byId.get(id)).filter((g): g is GameDef => !!g)
+  const featured = pickOf(FEATURED).slice(0, 8)
+  const tries = pickOf([...new Set([...TRY, 'pandemic'])])
   const mine = games.filter((g) => g.custom)
   const onShelf = (g: GameDef) => (tab === 'done' ? !!me.done[g.id] : me.shelf[g.id] === tab)
   const streak = liveStreak(me)
   const played = me.daily?.day === today()
   const hasShelf = Object.keys(me.shelf).length + Object.keys(me.done).length > 0
+  const grid = 'mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4'
 
   return (
-    <div className="mx-auto max-w-2xl px-6 pb-12 pt-6 sm:px-8">
-      <header className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Logo size={24} />
-          <span className="font-display text-title font-bold">howty</span>
-        </div>
-        <nav className="flex items-center">
-          <Button kind="quiet" size="sm" onClick={onDaily}>
-            Daily
-          </Button>
-          <Button kind="quiet" size="sm" onClick={onAdd}>
-            Add your own
-          </Button>
-          {SITE.repo && (
-            <a href={SITE.repo} target="_blank" rel="noreferrer" className="ml-2 inline-flex h-8 items-center gap-2 rounded-full border border-line bg-white px-3 text-ui font-semibold text-ink transition duration-150 ease-out hover:border-ink">
-              <Icon name="star" /> Star
-            </a>
-          )}
-        </nav>
-      </header>
-
+    <div className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
       {/* One focal point: the headline and the search box. Everything below is quieter. */}
-      <h1 className="mt-12 max-w-[14ch] font-display text-hero font-bold text-ink sm:mt-16">Set up any board game, step by step.</h1>
-      <p className="mt-4 max-w-[46ch] text-body text-stone-600">Pick the game on your table. Each setup step plays out in 3D, then you watch a real first turn.</p>
+      <h1 className="mt-12 max-w-[16ch] font-display text-hero font-bold text-ink sm:mt-16">Set up any board game, step by step.</h1>
+      <p className="mt-4 max-w-[44ch] text-body text-stone-600">Pick the game on your table. Each setup step plays out in 3D, then you watch a real first turn.</p>
       {note && (
-        <div className="mt-4">
+        <div className="mt-4 max-w-md">
           <Note>{note}</Note>
         </div>
       )}
-      <label className="mt-8 flex h-14 items-center gap-3 rounded-full border border-line bg-white pl-6 pr-2 shadow-soft transition duration-150 ease-out focus-within:border-ink">
+      <label className="mt-8 flex h-14 max-w-md items-center gap-3 rounded-full border border-line bg-white pl-6 pr-2 shadow-soft transition duration-150 ease-out focus-within:border-ink">
         <Icon name="search" size={20} className="shrink-0 text-stone-400" />
         <input
           type="search"
@@ -140,44 +159,91 @@ export function Home({ games, note, onOpen, onAdd, onDaily }: { games: GameDef[]
         </Button>
       </label>
       {!term && (
-        <p className="mt-3 text-ui text-stone-500">
-          Try{' '}
-          {TRY.map((id) => byId.get(id)).map(
-            (g, i) =>
-              g && (
-                <span key={g.id}>
-                  {i > 0 && ', '}
-                  <a {...open(g.id, onOpen)} className="font-medium text-stone-700 underline decoration-line underline-offset-4 transition hover:text-ink hover:decoration-ink">
-                    {g.meta.title}
-                  </a>
-                </span>
-              ),
-          )}
-        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="text-ui text-stone-500">Try</span>
+          {tries.slice(0, 5).map((g) => (
+            <Chip key={g.id} onClick={() => onOpen(g.id)}>
+              {g.meta.title}
+            </Chip>
+          ))}
+        </div>
       )}
 
       {!term && (
         <>
-          <div className="mt-12">
+          {/* The live table: a real setup you can turn around, with tabs to swap the game */}
+          <section className={cx(surface, 'relative mt-12 h-[52dvh] max-h-[560px] min-h-[320px] overflow-hidden shadow-soft')}>
+            <div ref={table} className="absolute inset-0" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 sm:p-6">
+              <div>
+                <div className="font-display text-title font-bold text-ink">{demo.meta.title}</div>
+                <div className="text-ui text-stone-600">
+                  Set up for {demoPlayers}, {demoSteps} steps
+                </div>
+              </div>
+              <Button kind="primary" iconRight="arrow" onClick={() => onOpen(demo.id)} className="pointer-events-auto">
+                Set this up
+              </Button>
+            </div>
+          </section>
+          <div className="mt-4 flex flex-wrap justify-center gap-1">
+            {tries.map((g) => (
+              <button key={g.id} onClick={() => onDemo(g.id)} aria-pressed={g.id === demo.id} className={cx('h-8 rounded-full px-3 text-ui font-medium transition duration-150 ease-out active:scale-[0.98]', g.id === demo.id ? 'border border-line bg-white text-ink shadow-soft' : 'text-stone-500 hover:text-ink')}>
+                {g.meta.title}
+              </button>
+            ))}
+          </div>
+
+          <section className="mt-16">
+            <H2 className="sm:text-page">How it works</H2>
+            <ol className="mt-6 grid border-t border-line sm:grid-cols-3 sm:divide-x sm:divide-line">
+              {[
+                ['Find your game', 'Search by the name on the box. If we do not have it, paste its setup rules and Howty builds the table for you.'],
+                ['Follow each step', 'Pieces land on the table one step at a time. Drag to look from any side, and tap a piece to see what it is.'],
+                ['Watch a first turn', 'A short walkthrough plays an opening turn, so nobody has to read the rulebook aloud.'],
+              ].map(([t, d], i) => (
+                <li key={t} className="border-b border-line py-6 sm:border-b-0 sm:px-6 sm:first:pl-0 sm:last:pr-0">
+                  <div className="font-display text-page font-bold text-ink">{i + 1}</div>
+                  <div className="mt-6 text-body font-semibold text-ink">{t}</div>
+                  <p className="mt-1 max-w-[36ch] text-ui text-stone-600">{d}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section className="mt-16">
+            <div className="flex flex-wrap items-baseline justify-between gap-4">
+              <H2 className="sm:text-page">Popular setups</H2>
+              <a href="#all" className="text-ui font-medium text-stone-600 underline decoration-line underline-offset-4 transition hover:text-ink hover:decoration-ink">
+                All {games.length} games
+              </a>
+            </div>
+            <div className={grid}>
+              {featured.map((g) => (
+                <GameCard key={g.id} g={g} onOpen={onOpen} />
+              ))}
+            </div>
+          </section>
+
+          <div className="mt-16">
             <Marquee games={games} onOpen={onOpen} />
           </div>
 
-          <button onClick={onDaily} className={cx(surface, 'mt-12 flex w-full items-center gap-4 p-4 text-left transition duration-150 ease-out hover:border-ink hover:shadow-soft active:scale-[0.99]')}>
+          <button onClick={onDaily} className={cx(surface, 'mt-16 flex w-full items-center gap-4 p-4 text-left transition duration-150 ease-out hover:border-ink hover:shadow-soft active:scale-[0.99] sm:p-6')}>
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent font-display text-title font-bold text-white">?</span>
             <span className="min-w-0 flex-1">
-              <span className="block font-display text-body font-bold text-ink">{played ? (me.daily!.won ? 'You named today’s game' : 'See today’s answer') : 'Name the game from its setup'}</span>
+              <span className="block font-display text-title font-bold text-ink">{played ? (me.daily!.won ? 'You named today’s game' : 'See today’s answer') : 'Name the game from its setup'}</span>
               <span className="block text-ui text-stone-500">
-                Daily table #{dayNumber()}
-                {streak > 0 && ` · ${streak}-day streak`}
+                Daily table #{dayNumber()}: one table, one guess{streak > 0 && `, ${streak}-day streak`}
               </span>
             </span>
             <Icon name="arrow" size={20} className="shrink-0 text-stone-400" />
           </button>
 
           {hasShelf && (
-            <section className="mt-12">
-              <H2>Your shelf</H2>
-              <div className="mt-4">
+            <section className="mt-16">
+              <H2 className="sm:text-page">Your shelf</H2>
+              <div className="mt-6 max-w-xl">
                 <Stats
                   items={[
                     ['On your shelf', Object.keys(me.shelf).length],
@@ -194,7 +260,7 @@ export function Home({ games, note, onOpen, onAdd, onDaily }: { games: GameDef[]
                   </Chip>
                 ))}
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <div className={grid}>
                 {games.filter(onShelf).map((g) => (
                   <GameCard key={g.id} g={g} onOpen={onOpen} />
                 ))}
@@ -204,37 +270,28 @@ export function Home({ games, note, onOpen, onAdd, onDaily }: { games: GameDef[]
           )}
 
           {mine.length > 0 && (
-            <section className="mt-12">
-              <H2>Games you added</H2>
-              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <section className="mt-16">
+              <H2 className="sm:text-page">Games you added</H2>
+              <div className={grid}>
                 {mine.map((g) => (
                   <GameCard key={g.id} g={g} onOpen={onOpen} />
                 ))}
               </div>
             </section>
           )}
-
-          <section className="mt-12">
-            <H2>Popular setups</H2>
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {featured.map((g) => (
-                <GameCard key={g.id} g={g} onOpen={onOpen} />
-              ))}
-            </div>
-          </section>
         </>
       )}
 
-      <section id="all" className="mt-12">
-        <H2>{term ? `${all.length} match${all.length === 1 ? '' : 'es'}` : list === 'All' ? `All ${games.length} games` : `${LISTS.find((l) => l[0] === list)![1]}, ${all.length} games`}</H2>
-        <div className="mt-4 flex flex-wrap gap-2">
+      <section id="all" className="mt-16 scroll-mt-20">
+        <H2 className="sm:text-page">{term ? `${all.length} match${all.length === 1 ? '' : 'es'}` : list === 'All' ? `All ${games.length} games` : `${LISTS.find((l) => l[0] === list)![1]}, ${all.length} games`}</H2>
+        <div className="mt-6 flex flex-wrap gap-2">
           {LISTS.map(([key, label]) => (
             <Chip key={key} on={list === key} onClick={() => setList(key)}>
               {label}
             </Chip>
           ))}
         </div>
-        <ul className="mt-4 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
+        <ul className="mt-4 grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
           {all.map((g) => (
             <li key={g.id} className="border-b border-line">
               <a {...open(g.id, onOpen)} className="group flex items-baseline justify-between gap-3 py-3">
@@ -249,23 +306,25 @@ export function Home({ games, note, onOpen, onAdd, onDaily }: { games: GameDef[]
         {all.length === 0 && <p className="mt-4 text-ui text-stone-600">No game matches “{q}”. You can add it yourself below.</p>}
       </section>
 
-      <button onClick={onAdd} className="mt-8 flex w-full items-center gap-4 rounded-2xl border border-dashed border-stone-400 p-4 text-left transition duration-150 ease-out hover:border-ink hover:bg-white active:scale-[0.99]">
+      <button onClick={onAdd} className="mt-8 flex w-full items-center gap-4 rounded-2xl border border-dashed border-stone-400 p-4 text-left transition duration-150 ease-out hover:border-ink hover:bg-white active:scale-[0.99] sm:p-6">
         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-ink text-paper">
           <Icon name="plus" size={20} />
         </span>
         <span>
-          <span className="block font-display text-body font-bold text-ink">Add a game we do not have</span>
+          <span className="block font-display text-title font-bold text-ink">Add a game we do not have</span>
           <span className="block text-ui text-stone-500">Paste its setup rules to get a 3D table and a link you can send to friends.</span>
         </span>
       </button>
 
-      <footer className="mt-16 border-t border-line pt-6 text-meta text-stone-500">
-        <p className="max-w-[70ch]">{DISCLAIMER}</p>
-        <p className="mt-3">
-          Free and open source. No account and no tracking: your shelf and streak stay in this browser.
+      <footer className="mt-16 grid gap-8 border-t border-line pt-8 text-meta text-stone-500 sm:grid-cols-[1.4fr_1fr]">
+        <div>
+          <div className="flex items-center gap-2">
+            <Logo size={20} />
+            <span className="font-display text-body font-bold text-ink">howty</span>
+          </div>
+          <p className="mt-3 max-w-[52ch] text-ui text-stone-600">Board-game setup you can turn around and follow with the box open. Free and open source, with no account and no tracking: your shelf and streak stay in this browser.</p>
           {SITE.repo && (
-            <>
-              {' '}
+            <p className="mt-3 text-ui">
               <a href={SITE.repo} target="_blank" rel="noreferrer" className="text-stone-700 underline underline-offset-4 hover:text-ink">
                 Source code
               </a>
@@ -273,9 +332,10 @@ export function Home({ games, note, onOpen, onAdd, onDaily }: { games: GameDef[]
               <a href={`${SITE.repo}/issues/new/choose`} target="_blank" rel="noreferrer" className="text-stone-700 underline underline-offset-4 hover:text-ink">
                 Report a rules error
               </a>
-            </>
+            </p>
           )}
-        </p>
+        </div>
+        <p className="max-w-[60ch]">{DISCLAIMER}</p>
       </footer>
     </div>
   )

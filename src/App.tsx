@@ -6,7 +6,8 @@
  *   src/data/games/          one schema builder per game
  *   src/custom/              client-side rulebook parser and "+ Add Custom Game" modal
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Canvas } from '@react-three/fiber'
 import { Scene, type Nav } from './engine/Engine'
 import { audio, unlockAudio } from './engine/audio'
@@ -17,10 +18,10 @@ import { CustomGameModal } from './custom/CustomGameModal'
 import { SITE } from './site'
 import { Cover, PlayerPicker } from './ui/Cover'
 import { Daily } from './ui/Daily'
-import { Home, playersLabel } from './ui/Home'
+import { Home, TopBar, playersLabel } from './ui/Home'
 import { dailyPuzzle, today, update, useMe } from './ui/me'
 import { Icon, Logo, type IconName } from './ui/icons'
-import { Button, cx, panel } from './ui/kit'
+import { Button, cx, panel, surface } from './ui/kit'
 import { decodeShare, encodeShare, loadCustoms, saveCustoms, toGameDef, type CustomEntry } from './custom/parser'
 
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n))
@@ -75,6 +76,17 @@ export default function App() {
     return { step: started ? clamp(first.step - 1, 0, n - 1) : n - 1, dir: 0, jump: true }
   })
   const [nonce, setNonce] = useState(0)
+  // One 3D canvas for the whole app. It lives in its own element, which is moved into whichever
+  // page panel is on screen, so switching pages never rebuilds the scene.
+  const host = useMemo(() => Object.assign(document.createElement('div'), { className: 'h-full w-full' }), [])
+  const [slot, setSlot] = useState<HTMLElement | null>(null)
+  useLayoutEffect(() => {
+    slot?.appendChild(host)
+  }, [slot, host])
+  const page = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    page.current?.scrollTo(0, 0)
+  }, [view, gameId])
   const [muted, setMuted] = useState(false)
   const [narrate, setNarrate] = useState(false)
   const [listening, setListening] = useState(false)
@@ -325,29 +337,56 @@ export default function App() {
 
   return (
     <div className="relative h-full w-full select-none bg-paper text-ink">
-      {/* The 3D table fills the screen while playing; on the home and cover pages it sits beside (or above) the text. */}
-      <div className={started ? 'absolute inset-0' : 'absolute inset-x-0 top-0 h-[34dvh] lg:inset-y-0 lg:left-[46%] lg:h-auto'}>
+      {createPortal(
         <Canvas shadows camera={{ position: [2, 25, 20], fov: 40, near: 0.1, far: 400 }} dpr={[1, 2]} onPointerMissed={() => hoverStore.clear()}>
-          <Scene game={game} gameKey={gameId} nav={{ ...nav, step }} nonce={nonce} idle={!started} quiet={view === 'daily' && !guessed} />
-        </Canvas>
-        {view === 'home' && (
-          <button onClick={() => pickGame(gameId, 'cover')} className={cx(panel, 'absolute bottom-4 left-4 flex h-10 items-center gap-2 px-4 text-ui font-semibold text-ink transition duration-150 ease-out hover:bg-white active:scale-[0.98]')}>
-            {def.meta.title}, set up for {players} <Icon name="arrow" />
-          </button>
-        )}
-      </div>
-      {!started && (
-        <main className="absolute inset-x-0 bottom-0 top-[34dvh] select-text overflow-y-auto overflow-x-hidden rounded-t-2xl border-t border-line bg-paper lg:inset-y-0 lg:right-auto lg:w-[46%] lg:rounded-none lg:border-r lg:border-t-0">
-          <div key={`${view}:${view === 'home' ? '' : gameId}`} className="animate-slide min-h-full" style={{ ['--from' as string]: `${from}px` }}>
+          <Scene game={game} gameKey={gameId} nav={{ ...nav, step }} nonce={nonce} idle={!started} quiet={view === 'daily' && !guessed} backdrop={started ? '#d9cfc0' : '#f4efe5'} />
+        </Canvas>,
+        host,
+      )}
+      {started ? (
+        <div ref={setSlot} className="absolute inset-0" />
+      ) : (
+        <div ref={page} className="absolute inset-0 select-text overflow-y-auto overflow-x-hidden">
+          <TopBar onHome={goHome} onDaily={openDaily} onAdd={() => setAdding(true)} />
           {view === 'home' ? (
-            <Home games={games} note={sharedNote} onOpen={(id) => pickGame(id, 'cover')} onAdd={() => setAdding(true)} onDaily={openDaily} />
-          ) : view === 'daily' ? (
-            <Daily puzzle={puzzle} onOpen={(id) => pickGame(id, 'cover')} onHome={goHome} />
+            <div key="home" className="animate-slide" style={{ ['--from' as string]: `${from}px` }}>
+              <Home
+                games={games}
+                note={sharedNote}
+                demo={def}
+                demoPlayers={players}
+                demoSteps={setupCount}
+                table={setSlot}
+                onDemo={(id) => {
+                  const g = games.find((x) => x.id === id) ?? games[0]
+                  hoverStore.clear()
+                  setGameId(g.id)
+                  setPlayers(g.meta.defaultPlayers)
+                  setNav({ step: g.build(g.meta.defaultPlayers).setupCount - 1, dir: 0, jump: true })
+                }}
+                onOpen={(id) => pickGame(id, 'cover')}
+                onAdd={() => setAdding(true)}
+                onDaily={openDaily}
+              />
+            </div>
           ) : (
-            <Cover def={def} game={game} players={players} note={sharedNote} copied={copied} onPlayers={changePlayers} onStart={start} onWatch={watch} onHome={goHome} onShare={() => void share()} onRemove={removeCustom} />
+            /* A game page: the table on the left, what to do on the right */
+            <div className="mx-auto grid max-w-6xl gap-4 px-4 py-4 sm:px-6 lg:h-[calc(100dvh-3.5rem)] lg:grid-cols-[1.5fr_1fr]">
+              <div className={cx(surface, 'relative h-[40dvh] min-h-[260px] overflow-hidden shadow-soft lg:h-auto')}>
+                <div ref={setSlot} className="absolute inset-0" />
+              </div>
+              <div className={cx(surface, 'overflow-x-hidden p-6 shadow-soft lg:overflow-y-auto')}>
+                <div key={`${view}:${gameId}`} className="animate-slide h-full" style={{ ['--from' as string]: `${from}px` }}>
+                  {view === 'daily' ? (
+                    <Daily puzzle={puzzle} onOpen={(id) => pickGame(id, 'cover')} onHome={goHome} />
+                  ) : (
+                    <Cover def={def} game={game} players={players} note={sharedNote} copied={copied} onPlayers={changePlayers} onStart={start} onWatch={watch} onHome={goHome} onShare={() => void share()} onRemove={removeCustom} />
+                  )}
+                </div>
+              </div>
+            </div>
           )}
-          </div>
-        </main>
+        </div>
       )}
       {adding && <CustomGameModal onClose={() => setAdding(false)} onCreate={addCustom} />}
 

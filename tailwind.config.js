@@ -18,7 +18,7 @@ export default {
         body: ['16px', { lineHeight: '24px' }],
         title: ['20px', { lineHeight: '24px', letterSpacing: '-0.01em' }],
         page: ['28px', { lineHeight: '32px', letterSpacing: '-0.02em' }],
-        hero: ['44px', { lineHeight: '46px', letterSpacing: '-0.025em' }],
+        hero: ['clamp(38px, 5.2vw, 56px)', { lineHeight: '1.04', letterSpacing: '-0.03em' }],
       },
       boxShadow: {
         soft: '0 1px 2px rgba(60, 40, 10, 0.06), 0 8px 24px -10px rgba(60, 40, 10, 0.14)',

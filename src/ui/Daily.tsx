@@ -21,13 +21,13 @@ export function Daily({ puzzle, onOpen, onHome }: { puzzle: { answer: GameDef; c
     }
   }
   return (
-    <div className="mx-auto flex min-h-full max-w-2xl flex-col px-6 pb-8 pt-6 sm:px-8">
+    <div className="flex min-h-full flex-col">
       <Button kind="quiet" size="sm" icon="back" onClick={onHome} className="-ml-3 self-start">
         All games
       </Button>
-      <div className="mt-8">
+      <div className="mt-6">
         <Eyebrow>Daily table #{puzzle.number}</Eyebrow>
-        <h1 className="mt-1 font-display text-hero font-bold text-ink">{result ? (result.won ? 'You named it.' : 'Not this time.') : 'Which game is this?'}</h1>
+        <h1 className="mt-1 font-display text-page font-bold text-ink sm:text-[40px] sm:leading-[1.05]">{result ? (result.won ? 'You named it.' : 'Not this time.') : 'Which game is this?'}</h1>
         <p className="mt-3 max-w-[46ch] text-body text-stone-600">
           {result ? `Today’s table was ${puzzle.answer.meta.title}. A new one appears at midnight.` : 'This table is set up and ready to play. Drag it to look around, then pick the game. You get one guess.'}
         </p>

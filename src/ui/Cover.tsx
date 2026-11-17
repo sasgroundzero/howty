@@ -38,7 +38,7 @@ export function Cover({
       return { ...m, shelf }
     })
   return (
-    <div className="mx-auto flex min-h-full max-w-2xl flex-col px-6 pb-8 pt-6 sm:px-8">
+    <div className="flex min-h-full flex-col">
       <Button kind="quiet" size="sm" icon="back" onClick={onHome} className="-ml-3 self-start">
         All games
       </Button>
@@ -47,9 +47,9 @@ export function Cover({
           <Note>{note}</Note>
         </div>
       )}
-      <div className="mt-8">
+      <div className="mt-6">
         <Eyebrow>{def.custom ? 'Your game' : 'Setup guide'}</Eyebrow>
-        <h1 className="mt-1 font-display text-hero font-bold text-ink">{def.meta.title}</h1>
+        <h1 className="mt-1 font-display text-page font-bold text-ink sm:text-[40px] sm:leading-[1.05]">{def.meta.title}</h1>
         <p className="mt-3 text-body text-stone-600">{def.meta.blurb}</p>
         <p className="mt-2 text-ui text-stone-500">
           {playersLabel(range)} · {def.meta.playTime} · {def.meta.difficulty} · {setup.length} setup steps

@@ -7,6 +7,19 @@ here. If a change cannot answer "yes" to all seven, it is not done.
 The tokens live in `tailwind.config.js`, the shared components in `src/ui/kit.tsx`, and the
 motion rules at the bottom of `src/index.css`. Use those; do not hand-roll a new button or shadow.
 
+## Page layout
+
+The layout follows the same shape on every page, modelled on usebygga.com:
+
+- **A thin bar across the top** with the name, two links and the GitHub star. It stays put while you scroll.
+- **Home is one full-width column** (max 72rem): headline and search at the top left, then the live 3D
+  table in a large rounded panel with its caption and one button, then tabs to swap the game, then
+  "How it works" as three ruled columns, then the library.
+- **A game page is two panels side by side:** the 3D table on the left, and a card on the right that
+  ends in the one primary button. On a phone they stack, table first.
+- **The step view is the only full-screen page.** The table fills the screen and the controls float over it.
+- There is one 3D canvas. It is moved into whichever panel is showing, so pages switch without reloading the scene.
+
 ## 1. Focal point: what is this screen for?
 
 Each screen has one job and one loudest element. Everything else is turned down.
@@ -36,7 +49,7 @@ Six sizes, and no arbitrary `text-[13px]`:
 
 | Class | Size | Used for |
 | --- | --- | --- |
-| `text-hero` | 44 | The one headline on a page |
+| `text-hero` | 38–56, scales with the window | The home page headline |
 | `text-page` | 28 | A step's title, a dialog's title |
 | `text-title` | 20 | Section headings |
 | `text-body` | 16 | Reading text, names in lists |
