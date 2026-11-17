@@ -6,7 +6,7 @@ const HAND = KIND.map(([c, t, g]) => ft(c, t, 'Age I', g))
 
 export const sevenWonders = tabletop('7-wonders', '7 Wonders', [3, 7], 4, '30 min', 'Medium', 'Draft cards to build a city and a wonder.', ['#a9744a', '#3f78c2', '#e0b12f'], (n) => ({
   setup: [
-    S('Deal the wonder boards', 'Give each player one wonder board at random. Agree which side to use; side A is the simpler one for a first game.', 'you', [
+    S('Deal the wonder boards', 'Give each player one wonder board at random. Each player picks a side; the Day side (side A in the first edition) is simpler for a first game.', 'you', [
       P(zone('city', 6.4, 1.5, 'Your city', 'Cards you build are placed here face up, grouped by color so your neighbours can see them.')),
       P(mat('wonder', 4.6, 1.6, '$', 'Wonder', 'Wonder board', 'Shows the resource your city produces from the start and the stages of your wonder, which you build one at a time from left to right.')),
     ]),
@@ -35,7 +35,7 @@ export const sevenWonders = tabletop('7-wonders', '7 Wonders', [3, 7], 4, '30 mi
       set('coin@2', { label: '6' }),
     ]),
     T('Pass your hand', 'Everyone passes the rest of their hand to the player on their left in Age I. Hands go to the right in Age II and to the left again in Age III. Repeat until 6 cards have been played; the 7th is discarded.', 'all'),
-    T('Settle conflicts', 'At the end of each Age compare your military shields with each neighbour. The stronger side takes a victory token (1, 3 or 5 points by Age) and the weaker takes a minus 1 token. Here you beat one neighbour.', 'you', [
+    T('Settle conflicts', 'At the end of each Age compare your military shields with each neighbour. The stronger side takes a victory token (1, 3 or 5 points by Age) and the weaker takes a minus 1 token; on a tie, neither takes one. Here you beat one neighbour.', 'you', [
       spawn(tiles('won', 1, 0.5, 0.5, ft('#c0392b', '', '', '1'), 'Victory token', 'Worth 1 point, won at the end of Age I.', { h: 0.08 }), at('wonder', 0.1, 0.35), 'conflict.0'),
     ]),
     T('End of the game', 'After the conflicts of Age III everyone adds up points from military, coins, wonder stages, and their civic, trade, science and guild cards. The highest total wins.', 'all'),

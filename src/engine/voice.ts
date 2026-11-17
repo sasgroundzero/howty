@@ -11,6 +11,16 @@ export function speak(text: string, onEnd?: () => void) {
   window.speechSynthesis.speak(u)
   return true
 }
+/**
+ * iOS Safari only lets a page speak if speech was first started directly by a tap. Call this from the tap
+ * that turns narration on; later lines, started by timers and effects, are then allowed.
+ */
+export function primeSpeech() {
+  if (!('speechSynthesis' in window)) return
+  const u = new SpeechSynthesisUtterance(' ')
+  u.volume = 0
+  window.speechSynthesis.speak(u)
+}
 export const hush = () => 'speechSynthesis' in window && window.speechSynthesis.cancel()
 
 export type VoiceCommand = 'next' | 'back' | 'repeat'

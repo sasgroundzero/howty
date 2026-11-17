@@ -20,14 +20,14 @@ function build(n: number) {
   b.s('Ready to play', 'You are set up: on your turn, roll both dice and move your token clockwise that many spaces.', OVER, 'Buy property, collect rent, and be the last player who is not bankrupt.')
 
   b.board('board', BOARD, 11, 11, 'b:ring', info('Game board', 'A square track of 40 spaces. Colored bars mark the property groups, and you travel clockwise from GO. There is 1.'), { edge: '#2f5d50' })
-  b.deck('chest', DECKS, P([0.3, 0.3]), 16, { panel: '#2e6fb7', ink: '#ffffff', glyph: '▣' }, info('Community Chest deck', '16 cards. Draw the top one when you land on a Community Chest space, do what it says, then return it to the bottom.'), { w: 1.3, d: 2, rotY: -Math.PI / 4 })
-  b.deck('chance', DECKS, P([0.7, 0.7]), 16, { panel: '#d9772b', ink: '#ffffff', glyph: '?' }, info('Chance deck', '16 cards. Draw the top one when you land on a Chance space, do what it says, then return it to the bottom.'), { w: 1.3, d: 2, rotY: -Math.PI / 4, delay: 0.3 })
+  b.deck('chest', DECKS, P([0.3, 0.3]), 16, { panel: '#2e6fb7', ink: '#ffffff', glyph: '▣' }, info('Community Chest deck', '16 cards. Draw the top one when you land on a Community Chest space, do what it says, then return it to the bottom. A Get Out of Jail Free card is kept until you use it.'), { w: 1.3, d: 2, rotY: -Math.PI / 4 })
+  b.deck('chance', DECKS, P([0.7, 0.7]), 16, { panel: '#d9772b', ink: '#ffffff', glyph: '?' }, info('Chance deck', '16 cards. Draw the top one when you land on a Chance space, do what it says, then return it to the bottom. A Get Out of Jail Free card is kept until you use it.'), { w: 1.3, d: 2, rotY: -Math.PI / 4, delay: 0.3 })
   BILLS.forEach(([v, color], i) =>
     b.deck(`bank-${i}`, BANKER, [13.4 + (i % 4) * 1.5, 0, i < 4 ? -3.2 : -1.6], 30, { bg: color, border: '#5a6b5a', glyph: v }, info(`Bank: ${v} bills`, 'The bank never runs out of money: if it does, the banker may write IOUs on paper.'), { w: 1.3, d: 0.7, delay: i * 0.08 }),
   )
   b.deck('deeds', BANKER, [13.6, 0, 0.6], 28, { bg: '#fbf6ea', border: '#2b241c', title: 'TITLE DEED', glyph: '⌂' }, info('Title deeds', '28 cards, one per property. When you buy a property you take its deed, which lists the rent.'), { delay: 0.6 })
-  b.box('houses', BANKER, [15.3, 0, 0.4], 1.4, 0.4, 1, '#2e9e5b', info('Houses', '32 green houses. Once you own a whole color group you can build houses on it to raise the rent.'), { delay: 0.7 })
-  b.box('hotels', BANKER, [17, 0, 0.4], 1.2, 0.5, 1, '#c0392b', info('Hotels', '12 red hotels. Trade four houses on a property for one hotel.'), { delay: 0.8 })
+  b.box('houses', BANKER, [15.3, 0, 0.4], 1.4, 0.4, 1, '#2e9e5b', info('Houses', '32 green houses. Once you own a whole color group you can buy houses for it, built evenly across the group, to raise the rent.'), { delay: 0.7 })
+  b.box('hotels', BANKER, [17, 0, 0.4], 1.2, 0.5, 1, '#c0392b', info('Hotels', '12 red hotels. Once every property in a group has four houses, pay the hotel price and return a property’s four houses to swap them for one hotel.'), { delay: 0.8 })
   const cash = S.map((s) =>
     b.deck(`cash-${s.i}`, MONEY, s.at(-0.9, 0, 0), 16, { bg: '#f0d7a0', border: '#5a6b5a', glyph: '$1,500' }, info(`${s.whose} money`, 'Every player starts with $1,500. Keep it in front of you where everyone can see it.'), { w: 1.5, d: 0.8, rotY: s.rot, delay: s.i * 0.12 }),
   )
@@ -40,7 +40,7 @@ function build(n: number) {
   const T1 = b.t('Roll and move', 'You roll a 4 and a 2, so you move your token 6 spaces clockwise from GO.', look(0, 4.2, 8), 7)
   roll(T1, 4, 2)
   tokens[0].keys.push({ step: T1, pos: spot(6, 0), delay: 1.6 })
-  const T2 = b.t('Buy the property', 'Nobody owns the light-blue property you landed on, so you pay the bank its price and take the title deed.', look(0, 6, 8), 7)
+  const T2 = b.t('Buy the property', 'Nobody owns the light-blue property you landed on, so you pay the bank its price and take the title deed. If you don’t want it, the banker must auction it.', look(0, 6, 8), 7)
   cash[0].keys.push({ step: T2, pos: cash[0].keys[0].pos, rotY: S[0].rot, props: { count: 14, face: { bg: '#f0d7a0', border: '#5a6b5a', glyph: '$1,400' } } })
   b.add({ id: 'deed-1', kind: 'card', spawnFrom: [13.6, 0.4, 0.6], props: { w: 0.9, d: 1.26, faceUp: true, face: { bg: '#fbf6ea', panel: '#9ed3ee', ink: '#2b241c', title: 'TITLE DEED', sub: 'Rent $6' } }, keys: [{ step: T2, pos: S[0].at(0.9, 0, 0), delay: 0.8 }], info: info('Your title deed', 'Proof that you own this property. Anyone else who lands on it pays you the rent shown.') })
   const T3 = b.t('Next player rolls', 'The player on your left rolls a 3 and a 4 and moves 7 spaces to a Chance space.', look(0, 4.2, 8), 7)

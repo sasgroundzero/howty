@@ -46,7 +46,17 @@ const howTo = (g, setup, url) =>
     step: setup.steps.slice(0, setup.setupCount).map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.title, text: [s.instruction, s.detail].filter(Boolean).join(' ') })),
   }).replace(/</g, '\\u003c')
 const shell = readFileSync(resolve(dist, 'index.html'), 'utf8').replace('content="/og.png"', `content="${site}/og.png"`)
-writeFileSync(resolve(dist, 'index.html'), shell.replace('</head>', `    <link rel="canonical" href="${site}/" />\n  </head>`))
+/** The home page as plain HTML: what Howty is and a link to every guide, shown before the app loads. */
+const homeHtml = () => `<main style="max-width:720px;margin:0 auto;padding:48px 16px;font:16px/1.6 'DM Sans',system-ui,sans-serif;color:#44403c;background:#fff">
+<h1 style="font:700 44px/1.05 Fraunces,Georgia,serif;color:#1c1917;margin:0 0 16px">Set up any board game, step by step.</h1>
+<p style="margin:0 0 32px">Pick the game on your table. Each setup step plays out in 3D, then you watch a real first turn. ${GAMES.length} games, free, no account.</p>
+<h2 style="font:700 20px Fraunces,Georgia,serif;color:#1c1917">Every setup guide</h2>
+<ul style="list-style:none;padding:0;margin:0">${[...GAMES].sort((x, y) => x.meta.title.localeCompare(y.meta.title)).map((g) => `<li style="padding:6px 0;border-bottom:1px solid #f5f5f4"><a href="/g/${g.id}" style="color:#1c1917">${esc(g.meta.title)}</a> <span style="color:#78716c">· ${players(g.meta.players)} · ${esc(g.meta.playTime)}</span></li>`).join('')}</ul>
+</main>`
+writeFileSync(
+  resolve(dist, 'index.html'),
+  shell.replace('</head>', `    <link rel="canonical" href="${site}/" />\n  </head>`).replace('<div id="root"></div>', `<div id="root">${homeHtml()}</div>`),
+)
 for (const g of GAMES) {
   const [a, b] = g.meta.players
   const setup = g.build(g.meta.defaultPlayers)

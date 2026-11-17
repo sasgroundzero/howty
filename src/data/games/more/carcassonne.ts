@@ -14,7 +14,7 @@ export const carcassonne = tabletop('carcassonne', 'Carcassonne', [2, 5], 3, '35
       R(deck('stack', 18, BACK, 'Land tile stack', 'The base game has 72 land tiles counting the start tile. Each shows pieces of roads, cities, monasteries and fields.', { w: 1.2, d: 1.2, per: 0.04, n: 4, cols: 2 })),
     ], 'Some editions add extra tiles such as a river. Leave those out for a standard first game.'),
     S('Set out the scoreboard', 'Put the scoreboard to one side of the table.', 'track', [
-      L(board('track', 5, 3.4, 'g:ring:12:#d9c9a0:#8a6a3a:Scoreboard', 'Scoreboard', 'A track of point spaces that runs round the board. Going past the end just means you start a second lap.')),
+      L(board('track', 5, 3.4, 'g:ring:12:#d9c9a0:#8a6a3a:Scoreboard', 'Scoreboard', 'A track of 50 point spaces that runs round the board. Going past 50, lay your scoring meeple down and start a second lap.')),
     ]),
     S('Take your meeples', 'Each player takes the meeples of one color.', 'you', [
       P(pawns('meeple', 7, '$', 'Meeples', 'Your supply of 7 meeples. Place one on a tile you have just laid to claim a road, city, monastery or field.', { scale: 0.5 })),
@@ -22,13 +22,13 @@ export const carcassonne = tabletop('carcassonne', 'Carcassonne', [2, 5], 3, '35
     S('Mark your score', 'Put your eighth meeple on the start space of the scoreboard.', 'track', [
       OnP('track', 0.5, 0.96, pawns('score', 1, '$', 'Scoring meeple', 'Shows your points. It moves whenever one of your features is scored.', { scale: 0.5 }), [0.45, 0]),
     ]),
-    S('Ready to play', 'Choose a starting player (older rulebooks say the youngest). Play then passes clockwise.', 'all', [], 'A turn is always the same: draw a tile, add it to the map, optionally place one meeple on it, then score anything that was completed.'),
+    S('Ready to play', 'Choose a starting player (the rulebook suggests the youngest). Play then passes clockwise.', 'all', [], 'A turn is always the same: draw a tile, add it to the map, optionally place one meeple on it, then score anything that was completed.'),
   ],
   turn: [
     T('Draw and place a tile', 'You draw a tile and add it to the map so that every touching edge matches: road to road, city to city, field to field.', 'field', [
       draw('stack.0', by('start', 1.2, 0), land('═', 'road'), 'tile1'),
     ]),
-    T('Place a meeple', 'You may put one meeple from your supply on the tile you just placed. Here it stands on the road, which no one else has claimed.', 'tile1', [
+    T('Place a meeple', 'You may put one meeple from your supply on the tile you just placed, but not on a road, city or field that already has a meeple. Here it stands on the road, which no one else has claimed.', 'tile1', [
       mv('meeple.6', at('tile1', 0.5, 0.55)),
     ]),
     T('Next player', 'The player on your left draws a tile, joins it to the other side of the start tile and places a meeple of their own on it.', 'field', [

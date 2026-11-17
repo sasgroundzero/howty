@@ -27,7 +27,7 @@ export const splendor = tabletop('splendor', 'Splendor', [2, 4], 3, '30 min', 'E
     turn: [
       T('Take three different gems', 'You take one sapphire, one emerald and one ruby from the supply.', 'gems', [1, 2, 3].map((i, k) => spawn(gem(i), at('area', 0.15 + k * 0.16, 0.3), `gems.${i}`))),
       T('Next player takes two of a kind', 'The player on your left takes 2 onyx tokens instead. This is only allowed while at least 4 of that color are in the supply.', 'area@1', [spawn({ ...gem(4, 2), id: 'pair' }, at('area@1', 0.25, 0.3), 'gems.4')]),
-      T('A player reserves a card', 'Or they could reserve: take a face-up level 2 card into their hand and gain a gold joker. The empty space is refilled from the deck.', 'row2', [
+      T('A player reserves a card', 'Or they could reserve: take a face-up level 2 card into their hand (3 at most) and gain a gold joker. The empty space is refilled from the deck.', 'row2', [
         mv('row2.1', at('area@1', 0.8, 0.5)),
         spawn({ ...gem(0), id: 'joker' }, at('area@1', 0.55, 0.3), 'gold'),
         draw('deck2', by('row2.0', 1.04, 0), dev(2)[0]),

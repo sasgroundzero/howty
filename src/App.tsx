@@ -12,7 +12,7 @@ import { Canvas } from '@react-three/fiber'
 import { Scene, type Nav } from './engine/Engine'
 import { audio, unlockAudio } from './engine/audio'
 import { hoverStore } from './engine/hover'
-import { canListen, hush, listen, speak, voice } from './engine/voice'
+import { canListen, hush, listen, primeSpeech, speak, voice } from './engine/voice'
 import { CATALOG } from './data/games/catalog'
 import { loadGame, loaded } from './data/games/load'
 import type { GameDef, GameInfo } from './engine/types'
@@ -169,6 +169,7 @@ export default function App() {
   /** Teach mode: every setup step plays by itself and is read aloud, then the first turn runs. */
   const teach = () => {
     unlockAudio()
+    primeSpeech()
     voice.on = true
     setNarrate(true)
     setView('play')
@@ -490,6 +491,7 @@ export default function App() {
               onClick={() => {
                 voice.on = !narrate
                 if (narrate) hush()
+                else primeSpeech()
                 setNarrate(!narrate)
               }}
             />

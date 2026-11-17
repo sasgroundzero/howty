@@ -17,7 +17,7 @@ function build(n: number) {
   const RACKS = b.s('Give everyone a rack', 'Each player takes a tile rack and sets it up facing themselves.', WIDE, undefined, [`${n} racks`])
   const FIRST = b.s('Draw to see who starts', 'Each player draws one tile: the letter closest to A goes first. Put those tiles back and shake the bag again.', BAGF, 'A blank beats every letter.')
   const DRAW = b.s('Draw seven tiles', 'Starting with the first player, everyone draws 7 tiles and stands them on their rack, hidden from the others.', MINE, undefined, ['7 tiles each'])
-  const PAD = b.s('Pick a scorekeeper', 'One player takes the score pad and a pencil and writes everyone’s name across the top.', WIDE, undefined, ['Score pad', 'Pencil'])
+  const PAD = b.s('Pick a scorekeeper', 'One player takes paper and a pen and writes everyone’s name across the top.', WIDE, undefined, ['Paper', 'Pen'])
   b.s('Ready to play', 'You are set up: the first word must cross the star in the center of the board.', WIDE, `The bag now holds ${100 - 7 * n} tiles. Highest score when the tiles run out wins.`)
 
   b.board('board', BOARD, size, size, 'b:words', info('Board', '225 squares. Premium squares double or triple a letter (DL, TL) or a whole word (DW, TW). The center star is a double-word square. There is 1.'), { edge: '#2f5d50' })
@@ -48,7 +48,7 @@ function build(n: number) {
     b.add({ id: `new-${j}`, kind: 'block', spawnFrom: [8.4, 1.2, -4.6], props: { w: 0.6, h: 0.12, d: 0.6, color: WOOD, top: { bg: WOOD, glyph: ch, sub: ch === 'G' ? '2' : '1' } }, keys: [{ step: T3, pos: S[0].at((j - 3) * 0.66, 0, 0), delay: 0.4 + j * 0.15 }], info: info(`Letter ${ch}`, 'A freshly drawn tile.') }),
   )
   b.t('Build on what is there', 'The next player must add tiles that connect to a word already on the board, and every new row of letters must spell a real word.', look(0, 0, 8), 7)
-  b.t('Use every tile', 'Play continues until the bag is empty and someone uses their last tile. Highest total score wins.', OVER)
+  b.t('Use every tile', 'Play continues until the bag is empty and someone uses their last tile, or everyone passes twice in a row. Each player then subtracts their unplayed tiles (whoever went out adds them). Highest total score wins.', OVER)
   return b.done({ w: 34, d: 23 })
 }
 

@@ -15,7 +15,7 @@ export const terraformingMars = tabletop('terraforming-mars', 'Terraforming Mars
       On('mars', 0.03, 0.6, cubes('gen', 1, '#e9e4d8', 'Generation marker', 'Counts the rounds, called generations. It starts at 1.', { s: 0.22 })),
     ]),
     S('Supplies and project deck', 'Shuffle the project cards into a deck beside the board, and put the resource cubes and the greenery and city tiles within reach.', 'r', [
-      R(deck('projects', 60, f('#3a2c20', '●'), 'Project deck', 'A big deck of project cards. Which cards are included depends on whether you add the Corporate Era cards.'), zone('discard', 1.1, 1.4, 'Discard', 'Project cards that are not bought, and played events, end up here face down.')),
+      R(deck('projects', 60, f('#3a2c20', '●'), 'Project deck', 'A big deck of project cards. Which cards are included depends on whether you add the Corporate Era cards.'), zone('discard', 1.1, 1.4, 'Discard', 'Project cards that are not bought end up here face down. Played events are not discarded: you keep them face down in front of you.')),
       R(pile('resources', ['#b87333', '#c0c0c0', '#e0b12f'], 'Resource cubes', 'Bronze cubes count as 1, silver as 5 and gold as 10. They mark every kind of resource on your player board.'), hexes('tiles', 2, 0.45, ['#3d8b4a', '#8d8d8d'], 'Greenery and city tiles', 'Double-sided tiles, greenery on one side and city on the other. They are marked with the owner\'s cube when placed.', { label: ['G', 'C'] })),
     ]),
     S('Player boards', `Each of the ${n} players takes a player board and the markers of one color. In the standard game everyone starts with 1 production of each of the six resources.`, 'you', [

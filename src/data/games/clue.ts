@@ -44,10 +44,10 @@ function build(n: number) {
   const T2 = b.t('Make a suggestion', 'In a room you may suggest a suspect and a weapon: "Green, with the rope, in the Hall". Both are brought into your room.', look(0.5, 3.6, 7), 8)
   pawns[3].keys.push({ step: T2, pos: P(roomCenter(7), BH, 0.4, 0.2), delay: 0.8 })
   arms[4].keys.push({ step: T2, pos: P(roomCenter(7), BH, 0, 0.75), rotY: 0.3, delay: 1.3 })
-  const T3 = b.t('Someone proves you wrong', 'The player on your left must secretly show you one card that matches your suggestion, if they hold any.', WIDE, 7)
+  const T3 = b.t('Someone proves you wrong', 'The player on your left must secretly show you one card that matches your suggestion, if they hold any. If not, the next player to the left tries, and so on.', WIDE, 7)
   b.add({ id: 'shown', kind: 'card', spawnFrom: S[1].at(-0.8, 0.3, 0), props: { w: 0.9, d: 1.26, face: { panel: '#6b7680', ink: '#ffffff', title: 'WEAPON', glyph: '➰', sub: 'ROPE' }, back: BACK, faceUp: true }, keys: [{ step: T3, pos: S[0].at(-2.2, 0, 0), delay: 0.6 }], info: info('Card shown to you', 'Only you see it. The rope cannot be the murder weapon, so cross it off your notes.') })
   b.t('Cross it off', 'You tick the rope on your notes sheet: every card you are shown is one more thing that is not in the envelope.', look(0, 8, 6))
-  b.t('Accuse to win', 'When you are sure, name all three out loud and check the envelope in secret: right and you win, wrong and you are out.', look(0, 0, 8))
+  b.t('Accuse to win', 'When you are sure, name all three out loud and check the envelope in secret: right and you win, wrong and you are out, but you still show cards to disprove others’ suggestions. You get only one accusation.', look(0, 0, 8))
   void ROOMS
   return b.done({ w: 34, d: 23 })
 }
