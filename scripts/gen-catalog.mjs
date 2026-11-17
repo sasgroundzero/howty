@@ -4,7 +4,7 @@
  * Also precomputes the card-game list and the daily-puzzle pool. Runs as part of `npm run index` and the build.
  */
 import { build } from 'esbuild'
-import { readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
@@ -16,6 +16,7 @@ const files = [
   ...readdirSync(resolve(dir, 'more')).filter((f) => f.endsWith('.ts') && f !== 'index.ts').map((f) => resolve(dir, 'more', f)),
 ]
 const tmp = resolve(root, 'node_modules/.cache')
+mkdirSync(tmp, { recursive: true })
 const entry = resolve(tmp, 'catalog-entry.ts')
 const out = resolve(tmp, 'catalog-entry.mjs')
 writeFileSync(entry, files.map((f, i) => `export * as m${i} from ${JSON.stringify(f)}`).join('\n'))
