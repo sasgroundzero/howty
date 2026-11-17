@@ -9,9 +9,9 @@ const TOKEN_BODY = '100 wildlife tokens, 20 for each of the five animals. A toke
 
 export const cascadia = tabletop('cascadia', 'Cascadia', [2, 4], 3, '30–45 min', 'Easy', 'Draft habitats and wildlife in the Northwest.', ['#4f7f4a', '#4f8fb7', '#d9772b'], (n) => ({
   setup: [
-    S('Wildlife scoring cards', 'Choose one scoring card for each of the five animals and lay them where everyone can see them.', 'l', [
+    S('Wildlife scoring cards', 'Pick one scoring card at random for each of the five animals and lay them where everyone can see them.', 'l', [
       L(cards('goals', 5, NAME.map((a) => ft('#f3ecdc', a.toUpperCase(), 'scoring', '●')), 'Wildlife scoring cards', 'One card per animal (bear, elk, salmon, hawk, fox). Each says how that animal scores for the pattern it forms in your environment.')),
-    ], 'For a first game the rulebook recommends a particular beginner set of cards: check it for which ones.'),
+    ], 'For a first game the rulebook recommends the five A cards (marked A in the bottom right corner).'),
     S('Count out the habitat tiles', `Shuffle the habitat tiles face down and count out ${20 * n + 3} of them (20 per player plus 3). Return the rest to the box unseen.`, 'r', [
       R(box('stack', 1.3, 1.1, 1.5, '#5a6b4a', 'Habitat tile stacks', `${20 * n + 3} face-down habitat tiles for ${n} players, out of 85 in the box. When they run out the game ends.`)),
     ], 'There is also a solo mode with a few rules of its own, which this walkthrough does not cover.'),

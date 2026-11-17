@@ -25,12 +25,14 @@ textarea, input { -webkit-user-select: text; user-select: text; }
 /* Printing a game's checklist: only the plain sheet is printed. */
 .print-sheet { display: none; }
 @media print {
+  @page { margin: 0.6in; }
   html, body, #root { height: auto; overflow: visible; background: #fff; }
   body > *:not(.print-sheet) { display: none !important; }
   .print-sheet { display: block; font: 11pt/1.45 'DM Sans', system-ui, sans-serif; color: #000; }
   .print-sheet h1 { font: 700 20pt Fraunces, Georgia, serif; margin: 0 0 4pt; }
   .print-sheet h2 { font: 700 13pt Fraunces, Georgia, serif; margin: 14pt 0 4pt; }
-  .print-sheet ol { padding-left: 18pt; }
+  .print-sheet ol { padding-left: 22pt; list-style: decimal; }
+  .print-sheet li::marker { font-weight: 700; }
   .print-sheet li { margin: 0 0 6pt; break-inside: avoid; }
   .print-sheet i { color: #444; }
   .print-foot { margin-top: 14pt; color: #555; font-size: 9pt; }

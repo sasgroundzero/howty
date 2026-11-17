@@ -46,9 +46,9 @@ function build(n: number) {
   const T3 = b.t('No play? Draw a tile', 'The next player cannot make 30 points yet, so they draw one tile from the pool and their turn ends.', WIDE, 7)
   const spare = b.pieces.find((p) => p.id === `tile-${14 * n}`) as PieceSpec<'block'>
   spare.keys.push({ step: T3, pos: S[1].at(2.2, 0, 0.05), rotY: S[1].rot, delay: 0.6 })
-  b.t('Runs and groups', 'A run is three or more consecutive numbers in one color; a group is three or four of the same number in different colors.', look(0, 2.6, 7), 7)
-  b.t('Rearrange the table', 'Once you have made your first meld you may add to, split and rebuild any sets on the table, as long as every set is valid when you finish.', OVER, 7)
-  b.t('Empty your rack', 'The first player to play their last tile calls "Rummikub!" and wins the round.', OVER)
+  b.t('Runs and groups', 'A run is three or more consecutive numbers in one color; a group is three or four of the same number in different colors. A 1 is always low: it cannot follow 13.', look(0, 2.6, 7), 7)
+  b.t('Rearrange the table', 'On turns after your first meld, you may add to, split and rebuild any sets on the table, as long as every set is valid when you finish.', OVER, 7)
+  b.t('Empty your rack', 'The first player to play their last tile calls "Rummikub!" and wins the game.', OVER)
   void T1
   return b.done({ w: 32, d: 22 })
 }

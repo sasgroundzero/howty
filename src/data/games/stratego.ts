@@ -16,7 +16,7 @@ const ARMY: [string, string, number, string][] = [
   ['Sergeant', '4', 4, 'Low-ranking officer.'],
   ['Miner', '3', 5, 'The only piece that can defuse a Bomb.'],
   ['Scout', '2', 8, 'Weak, but may move any number of open squares in a straight line.'],
-  ['Spy', 'S', 1, 'Loses to everything, but captures the Marshal if the Spy attacks first.'],
+  ['Spy', 'S', 1, 'Captured by any piece that attacks it, but captures the Marshal if the Spy attacks first.'],
 ]
 const RED = '#b8352a'
 const BLUE = '#2e5fa3'
@@ -27,7 +27,7 @@ function build() {
   const size = sqSize(SQ10.n, SQ10.cell, SQ10.margin)
   const MINE = look(0, 3.2, 9)
   const BOARD = b.s('Place the board', 'Set the board between you: each player owns the four rows nearest them, and the two lakes sit in the middle.', OVER, 'Pieces can never enter the lake squares.', ['1 board'])
-  const FLAG = b.s('Hide your Flag', 'Stand your Flag somewhere in your back rows with its face toward you so your opponent cannot see it.', MINE, 'All of your pieces face you. Your opponent only ever sees their blank backs.', ['1 Flag each'])
+  const FLAG = b.s('Hide your Flag', 'Stand your Flag anywhere in your four rows (the back row is a popular spot) with its face toward you so your opponent cannot see it.', MINE, 'All of your pieces face you. Your opponent only ever sees their blank backs.', ['1 Flag each'])
   const BOMBS = b.s('Guard it with Bombs', 'Place your 6 Bombs, usually with a few of them around the Flag.', MINE, undefined, ['6 Bombs each'])
   const RANKS = b.s('Place your officers', 'Arrange your Marshal, General, Colonels, Majors, Captains, Lieutenants and Sergeants wherever you like in your four rows.', MINE, 'The layout is your secret strategy: no two games need start the same.', ['19 officers each'])
   const REST = b.s('Fill the gaps', 'Fill every remaining square of your four rows with your Miners, Scouts and Spy.', OVER, 'You should have exactly 40 pieces filling a 10 by 4 block.', ['5 Miners', '8 Scouts', '1 Spy'])
@@ -56,11 +56,11 @@ function build() {
   const MIDF = look(0, 0.5, 9)
   scout.keys.push({ step: b.t('Red moves first', 'You move one piece per turn: most go one square forward, back or sideways, but your Scout can run any distance in a straight line.', MIDF, 7), pos: g(4, 5), delay: 0.6 })
   at.get('b5,6')!.keys.push({ step: b.t('Blue moves', 'Blue moves one piece a single square forward. You still do not know what it is.', MIDF), pos: g(5, 5), rotY: Math.PI, delay: 0.6 })
-  const HIT = b.t('Attack to reveal', 'Move onto an enemy piece to attack: both players say their rank out loud, and the lower rank is removed.', MIDF, 7)
+  const HIT = b.t('Attack to reveal', 'Move onto an enemy piece to attack: both players say their rank out loud, and the lower rank is removed. If the ranks are equal, both are removed.', MIDF, 7)
   scout.keys.push({ step: HIT, pos: g(4, 5.55), delay: 0.5 })
   scout.keys.push({ step: b.t('The Scout is captured', 'Your Scout (2) attacked a Sergeant (4), so the Scout comes off the board, but now you know where that Sergeant is.', MIDF, 7), pos: g(4, 5.55), hide: true, delay: 0.8 })
   b.t('Bombs and the Spy', 'Bombs destroy any attacker except a Miner, and the Spy takes the Marshal only if the Spy attacks first.', TOP)
-  b.t('Capture the Flag', 'Keep scouting and attacking: the first player to capture the enemy Flag wins.', OVER)
+  b.t('Capture the Flag', 'Keep scouting and attacking: the first player to capture the enemy Flag wins. If you cannot move or attack on your turn, you lose.', OVER)
   return b.done({ w: 30, d: 21 })
 }
 

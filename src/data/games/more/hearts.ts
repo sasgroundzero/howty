@@ -30,15 +30,15 @@ export const hearts = tabletop('hearts', 'Hearts', [3, 7], 4, '30–60 min', 'Ea
     ],
     turn: [
       T('The 2 of clubs leads', 'You hold the 2♣, so you play it to the middle to start the first trick.', 'trick', [mv('hand.0', at('trick', 0.5, 0.78))]),
-      T('Everyone follows suit', 'Going clockwise, each player plays one card and must play a club if they have one. A player with no clubs may play any card, but not a heart or the Q♠ on this first trick.', 'trick', [
+      T('Everyone follows suit', 'Going clockwise, each player plays one card and must play a club if they have one. A player with no clubs may play any card, even a heart or the Q♠, though many groups and computer Hearts forbid points on this first trick.', 'trick', [
         flip('hand.1@1'), mv('hand.1@1', at('trick', 0.2, 0.5)), flip('hand.2@2'), mv('hand.2@2', at('trick', 0.5, 0.22), 0.5),
       ]),
       T('Highest club takes the trick', 'The highest card of the suit led wins. The winner gathers the cards face down and leads the next trick.', 'trick', [
         mv('hand.0', at('hand@2', ...slot(2, 7, rows))), mv('hand.1@1', at('hand@2', ...slot(2, 7, rows), 0.02)),
       ]),
-      T('Hearts must be broken', 'Nobody may lead a heart until a heart or the Q♠ has been discarded on an earlier trick, unless they hold nothing else.', 'you'),
-      T('Score the deal', 'After the last trick, count 1 point per heart and 13 for the Q♠ in the tricks you took. Take all 26 and you "shoot the moon": you score 0 and everyone else scores 26.', 'all'),
-      T('How it ends', 'Deal again until someone reaches 100 points. The player with the lowest score at that moment wins.', 'all'),
+      T('Hearts must be broken', 'Nobody may lead a heart until a heart has been played to an earlier trick, unless they hold nothing but hearts. Spades, including the Q♠, may be led after the first trick. Some groups also count the Q♠ as breaking hearts.', 'you'),
+      T('Score the deal', 'After the last trick, count 1 point per heart and 13 for the Q♠ in the tricks you took. Take all 26 and you "shoot the moon": either take 26 off your own score or add 26 to everyone else\'s, as you choose.', 'all'),
+      T('How it ends', 'Deal again until someone reaches or passes 100 points at the end of a deal. The player with the lowest score at that moment wins.', 'all'),
     ],
   }
 })

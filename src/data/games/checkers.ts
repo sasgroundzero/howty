@@ -14,7 +14,7 @@ function build() {
     b.s('Fill the third row', 'Place your last 4 on the dark squares of your third row, for 12 checkers each.', OVER, undefined, ['4 checkers each']),
   ]
   b.s('Leave the middle open', 'The two middle rows stay empty: this is the gap the armies cross.', TOP)
-  b.s('Ready to play', 'You are set up: the darker color moves first, and pieces only ever move diagonally forward.', OVER, 'Capture all of your opponent’s pieces, or leave them with no legal move, to win.')
+  b.s('Ready to play', 'You are set up: the darker color moves first. Men move only diagonally forward, and if you can jump, you must.', OVER, 'Capture all of your opponent’s pieces, or leave them with no legal move, to win.')
 
   b.board('board', BOARD, size, size, 'b:checkers', info('Checkerboard', 'An 8 by 8 board. Only the 32 dark squares are used. There is 1.'), { edge: '#2f2620' })
   const men = new Map<string, PieceSpec<'token'>>()
@@ -27,7 +27,7 @@ function build() {
             id: `man-${c}-${r}`, kind: 'token',
             props: { r: 0.46, h: 0.2, color: near ? '#2b2522' : '#b8352a' },
             keys: [{ step: ROW[k], pos: g(c, r), delay: c * 0.06 + (near ? 0 : 0.4) }],
-            info: info(near ? 'Black checker' : 'Red checker', 'A single man moves one square diagonally forward. Each player starts with 12. Reach the far row and it is crowned a king, which can also move backward.'),
+            info: info(near ? 'Black checker' : 'Red checker', 'A single man moves one square diagonally forward, or jumps an enemy piece to capture it. Each player starts with 12. Reach the far row and it is crowned a king, which can also move backward.'),
           }))
     }
   const move = (from: string, c: number, r: number, step: number) => men.get(from)!.keys.push({ step, pos: g(c, r), delay: 0.6 })
@@ -41,7 +41,7 @@ function build() {
   const J2 = b.t('Red jumps back', 'Jumps are compulsory, so Red now jumps the black checker and takes it off in return.', F, 7)
   move('6,6', 4, 4, J2)
   take('2,2', J2)
-  b.t('Crown your kings', 'A checker that reaches the far row gets a second checker stacked on top and becomes a king that can move both ways.', OVER)
+  b.t('Crown your kings', 'A checker that reaches the far row gets a second checker stacked on top and becomes a king that can move both ways. Crowning ends that turn.', OVER)
   b.t('Clear the board', 'Keep trading moves until one player has no pieces left, or no move they can make.', OVER)
   return b.done({ w: 30, d: 21 })
 }

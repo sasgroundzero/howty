@@ -26,7 +26,7 @@ export const cribbage = tabletop('cribbage', 'Cribbage', [2, 2], 2, '30 min', 'M
         hand('hand', '3♦ 7♠ 8♥ 9♣ 2♥ Q♠', 'Your hand', 'Your 6 cards. You will keep four of them and throw two into the crib.'),
       )),
     ]),
-    S('Know what scores', 'You score for cards adding to fifteen (2 points), pairs (2), runs of three or more (1 per card) and flushes. The same combinations score both during the play and when hands are shown.', 'board', [], 'Number cards count their face value, aces count 1, and jacks, queens and kings count 10.'),
+    S('Know what scores', 'You score for cards adding to fifteen (2 points), pairs (2) and runs of three or more (1 per card). These score both during the play and when hands are shown. Flushes, and 1 for holding the jack of the starter\'s suit, score only in the show.', 'board', [], 'Number cards count their face value, aces count 1, and jacks, queens and kings count 10.'),
     S('Ready to play', 'Each hand has three parts: throw two cards to the crib, play the cards out one at a time, then show and count the hands. The non-dealer plays the first card.', 'all', [], 'The first player to peg 121 wins, even in the middle of a hand.'),
   ],
   turn: [

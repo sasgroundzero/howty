@@ -61,7 +61,7 @@ function build(): ReturnType<Builder['done']> {
   })
   const C8 = b.step({
     title: 'Three on the 8-point',
-    instruction: 'Each player puts 3 checkers on their 8-point, two points to the left of the bar on their own side.',
+    instruction: 'Each player puts 3 checkers on their 8-point, the second point to the left of the bar on their own side.',
     needs: ['3 checkers each'],
     focus: FOCUS.left,
   })
@@ -147,7 +147,7 @@ function build(): ReturnType<Builder['done']> {
       props: { sides: 6, value, color: white ? '#f7f1e3' : '#3a2f2a', ink: white ? '#2e2622' : '#f7f1e3', size: 0.85 },
       keys: [{ step: DICE, pos, rotY: 0.3 - delay, delay }],
       tumble: true,
-      info: { title: `${white ? 'White' : 'Dark'}'s dice`, body: 'Each player has their own pair. Roll both on your turn and move one checker for each die (or the same checker twice).' },
+      info: { title: `${white ? 'White' : 'Dark'}'s dice`, body: 'Each player has their own pair. Roll both on your turn and move one checker for each die (or the same checker twice). Doubles are played twice, for four moves.' },
     })
   const w1 = die('die-w1', true, [9.2, 0, 3.6], 3, 0)
   const w2 = die('die-w2', true, [9.9, 0, 4.2], 5, 0.1)
@@ -207,7 +207,7 @@ function build(): ReturnType<Builder['done']> {
 
   b.turn({
     title: 'Hits and the doubling cube',
-    instruction: 'A lone checker can be hit and sent to the bar, and before any roll a player may offer the cube to double the stakes.',
+    instruction: 'A lone checker can be hit and sent to the bar, and must re-enter before its owner moves anything else. Before rolling on your turn, you may offer the cube to double the stakes.',
     focus: FOCUS.bar,
   })
   b.turn({

@@ -11,7 +11,7 @@ function build() {
   const SIDE = cam(9, 11, 16, 0, 2, 0)
   const FRAME = b.s('Stand the grid up', 'Stand the grid upright between the two players and make sure the release bar at the bottom is closed.', FRONT, 'The grid has 7 columns, and each column holds 6 discs.', ['1 grid'])
   const DISCS = b.s('Pick a color', 'One player takes all 21 red discs and the other takes all 21 yellow discs.', SIDE, undefined, ['21 red discs', '21 yellow discs'])
-  b.s('Ready to play', 'You are set up: decide who goes first, then take turns dropping one disc into any column that is not full.', FRONT, 'Line up four of your own discs in a row (across, up and down, or diagonally) to win.')
+  b.s('Ready to play', 'You are set up: the youngest player goes first, then take turns dropping one disc into any column that is not full.', FRONT, 'Line up four of your own discs in a row (across, up and down, or diagonally) to win.')
 
   b.add({ id: 'frame', kind: 'c4frame', props: { cols: 7, rows: 6, cell: 1, color: '#2456b8' }, keys: [{ step: FRAME, pos: [0, 0, 0] }], info: info('Grid', 'An upright rack with 7 columns of 6 slots, 42 in all. Discs dropped in the top fall to the lowest empty slot. There is 1.') })
   const loose: ReturnType<Kit['add']>[][] = [[], []]
@@ -35,7 +35,7 @@ function build() {
   drop(0, 1, 4, 0, b.t('Red builds a row', 'Red drops a disc beside their first one and now has two in a row along the bottom.', FRONT))
   drop(1, 1, 2, 0, b.t('Yellow blocks', 'Yellow drops into the column on the other side to stop the row from growing that way.', FRONT))
   drop(0, 2, 5, 0, b.t('Three in a row', 'Red adds a third disc: one more on the open end would make four, so Yellow must block it next turn.', FRONT))
-  b.t('Four in a row wins', 'The first player to line up four discs in any direction wins. Slide the bar to empty the grid and play again.', SIDE)
+  b.t('Four in a row wins', 'The first player to line up four discs in any direction wins. The winner slides the bar to empty the grid for the next game.', SIDE)
   return b.done({ w: 24, d: 18 })
 }
 

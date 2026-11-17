@@ -22,14 +22,14 @@ export const sevenWondersDuel = tabletop('7-wonders-duel', '7 Wonders Duel', [2,
       P(cards('wonders', 4, ft('#efe2bd', 'WONDER', 'cost', '▲'), 'Your wonders', 'You end up with 4 wonder cards, chosen in the next step. Across both players only 7 of the 8 wonders can ever be built.', { w: 1.3, d: 0.9 })),
       P(discs('coins', 2, 0.24, ['#e0b12f', '#c0c0c0'], 'Your coins', 'You start with 7 coins, shown here as a 6 and a 1.', { h: 0.06, label: ['6', '1'], ink: '#2b241c' }), zone('city', 4.6, 1.2, 'Your city', 'Cards you build are laid here, grouped by color.')),
     ]),
-    S('Choose wonders', 'Shuffle the 12 wonders and reveal 4. The first player takes 1, the other player takes 2, and the first player takes the last. Reveal 4 more and repeat with the roles swapped.', 'wonders', [], 'Each player now has 4 wonders face up. The remaining 4 wonders go back in the box.'),
+    S('Choose wonders', 'Choose a first player. Shuffle the 12 wonders and reveal 4. The first player takes 1, the other player takes 2, and the first player takes the last. Reveal 4 more and repeat with the roles swapped.', 'wonders', [], 'Each player now has 4 wonders face up. The remaining 4 wonders go back in the box.'),
     S('Prepare the age decks', 'Remove 3 cards unseen from each of the three age decks. Then shuffle 3 random guild cards into the Age III deck.', 'r', [
-      R(deck('age2', 20, f('#2e6fb7', 'II'), 'Age II deck', '20 cards after 3 are removed. Set it aside until Age I is over.'), deck('age3', 20, f('#7a4fa3', 'III'), 'Age III deck', '17 Age III cards plus 3 of the 7 guild cards, 20 in all. Set it aside until Age II is over.'), zone('discard', 1.1, 1.4, 'Discard', 'Cards discarded for coins go here face up.')),
+      R(deck('age2', 20, f('#2e6fb7', 'II'), 'Age II deck', '20 cards after 3 are removed. Set it aside until Age I is over.'), deck('age3', 20, f('#7a4fa3', 'III'), 'Age III deck', '17 Age III cards plus 3 of the 7 guild cards, 20 in all. Set it aside until Age II is over.'), zone('discard', 1.1, 1.4, 'Discard', 'Cards discarded for coins go here face down. Either player may look through them at any time.')),
     ]),
     S('Lay out Age I', 'Shuffle the 20 Age I cards and lay them out in the pattern shown in the rulebook: rows of 2, 3, 4, 5 and 6 cards, alternating face-up and face-down rows.', 'c', [
       C(row(1, 2, false)), C(row(2, 3, true)), C(row(3, 4, false)), C(row(4, 5, true)), C(row(5, 6, false)),
     ], 'Each row half covers the row before it. Only the uncovered cards in the last row can be taken at first.'),
-    S('Ready to play', 'Choose a first player at random. Players then alternate turns until the structure is empty, and then lay out the next age.', 'all', [], 'On your turn take one uncovered card and either build it, discard it for coins, or use it to build one of your wonders.'),
+    S('Ready to play', 'The first player from the wonder selection begins Age I. Players then alternate turns until the structure is empty. Then lay out the next age; the player whose side the pawn is on chooses who begins it.', 'all', [], 'On your turn take one uncovered card and either build it, discard it for coins, or use it to build one of your wonders.'),
   ],
   turn: [
     T('Take a card and build it', 'You take an uncovered card from the open row, pay its cost if it has one, and place it in your city.', 'c', [mv('r5.0', at('city', 0.1, 0.5))]),

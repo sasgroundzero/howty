@@ -4,7 +4,7 @@ import type { GameInfo } from '../engine/types'
 import { Icon } from './icons'
 import { Button, Eyebrow, Stats, cx } from './kit'
 import { answerDaily, liveStreak, useMe } from './me'
-import { shareLink } from './share'
+import { canShareNatively, shareLink } from './share'
 
 export function Daily({ puzzle, onOpen, onHome }: { puzzle: { answer: GameInfo; choices: GameInfo[]; day: string; number: number }; onOpen: (id: string) => void; onHome: () => void }) {
   const me = useMe()
@@ -29,7 +29,7 @@ export function Daily({ puzzle, onOpen, onHome }: { puzzle: { answer: GameInfo; 
         <Eyebrow>Daily table #{puzzle.number}</Eyebrow>
         <h1 className="mt-1 font-display text-page font-bold text-ink sm:text-[40px] sm:leading-[1.05]">{result ? (result.won ? 'You named it.' : 'Not this time.') : 'Which game is this?'}</h1>
         <p className="mt-3 max-w-[46ch] text-body text-stone-600">
-          {result ? `Today’s table was ${puzzle.answer.meta.title}. A new one appears at midnight.` : 'This table is set up and ready to play. Drag it to look around, then pick the game. You get one guess.'}
+          {result ? `Today’s table was ${puzzle.answer.meta.title}${/[.!?]$/.test(puzzle.answer.meta.title) ? '' : '.'} A new one appears at midnight.` : 'This table is set up and ready to play. Drag it to look around, then pick the game. You get one guess.'}
         </p>
       </div>
 
@@ -72,7 +72,7 @@ export function Daily({ puzzle, onOpen, onHome }: { puzzle: { answer: GameInfo; 
 
       {result && (
         <div className="mt-auto pt-12">
-          <Button kind="primary" size="lg" iconRight={copied ? 'check' : 'link'} onClick={() => void share()} className="w-full justify-between shadow-soft">
+          <Button kind="primary" size="lg" iconRight={copied ? 'check' : canShareNatively() ? 'share' : 'link'} onClick={() => void share()} className="w-full justify-between shadow-soft">
             {copied ? 'Copied' : 'Share your result'}
           </Button>
           <div className="-mx-3 mt-2">

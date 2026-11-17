@@ -14,7 +14,7 @@ export function PlayerPicker({ range, value, onChange }: { range: [number, numbe
   return (
     <div className="flex rounded-xl border border-line bg-white p-1">
       {Array.from({ length: range[1] - range[0] + 1 }, (_, i) => range[0] + i).map((n) => (
-        <button key={n} onClick={() => onChange(n)} aria-pressed={value === n} aria-label={`${n} players`} className={cx('h-8 w-8 rounded-lg text-ui font-semibold transition duration-150 ease-out', value === n ? 'bg-ink text-paper' : 'text-stone-600 hover:bg-ink/5')}>
+        <button key={n} onClick={() => onChange(n)} aria-pressed={value === n} aria-label={`${n} ${n === 1 ? 'player' : 'players'}`} className={cx('h-8 w-8 rounded-lg text-ui font-semibold transition duration-150 ease-out', value === n ? 'bg-ink text-paper' : 'text-stone-600 hover:bg-ink/5')}>
           {n}
         </button>
       ))}
@@ -204,7 +204,7 @@ function PrintSheet({ def, game, players }: { def: GameDef; game: GameSetup; pla
     <div className="print-sheet">
       <h1>{def.meta.title}: setup checklist</h1>
       <p>
-        {players} players · {def.meta.playTime} · from {window.location.host}/g/{def.id}
+        {players} {players === 1 ? 'player' : 'players'} · {def.meta.playTime} · from {window.location.host}/g/{def.id}
       </p>
       <ol>{setup.map(row)}</ol>
       {turn.length > 0 && (

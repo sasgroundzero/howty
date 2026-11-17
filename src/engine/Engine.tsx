@@ -233,8 +233,10 @@ function CameraRig({ focus, nonce, back = 1 }: { focus: Focus; nonce: number; /*
   const flight = useRef<{ fromP: THREE.Vector3; fromT: THREE.Vector3; toP: THREE.Vector3; toT: THREE.Vector3; t: number } | null>(null)
   const first = useRef(true)
   const fkey = focus.pos.join(',') + focus.target.join(',')
-  // Narrow (portrait) screens see less of the table, so pull the camera back to compensate
-  const pull = Math.min(3, Math.max(1, 1.45 / (size.width / size.height))) * back
+  // Step framing is sized for a landscape screen about 1.6 wide per 1 tall. Narrower screens pull the camera back
+  // until the framed width fits, with a little extra for the buttons down the side on phones.
+  const aspect = size.width / size.height
+  const pull = Math.min(3.6, Math.max(1, (aspect < 1 ? 1.85 : 1.45) / aspect)) * back
 
   useEffect(() => {
     if (!controls) return
@@ -270,12 +272,16 @@ function CameraRig({ focus, nonce, back = 1 }: { focus: Focus; nonce: number; /*
   return null
 }
 
-/** Shifts the picture up a little so the bottom HUD never covers the action. */
+/**
+ * Shifts the picture up a little so the bottom HUD never covers the action. On a phone the step card is
+ * taller but so is the screen, so it moves up less, and a little left to clear the buttons down the right.
+ */
 function ViewOffset({ on }: { on: boolean }) {
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
   const size = useThree((s) => s.size)
   useEffect(() => {
-    if (on) camera.setViewOffset(size.width, size.height, 0, Math.min(120, size.height * 0.13), size.width, size.height)
+    const phone = size.width < 640
+    if (on) camera.setViewOffset(size.width, size.height, phone ? 16 : 0, phone ? size.height * 0.03 : Math.min(120, size.height * 0.13), size.width, size.height)
     else camera.clearViewOffset()
     camera.updateProjectionMatrix()
   }, [on, size, camera])

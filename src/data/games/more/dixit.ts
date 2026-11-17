@@ -17,8 +17,8 @@ export const dixit = tabletop('dixit', 'Dixit', [3, 6], 4, '30 min', 'Easy', 'Gi
       S('Choose a rabbit', 'Each player takes a rabbit and stands it at the start of the track.', 'track', [
         OnP('track', 0.22, 0.944, pawns('rabbit', 1, '$', 'Rabbit', 'Your scoring marker. One per player.', { scale: 0.5 }), [0.42, 0]),
       ]),
-      S('Take voting tokens', `Each player takes voting tokens in their color numbered 1 to ${n}, one for each player in the game.`, 'you', [
-        P(discs('vote', n, 0.22, '$', 'Voting tokens', `Numbered 1 to ${n}. You vote in secret by playing the token whose number matches the card you think is the storyteller’s.`, { label: Array.from({ length: n }, (_, k) => `${k + 1}`), h: 0.06, ink: '#ffffff' })),
+      S('Take voting tokens', `Each player takes voting tokens in their color numbered 1 to ${n === 3 ? '5 (with 3 players five cards are shown each round)' : `${n}, one for each player in the game`}.`, 'you', [
+        P(discs('vote', n === 3 ? 5 : n, 0.22, '$', 'Voting tokens', `Numbered 1 to ${n === 3 ? 5 : n}. You vote in secret by playing the token whose number matches the card you think is the storyteller’s.`, { label: Array.from({ length: n === 3 ? 5 : n }, (_, k) => `${k + 1}`), h: 0.06, ink: '#ffffff' })),
       ]),
       S(`Deal ${h} cards each`, `Shuffle the 84 picture cards and deal ${h} face down to each player. The rest form the draw pile.`, 'you', [
         R(deck('deck', 84 - h * n, BACK, 'Draw pile', '84 large picture cards in the base game. Everyone draws back up after each round.', { w: 0.9, d: 1.26 })),
@@ -44,7 +44,7 @@ export const dixit = tabletop('dixit', 'Dixit', [3, 6], 4, '30 min', 'Easy', 'Gi
         mv('rabbit@1', at('track', ...space(4))),
         draw('deck', at(`hand.${h - 1}`, 1.15, 0.5, 0.02)),
       ]),
-      T('All or nobody, and the finish', 'If everyone or no one finds the storyteller’s card, the storyteller scores 0 and the others score 2 each. The original game ends when the last card is drawn; newer printings stop when someone reaches 30. The highest score wins.', 'all'),
+      T('All or nobody, and the finish', 'If everyone or no one finds the storyteller’s card, the storyteller scores 0 and the others score 2 each, plus 1 for each vote on their own card. The game ends when someone reaches 30 points (the voting-token rulebook also ends it when the last card is drawn). The highest score wins.', 'all'),
     ],
   }
 })
