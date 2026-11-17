@@ -7,6 +7,46 @@ import { Icon, Logo } from './icons'
 export const playersLabel = ([a, b]: [number, number]) => (a === b ? `${a} player${a > 1 ? 's' : ''}` : `${a}–${b} players`)
 const LEVELS = ['All', 'Easy', 'Medium', 'Hard'] as const
 
+const dark = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16)
+  return ((n >> 16) & 255) * 0.3 + ((n >> 8) & 255) * 0.59 + (n & 255) * 0.11 < 150
+}
+
+/** Every game drifting past as a drawn "box lid" in its own colors. Each row is doubled so the loop is seamless. */
+function Marquee({ games, onOpen }: { games: GameDef[]; onOpen: (id: string) => void }) {
+  const rows = [0, 1, 2].map((r) => games.filter((_, i) => i % 3 === r))
+  return (
+    <div className="marquee -mx-5 mt-8 space-y-2.5 overflow-hidden py-1 sm:-mx-8" aria-label="All games">
+      {rows.map((row, r) => (
+        <div key={r} className="marquee-row flex w-max gap-2.5" style={{ animationDuration: `${row.length * 4.2}s`, animationDirection: r % 2 ? 'reverse' : 'normal' }}>
+          {[...row, ...row].map((g, i) => {
+            const [a, b, c] = g.meta.swatch
+            const ink = dark(a) ? '#ffffff' : '#1c1917'
+            return (
+              <a
+                key={`${g.id}-${i}`}
+                href={`/g/${g.id}`}
+                tabIndex={i < row.length ? 0 : -1}
+                aria-hidden={i >= row.length}
+                onClick={(e) => {
+                  e.preventDefault()
+                  onOpen(g.id)
+                }}
+                className="relative flex h-[88px] w-[136px] shrink-0 flex-col justify-end overflow-hidden rounded-xl border border-stone-900/15 p-2.5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+                style={{ background: `linear-gradient(140deg, ${a} 0%, ${a} 58%, ${b ?? a} 58%, ${b ?? a} 80%, ${c ?? b ?? a} 80%)`, color: ink }}
+              >
+                <span className="font-display text-[14px] font-bold leading-[1.1]" style={{ textShadow: ink === '#ffffff' ? '0 1px 2px rgba(0,0,0,0.35)' : '0 1px 0 rgba(255,255,255,0.5)' }}>
+                  {g.meta.title.replace(/: .*/, '')}
+                </span>
+              </a>
+            )
+          })}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function GameCard({ g, onOpen }: { g: GameDef; onOpen: (id: string) => void }) {
   return (
     <a
@@ -107,9 +147,11 @@ export function Home({ games, note, onOpen, onAdd }: { games: GameDef[]; note: s
         </div>
       )}
 
+      {!term && <Marquee games={games} onOpen={onOpen} />}
+
       {!term && (
         <>
-          <h2 className="mt-12 font-display text-2xl font-bold">How it works</h2>
+          <h2 className="mt-10 font-display text-2xl font-bold">How it works</h2>
           <ol className="mt-4 grid gap-3 sm:grid-cols-3">
             {[
               ['Pick your game', 'Search by name, or paste the setup rules of a game we do not have yet.'],

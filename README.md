@@ -7,7 +7,7 @@ piece on a 3D table one step at a time, then plays a short first turn. 113 games
 
 **Try it: [howty.vercel.app](https://howty.vercel.app)**
 
-<!-- Add a short screen recording here: it is the single most useful thing in this README. -->
+<p align="center"><img src="docs/demo.gif" alt="Searching for Wingspan, opening its cover page, stepping through setup and watching the first turn" width="840" /></p>
 
 - **Runs entirely in the browser.** No backend, no API keys, no AI calls, no tracking. It is a static site.
 - **113 games built in**, from Chess and Catan to Wingspan, Ark Nova and Terraforming Mars.

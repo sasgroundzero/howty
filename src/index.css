@@ -6,3 +6,10 @@ html, body, #root { height: 100%; margin: 0; overflow: hidden; background: #d9cf
 body { font-family: 'DM Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 canvas { touch-action: none; }
 textarea, input { -webkit-user-select: text; user-select: text; }
+
+/* Home page: rows of game cards drifting sideways. Hovering pauses them; reduced-motion stops them. */
+@keyframes marquee { to { transform: translateX(calc(-50% - 5px)); } }
+.marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.marquee-row { animation: marquee linear infinite; }
+.marquee:hover .marquee-row, .marquee:focus-within .marquee-row { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .marquee-row { animation: none; } .marquee { overflow-x: auto; } }
