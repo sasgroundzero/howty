@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { Icon } from '../ui/icons'
+import { Button } from '../ui/kit'
 import { EXAMPLE, describe, parseRules, type CustomEntry } from './parser'
 
 /** "+ Add Custom Game": paste setup rules or load a .txt/.md file, preview what was detected, build it. */
@@ -19,63 +21,46 @@ export function CustomGameModal({ onClose, onCreate }: { onClose: () => void; on
     if (!title) setTitle('')
   }
 
+  const field = 'w-full select-text rounded-xl border border-line bg-white px-4 py-3 text-body text-ink outline-none transition duration-150 ease-out placeholder:text-stone-400 focus:border-ink'
   return (
-    <div className="absolute inset-0 z-50 flex items-end justify-center bg-stone-900/45 p-0 backdrop-blur-[3px] sm:items-center sm:p-4" onClick={onClose}>
-      <div className="max-h-[92dvh] w-full max-w-xl overflow-auto rounded-t-3xl bg-[#fbf7ef] p-5 shadow-2xl sm:rounded-3xl sm:p-7" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">Rulebook to 3D</div>
-            <h2 className="font-display text-2xl font-bold text-stone-900">Add a custom game</h2>
-          </div>
-          <button onClick={onClose} aria-label="Close" className="h-9 w-9 rounded-full border border-stone-300 bg-white text-lg leading-none hover:bg-stone-50">×</button>
+    <div className="absolute inset-0 z-50 flex items-end justify-center bg-ink/40 sm:items-center sm:p-4" onClick={onClose}>
+      <div className="animate-grow max-h-[92dvh] w-full max-w-xl origin-bottom overflow-auto rounded-t-2xl border border-line bg-paper p-6 shadow-lift sm:rounded-2xl sm:p-8" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between gap-4">
+          <h2 className="font-display text-page font-bold text-ink">Add a game</h2>
+          <Button kind="quiet" size="sm" onClick={onClose} aria-label="Close" className="-mr-2 w-8 !px-0">
+            <Icon name="x" />
+          </Button>
         </div>
-        <p className="mt-1 text-sm text-stone-600">Paste the setup section of any rulebook. Everything is read in your browser: nothing is uploaded.</p>
+        <p className="mt-2 max-w-[52ch] text-ui text-stone-600">Paste the setup section of the rulebook. It is read in your browser and never uploaded.</p>
 
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Game name (optional)"
-          className="mt-4 w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
-        />
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Paste setup rules here, e.g. “For 2 to 4 players. Shuffle the 52 cards and deal 5 to each player…”"
-          rows={8}
-          className="mt-2 w-full select-text rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm leading-snug focus:outline-none focus:ring-2 focus:ring-amber-500"
-        />
-        <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-          <label className="cursor-pointer rounded-full border border-stone-300 bg-white px-3 py-1.5 font-semibold hover:bg-stone-50">
-            Upload .txt / .md
+        <div className="mt-6 space-y-2">
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Game name (optional)" aria-label="Game name" className={field} />
+          <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="For 2 to 4 players. Shuffle the 52 cards and deal 5 to each player…" aria-label="Setup rules" rows={8} className={field} />
+        </div>
+        <div className="-mx-3 mt-2 flex flex-wrap items-center">
+          <label className="inline-flex h-8 cursor-pointer items-center rounded-full px-3 text-ui font-semibold text-stone-600 transition duration-150 ease-out hover:bg-ink/5 hover:text-ink">
+            Upload a .txt or .md file
             <input type="file" accept=".txt,.md,.markdown,text/plain,text/markdown" className="hidden" onChange={(e) => void loadFile(e.target.files?.[0])} />
           </label>
-          <button onClick={() => { setText(EXAMPLE); setTitle('') }} className="rounded-full px-3 py-1.5 font-semibold text-amber-700 hover:bg-amber-50">
+          <Button kind="quiet" size="sm" onClick={() => { setText(EXAMPLE); setTitle('') }}>
             Try an example
-          </button>
-          {error && <span className="text-red-700">{error}</span>}
+          </Button>
         </div>
+        {error && <p className="mt-2 text-ui text-red-700">{error}</p>}
 
-        <div className="mt-4 min-h-[3.5rem] rounded-xl border border-dashed border-stone-300 p-3">
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">Detected</div>
+        <p className="mt-6 min-h-10 text-ui text-stone-600">
           {parsed ? (
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
-              <span className="rounded-full bg-stone-900 px-2 py-0.5 text-[11px] font-semibold text-white">{parsed.title}</span>
-              {describe(parsed).map((d) => (
-                <span key={d} className="rounded-full border border-stone-300 bg-white px-2 py-0.5 text-[11px] font-medium text-stone-700">{d}</span>
-              ))}
-            </div>
+            <>
+              <span className="font-semibold text-ink">{parsed.title}</span>: {describe(parsed).join(' · ')}
+            </>
           ) : (
-            <div className="mt-1 text-sm text-stone-400">Paste a few sentences to see what the parser finds.</div>
+            <span className="text-stone-400">What Howty finds in your rules will show here.</span>
           )}
-        </div>
+        </p>
 
-        <button
-          disabled={!parsed}
-          onClick={() => parsed && onCreate({ id: `custom-${Date.now().toString(36)}`, title: parsed.title, text })}
-          className="mt-4 h-12 w-full rounded-full bg-stone-900 text-sm font-semibold text-white shadow-md transition hover:bg-stone-700 disabled:opacity-35"
-        >
-          Build 3D setup →
-        </button>
+        <Button kind="primary" size="lg" iconRight="arrow" disabled={!parsed} onClick={() => parsed && onCreate({ id: `custom-${Date.now().toString(36)}`, title: parsed.title, text })} className="mt-4 w-full justify-between">
+          Build the 3D table
+        </Button>
       </div>
     </div>
   )

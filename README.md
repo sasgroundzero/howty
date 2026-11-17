@@ -48,6 +48,12 @@ every board, card face and sound is drawn or synthesised in code.
 A game is plain data: a list of steps and a list of pieces, where each piece says where it rests
 from a given step onward. The engine drops, slides, flips and hides pieces to match.
 
+## Design standard
+
+The interface follows a short written standard, [DESIGN.md](DESIGN.md): one focal point per screen, one
+spacing scale, six type sizes, neutral colors with a single accent, real content only, matching details,
+and motion that starts from where you acted. Changes to the UI are checked against its seven questions.
+
 ## Add or fix a game
 
 Most games are about 50 lines using the table composer: you say what goes in the centre, at the

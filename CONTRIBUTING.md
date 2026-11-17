@@ -8,6 +8,7 @@ Thanks for helping. The three most useful things, in order:
 2. **Add a game.** Read [scripts/AUTHORING.md](scripts/AUTHORING.md), copy a similar game in
    `src/data/games/more/`, then run `npm run index` to register it.
 3. **Improve the engine or the look.** Open an issue first for anything large.
+   UI changes must follow [DESIGN.md](DESIGN.md) and use the components in `src/ui/kit.tsx`.
 
 ## Before you open a pull request
 

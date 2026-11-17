@@ -20,9 +20,9 @@ import { Daily } from './ui/Daily'
 import { Home, playersLabel } from './ui/Home'
 import { dailyPuzzle, today, update, useMe } from './ui/me'
 import { Icon, Logo, type IconName } from './ui/icons'
+import { Button, cx, panel } from './ui/kit'
 import { decodeShare, encodeShare, loadCustoms, saveCustoms, toGameDef, type CustomEntry } from './custom/parser'
 
-const panel = 'rounded-2xl border border-stone-900/10 bg-[#fbf7ef]/90 shadow-lg backdrop-blur-md'
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n))
 
 type View = 'home' | 'cover' | 'play' | 'daily'
@@ -37,13 +37,7 @@ function readRoute() {
 
 function IconButton({ on, label, icon, onClick, title }: { on?: boolean; label: string; icon: IconName; onClick: () => void; title?: string }) {
   return (
-    <button
-      onClick={onClick}
-      title={title ?? label}
-      aria-label={title ?? label}
-      aria-pressed={on}
-      className={`flex h-10 min-w-10 items-center justify-center gap-1.5 px-2.5 text-sm font-semibold transition hover:bg-white ${panel} ${on ? '!border-amber-600 !bg-amber-100' : ''}`}
-    >
+    <button onClick={onClick} title={title ?? label} aria-label={title ?? label} aria-pressed={on} className={cx(panel, 'flex h-10 min-w-10 items-center justify-center gap-2 px-3 text-ui font-semibold transition duration-150 ease-out hover:bg-white active:scale-[0.97]', on ? 'text-accent' : 'text-ink')}>
       <Icon name={icon} />
       <span className="hidden xl:inline">{label}</span>
     </button>
@@ -62,6 +56,13 @@ export default function App() {
   const [gameId, setGameId] = useState(() => (first.view === 'daily' ? puzzle.answer.id : known(first.id) ? first.id : 'catan'))
   const [view, setView] = useState<View>(() => (first.view === 'daily' || known(first.id) ? first.view : 'home'))
   const started = view === 'play'
+  // pages slide in from the side you are heading toward: deeper from the right, back from the left
+  const depth = { home: 0, daily: 1, cover: 1, play: 2 }[view]
+  const lastDepth = useRef(depth)
+  const from = depth < lastDepth.current ? -16 : 16
+  useEffect(() => {
+    lastDepth.current = depth
+  }, [depth])
   const def = games.find((g) => g.id === gameId) ?? games[0]
   const [players, setPlayers] = useState(() => clamp(first.players || def.meta.defaultPlayers, def.meta.players[0], def.meta.players[1]))
   const game = useMemo(() => def.build(players), [def, players])
@@ -323,20 +324,21 @@ export default function App() {
   const simTotal = total - setupCount
 
   return (
-    <div className="relative h-full w-full select-none text-stone-900">
+    <div className="relative h-full w-full select-none bg-paper text-ink">
       {/* The 3D table fills the screen while playing; on the home and cover pages it sits beside (or above) the text. */}
       <div className={started ? 'absolute inset-0' : 'absolute inset-x-0 top-0 h-[34dvh] lg:inset-y-0 lg:left-[46%] lg:h-auto'}>
         <Canvas shadows camera={{ position: [2, 25, 20], fov: 40, near: 0.1, far: 400 }} dpr={[1, 2]} onPointerMissed={() => hoverStore.clear()}>
           <Scene game={game} gameKey={gameId} nav={{ ...nav, step }} nonce={nonce} idle={!started} quiet={view === 'daily' && !guessed} />
         </Canvas>
         {view === 'home' && (
-          <button onClick={() => pickGame(gameId, 'cover')} className={`absolute bottom-3 left-3 flex items-center gap-2 px-3 py-2 text-sm font-semibold hover:bg-white ${panel}`}>
-            <span className="h-2 w-2 animate-pulse rounded-full bg-amber-500" /> Live: {def.meta.title}, set up for {players} <Icon name="arrow" size={15} />
+          <button onClick={() => pickGame(gameId, 'cover')} className={cx(panel, 'absolute bottom-4 left-4 flex h-10 items-center gap-2 px-4 text-ui font-semibold text-ink transition duration-150 ease-out hover:bg-white active:scale-[0.98]')}>
+            {def.meta.title}, set up for {players} <Icon name="arrow" />
           </button>
         )}
       </div>
       {!started && (
-        <main className="absolute inset-x-0 bottom-0 top-[34dvh] select-text overflow-y-auto rounded-t-3xl bg-[#fbf7ef] shadow-[0_-8px_30px_rgba(0,0,0,0.12)] lg:inset-y-0 lg:right-auto lg:w-[46%] lg:rounded-none lg:shadow-[8px_0_30px_rgba(0,0,0,0.08)]">
+        <main className="absolute inset-x-0 bottom-0 top-[34dvh] select-text overflow-y-auto overflow-x-hidden rounded-t-2xl border-t border-line bg-paper lg:inset-y-0 lg:right-auto lg:w-[46%] lg:rounded-none lg:border-r lg:border-t-0">
+          <div key={`${view}:${view === 'home' ? '' : gameId}`} className="animate-slide min-h-full" style={{ ['--from' as string]: `${from}px` }}>
           {view === 'home' ? (
             <Home games={games} note={sharedNote} onOpen={(id) => pickGame(id, 'cover')} onAdd={() => setAdding(true)} onDaily={openDaily} />
           ) : view === 'daily' ? (
@@ -344,6 +346,7 @@ export default function App() {
           ) : (
             <Cover def={def} game={game} players={players} note={sharedNote} copied={copied} onPlayers={changePlayers} onStart={start} onWatch={watch} onHome={goHome} onShare={() => void share()} onRemove={removeCustom} />
           )}
+          </div>
         </main>
       )}
       {adding && <CustomGameModal onClose={() => setAdding(false)} onCreate={addCustom} />}
@@ -352,46 +355,36 @@ export default function App() {
         <>
           {/* Top left: game switcher + player count */}
           <div className="absolute left-2 top-2 z-20 flex max-w-[calc(100%-4rem)] flex-col items-start gap-2 sm:left-4 sm:top-4">
-            <div className={`flex flex-wrap items-center gap-x-3 gap-y-2 px-2.5 py-2 sm:px-3 sm:py-2.5 ${panel}`}>
-              <button onClick={goHome} title="All games" aria-label="All games" className="rounded-lg transition hover:opacity-70">
-                <Logo size={30} />
+            <div className={cx(panel, 'flex flex-wrap items-center gap-2 p-2')}>
+              <button onClick={goHome} title="All games" aria-label="All games" className="rounded-lg p-1 transition duration-150 ease-out hover:bg-ink/5 active:scale-[0.96]">
+                <Logo size={24} />
               </button>
-              <label className="flex items-center gap-2">
-                <select
-                  value={gameId}
-                  onChange={(e) => (e.target.value === '+' ? setAdding(true) : pickGame(e.target.value))}
-                  className="max-w-[11.5rem] rounded-lg border border-stone-300 bg-white px-2 py-1.5 font-display text-[15px] font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 sm:max-w-none sm:text-base"
-                >
-                  {[...games].sort((x, y) => x.meta.title.localeCompare(y.meta.title)).map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.meta.title}
-                    </option>
-                  ))}
-                  <option value="+">+ Add Custom Game…</option>
-                </select>
-              </label>
-              {range[0] !== range[1] && (
-                <div className="flex items-center gap-2">
-                  <span className="hidden text-[11px] font-semibold uppercase tracking-wider text-stone-500 sm:inline">Players</span>
-                  <PlayerPicker range={range} value={players} onChange={changePlayers} />
-                </div>
-              )}
-              <div className="hidden items-center gap-1.5 text-[11px] font-medium text-stone-600 xl:flex">
-                {range[0] === range[1] && <span className="rounded-full border border-stone-300 bg-white px-2 py-0.5">{playersLabel(range)}</span>}
-                <span className="rounded-full border border-stone-300 bg-white px-2 py-0.5">{def.meta.playTime}</span>
-                <span className="rounded-full border border-stone-300 bg-white px-2 py-0.5">{def.meta.difficulty}</span>
-              </div>
+              <select
+                value={gameId}
+                aria-label="Game"
+                onChange={(e) => (e.target.value === '+' ? setAdding(true) : pickGame(e.target.value))}
+                className="h-10 max-w-[11rem] rounded-xl border border-line bg-white px-3 font-display text-body font-bold text-ink sm:max-w-[16rem]"
+              >
+                {[...games].sort((x, y) => x.meta.title.localeCompare(y.meta.title)).map((g) => (
+                  <option key={g.id} value={g.id}>
+                    {g.meta.title}
+                  </option>
+                ))}
+                <option value="+">Add a game…</option>
+              </select>
+              {range[0] !== range[1] && <PlayerPicker range={range} value={players} onChange={changePlayers} />}
             </div>
             <div className="flex gap-2">
-              <button onClick={() => setShowList((v) => !v)} className={`px-3 py-1.5 text-xs font-semibold hover:bg-white ${panel}`}>
-                {showList ? 'Hide steps' : 'All steps'}
+              <button onClick={() => setShowList((v) => !v)} aria-expanded={showList} className={cx(panel, 'flex h-8 items-center gap-2 px-3 text-ui font-medium text-ink transition duration-150 ease-out hover:bg-white active:scale-[0.98]')}>
+                <Icon name={showList ? 'x' : 'list'} /> Steps
               </button>
-              <button onClick={() => pickGame(gameId, 'cover', players)} className={`px-3 py-1.5 text-xs font-semibold hover:bg-white ${panel}`}>
-                About this game
+              <button onClick={() => pickGame(gameId, 'cover', players)} className={cx(panel, 'flex h-8 items-center px-3 text-ui font-medium text-ink transition duration-150 ease-out hover:bg-white active:scale-[0.98]')}>
+                {playersLabel(range)} · {def.meta.playTime}
               </button>
             </div>
+            {/* The list grows out of the button that opened it */}
             {showList && (
-              <ol className={`max-h-[42dvh] w-60 overflow-auto p-1.5 ${panel}`}>
+              <ol className={cx(panel, 'animate-grow max-h-[42dvh] w-64 origin-top-left overflow-auto p-2')}>
                 {game.steps.slice(0, setupCount).map((st, i) => (
                   <li key={i}>
                     <button
@@ -399,17 +392,9 @@ export default function App() {
                         setPlaying(false)
                         go(i)
                       }}
-                      className={`flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-[13px] transition ${
-                        i === step ? 'bg-stone-900 font-semibold text-white' : 'text-stone-700 hover:bg-stone-900/5'
-                      }`}
+                      className={cx('flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-ui transition duration-150 ease-out', i === step ? 'bg-ink font-semibold text-paper' : 'text-stone-700 hover:bg-ink/5')}
                     >
-                      <span
-                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-                          i === step ? 'bg-white text-stone-900' : i < step ? 'bg-amber-600 text-white' : 'bg-stone-200 text-stone-600'
-                        }`}
-                      >
-                        {i < step ? '✓' : i + 1}
-                      </span>
+                      <span className={cx('w-4 shrink-0 text-center text-meta', i === step ? 'text-paper' : 'text-stone-400')}>{i < step ? <Icon name="check" size={16} /> : i + 1}</span>
                       {st.title}
                     </button>
                   </li>
@@ -448,89 +433,63 @@ export default function App() {
             <IconButton icon="link" label={copied ? 'Copied!' : 'Share'} on={copied} title={def.custom ? 'Copy a link that includes this game’s rules, so a friend can open it' : 'Copy a link to this step'} onClick={() => void share()} />
           </div>
 
-          {/* Bottom: step HUD */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:p-5">
-            <div className={`pointer-events-auto w-full max-w-3xl p-3 sm:p-5 ${panel} ${inSim ? '!border-amber-500/60' : ''}`}>
+          {/* Bottom: the step. Its one focal point is the instruction and the Next button. */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:p-4">
+            <div className={cx(panel, 'pointer-events-auto w-full max-w-3xl p-4 sm:p-6')}>
               <div className="flex gap-1">
-                {(inSim ? game.steps.slice(setupCount) : game.steps.slice(0, setupCount)).map((_, i) => {
-                  const at = inSim ? simIndex : step
-                  return (
-                    <button
-                      key={i}
-                      aria-label={`Go to step ${i + 1}`}
-                      onClick={() => go(inSim ? setupCount + i : i)}
-                      className={`h-2 flex-1 rounded-full transition-colors sm:h-1.5 ${i <= at ? 'bg-amber-600' : 'bg-stone-300 hover:bg-stone-400'}`}
-                    />
-                  )
-                })}
+                {(inSim ? game.steps.slice(setupCount) : game.steps.slice(0, setupCount)).map((_, i) => (
+                  <button key={i} aria-label={`Go to step ${i + 1}`} onClick={() => go(inSim ? setupCount + i : i)} className={cx('h-1 flex-1 rounded-full transition-colors duration-300 ease-out', i <= (inSim ? simIndex : step) ? 'bg-accent' : 'bg-ink/10 hover:bg-ink/25')} />
+                ))}
               </div>
-              <div className="mt-2.5 flex flex-col gap-3 sm:mt-3 sm:flex-row sm:items-end sm:gap-4">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em]">
-                    <button onClick={() => inSim && exitSim()} className={inSim ? 'text-stone-400 hover:text-stone-700' : 'text-amber-700'}>
-                      Setup{!inSim && ` · ${step + 1} of ${setupCount}`}
+              <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
+                <div key={step} className="animate-slide min-w-0 flex-1" style={{ ['--from' as string]: `${nav.dir < 0 ? -8 : 8}px` }}>
+                  <div className="flex items-center gap-2 text-meta font-semibold">
+                    <button onClick={() => inSim && exitSim()} className={inSim ? 'text-stone-400 transition hover:text-ink' : 'text-ink'}>
+                      Setup{!inSim && ` ${step + 1} of ${setupCount}`}
                     </button>
-                    <span className="text-stone-300">→</span>
-                    <button onClick={() => !inSim && simulate()} className={inSim ? 'text-amber-700' : 'text-stone-400 hover:text-stone-700'}>
-                      First turn{inSim && ` · ${simIndex + 1} of ${simTotal}`}
+                    <span className="text-stone-300">/</span>
+                    <button onClick={() => !inSim && simulate()} className={inSim ? 'text-ink' : 'text-stone-400 transition hover:text-ink'}>
+                      First turn{inSim && ` ${simIndex + 1} of ${simTotal}`}
                     </button>
                   </div>
-                  <h2 className="font-display text-lg font-bold leading-tight sm:text-2xl">{s.title}</h2>
-                  <p className="mt-1 text-sm leading-snug text-stone-800 sm:text-[15px]">{s.instruction}</p>
-                  {s.detail && <p className="mt-1 hidden text-[13px] leading-snug text-stone-500 sm:block">{s.detail}</p>}
-                  {!!s.needs?.length && (
-                    <div className="mt-2 hidden flex-wrap gap-1.5 sm:flex">
-                      {s.needs.map((n) => (
-                        <span key={n} className="rounded-full border border-stone-300 bg-white px-2 py-0.5 text-[11px] font-medium text-stone-600">
-                          {n}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  <h2 className="mt-1 font-display text-title font-bold text-ink sm:text-page">{s.title}</h2>
+                  <p className="mt-2 max-w-[60ch] text-body text-stone-800">{s.instruction}</p>
+                  {s.detail && <p className="mt-1 hidden max-w-[60ch] text-ui text-stone-500 sm:block">{s.detail}</p>}
+                  {!!s.needs?.length && <p className="mt-2 hidden text-meta text-stone-500 sm:block">{s.needs.join(' · ')}</p>}
                 </div>
                 <div className="flex shrink-0 gap-2">
                   {inSim ? (
                     <>
-                      <button onClick={exitSim} className="h-11 flex-1 rounded-full border border-stone-300 bg-white px-4 text-sm font-semibold transition hover:bg-stone-50 sm:flex-none">
-                        ← Setup
-                      </button>
+                      <Button icon="back" onClick={exitSim} className="flex-1 sm:flex-none">
+                        Setup
+                      </Button>
                       {step < total - 1 ? (
-                        <button onClick={() => setPlaying(!playing)} className="h-11 flex-1 rounded-full bg-stone-900 px-5 text-sm font-semibold text-white shadow-md transition hover:bg-stone-700 sm:flex-none">
-                          {playing ? '❚❚ Pause' : '▶ Resume'}
-                        </button>
+                        <Button kind="primary" icon={playing ? 'pause' : 'play'} onClick={() => setPlaying(!playing)} className="flex-1 sm:flex-none">
+                          {playing ? 'Pause' : 'Resume'}
+                        </Button>
                       ) : (
-                        <button onClick={simulate} className="h-11 flex-1 rounded-full bg-amber-600 px-5 text-sm font-semibold text-white shadow-md transition hover:bg-amber-700 sm:flex-none">
-                          ↻ Replay
-                        </button>
+                        <Button kind="primary" icon="replay" onClick={simulate} className="flex-1 sm:flex-none">
+                          Replay
+                        </Button>
                       )}
                     </>
                   ) : (
                     <>
-                      <button
-                        onClick={() => go(step - 1)}
-                        disabled={step === 0}
-                        className="h-11 rounded-full border border-stone-300 bg-white px-4 text-sm font-semibold transition hover:bg-stone-50 disabled:opacity-35"
-                      >
-                        ← Back
-                      </button>
+                      <Button icon="back" onClick={() => go(step - 1)} disabled={step === 0}>
+                        Back
+                      </Button>
                       {step < setupCount - 1 ? (
-                        <button onClick={() => go(step + 1)} className="h-11 flex-1 rounded-full bg-stone-900 px-5 text-sm font-semibold text-white shadow-md transition hover:bg-stone-700 sm:flex-none">
-                          Next →
-                        </button>
+                        <Button kind="primary" iconRight="arrow" onClick={() => go(step + 1)} className="flex-1 sm:flex-none">
+                          Next
+                        </Button>
                       ) : (
-                        <button
-                          onClick={simulate}
-                          className="h-12 flex-1 animate-pulse rounded-full bg-amber-600 px-6 text-base font-bold text-white shadow-lg ring-4 ring-amber-300/60 transition hover:animate-none hover:bg-amber-700 sm:flex-none"
-                        >
-                          ▶ Simulate First Turn
-                        </button>
+                        <Button kind="accent" icon="play" onClick={simulate} className="flex-1 sm:flex-none">
+                          Watch the first turn
+                        </Button>
                       )}
                     </>
                   )}
                 </div>
-              </div>
-              <div className="mt-2 hidden text-[11px] text-stone-400 sm:block">
-                ← → change steps · R repeats narration · drag to orbit · scroll or pinch to zoom · right-drag or two fingers to pan · hover or tap any piece
               </div>
             </div>
           </div>

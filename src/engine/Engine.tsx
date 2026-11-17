@@ -293,9 +293,11 @@ function Tooltip() {
   if (!show) return null
   return (
     <Html position={[show.point[0], show.point[1] + 0.35, show.point[2]]} zIndexRange={[30, 0]} style={{ pointerEvents: 'none' }}>
-      <div className="w-56 -translate-x-1/2 -translate-y-full rounded-xl border border-stone-900/10 bg-white/95 px-3.5 py-2.5 shadow-xl sm:w-60">
-        <div className="font-display text-[15px] font-bold leading-tight text-stone-900">{show.info.title}</div>
-        <div className="mt-1 text-[12.5px] leading-snug text-stone-600">{show.info.body}</div>
+      <div className="w-56 -translate-x-1/2 -translate-y-full">
+        <div className="animate-grow origin-bottom rounded-xl border border-line bg-white px-4 py-3 shadow-lift">
+          <div className="font-display text-ui font-bold text-ink">{show.info.title}</div>
+          <div className="mt-1 text-meta text-stone-600">{show.info.body}</div>
+        </div>
       </div>
     </Html>
   )

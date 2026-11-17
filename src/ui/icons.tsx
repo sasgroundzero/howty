@@ -13,10 +13,15 @@ const PATHS = {
   back: 'M19 12H5 M11 6l-6 6 6 6',
   play: 'M7 4l13 8-13 8z',
   plus: 'M12 5v14 M5 12h14',
+  check: 'M5 12.5l4.5 4.5L19 7.5',
+  pause: 'M8 5v14 M16 5v14',
+  replay: 'M4 12a8 8 0 1 0 2.6-5.9 M4 4v4.5h4.5',
+  list: 'M8 6h12 M8 12h12 M8 18h12 M4 6h.01 M4 12h.01 M4 18h.01',
+  x: 'M6 6l12 12 M18 6L6 18',
 } as const
 export type IconName = keyof typeof PATHS
 
-export function Icon({ name, size = 18, className }: { name: IconName; size?: number; className?: string }) {
+export function Icon({ name, size = 16, className }: { name: IconName; size?: number; className?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden className={className}>
       {PATHS[name].split(' M').map((d, i) => (
