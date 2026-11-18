@@ -30,28 +30,28 @@ export const alienFrontiers = tabletop('alien-frontiers', 'Alien Frontiers', [2,
         L(pile('fuel', '#d9772b', 'Fuel', 'Orange fuel tokens. Fuel pays for most alien tech powers and for building.', 'disc'), pile('ore', '#8a8f98', 'Ore', 'Grey ore tokens. Ore pays for ships and colonies.')),
         L(discs('fields', 3, 0.28, ['#5fa8d3', '#c0392b', '#7a4fa3'], 'Field generators', 'The isolation, positron and repulsor fields. Alien tech cards move them between territories.', { h: 0.1, gap: 0.3 })),
       ]),
-      S('Alien tech cards', 'Shuffle the alien tech cards and turn 3 face up by the Alien Artifact.', 'r', [
+      S('Alien tech cards', 'Shuffle the alien tech cards, turn 3 face up by the Alien Artifact, and deal 1 face up to each player.', 'r', [
         R(deck('techdeck', 19, f('#3d2b5a', '✦'), 'Alien tech deck', 'Cards with a reusable power and a one-off discard power.'), cards('tech', 3, ft('#e3d9f0', 'TECH', 'alien', '✦'), 'Alien tech on offer', 'Dock ships totalling 8 or more at the Alien Artifact to claim one of these.')),
       ]),
-      S('Ships and colonies', `Each player takes 3 ships (dice) of one color and ${colonies} colonies. Your other ships wait by the board until you build them.`, 'you', [
+      S('Ships and colonies', `Each player takes 3 ships (dice) of one color and ${colonies} colonies. Your other ships wait by the board until you build them.${n < 4 ? ' Set the dice of the unused colors to 1 on the docking ports marked with dots: they block those ports all game.' : ''}`, 'you', [
         P(
           dice('ships', 3, '$', 'Your ships', 'You start with 3 ships and can build up to 6. Roll them all at the start of your turn.', { values: [1, 1, 1] }),
-          pile('colonies', '$', 'Your colonies', `${colonies} colonies each with ${n} players. Check the rulebook if your edition gives a different number.`, 'disc'),
+          pile('colonies', '$', 'Your colonies', `${colonies} colonies each with ${n} players.`, 'disc'),
           zone('hold', 1.6, 1, 'Your stock', 'Your fuel, ore and alien tech cards.'),
         ),
       ]),
-      S('Score markers and head starts', 'Put each player\'s score marker at the start of the score track. Players later in turn order get a small head start of resources.', 'planet', [
+      S('Score markers and head starts', 'Put each player\'s score marker on 0. Roll for high to pick player one; players later in turn order get a small head start of resources.', 'planet', [
         OnP('planet', 0.5, 0.975, cubes('score', 1, '$', 'Score marker', 'You score 1 point per colony on the planet, plus bonuses for controlling territories and for some cards.', { s: 0.2 }), [0.3, 0]),
-      ], 'The exact starting resources for each seat are in the rulebook.'),
-      S('Ready to play', 'Choose a first player; play passes clockwise.', 'all', [], 'On your turn: roll all your ships, dock them at facilities, and take what those facilities give.'),
+      ], n === 4 ? 'Player two takes 1 fuel, player three 1 ore, and player four 1 fuel and 1 ore.' : n === 3 ? 'Player two takes 1 fuel and player three 1 ore.' : 'Player two takes 1 fuel.'),
+      S('Ready to play', 'Player one starts; play passes clockwise.', 'all', [], 'On your turn: roll all your ships, dock them at facilities, and take what those facilities give.'),
     ],
     turn: [
       T('Roll your ships', 'You roll all three dice. The numbers decide where each ship is allowed to dock.', 'you', [roll('ships.0', 5), roll('ships.1', 5), roll('ships.2', 2)]),
-      T('Dock at the facilities', 'You send both 5s to the Solar Converter for fuel and the 2 to the Lunar Mine for 1 ore.', 'planet', [
+      T('Dock at the facilities', 'You send both 5s to the Solar Converter for 3 fuel each and the 2 to the Lunar Mine for 1 ore.', 'planet', [
         mv('ships.0', at('solar', 0.25, 0.5)),
         mv('ships.1', at('solar', 0.7, 0.5)),
         mv('ships.2', at('lunar', 0.25, 0.5)),
-        spawn(discs('myfuel', 3, 0.14, '#d9772b', 'Fuel', 'Fuel gained at the Solar Converter.', { h: 0.08, gap: 0.06 }), at('hold', 0.38, 0.3), 'fuel'),
+        spawn(discs('myfuel', 6, 0.14, '#d9772b', 'Fuel', 'Fuel gained at the Solar Converter.', { h: 0.08, gap: 0.06 }), at('hold', 0.38, 0.3), 'fuel'),
         spawn(cubes('myore', 1, '#8a8f98', 'Ore', 'Ore gained at the Lunar Mine.', { s: 0.22 }), at('hold', 0.5, 0.75), 'ore'),
       ]),
       T('Next player', 'Docked ships stay put and may block others. The next player rolls and sends a ship to the Colonist Hub to start moving a colony.', 'planet', [

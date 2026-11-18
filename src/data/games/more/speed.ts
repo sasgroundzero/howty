@@ -36,6 +36,6 @@ export const speed = tabletop('speed', 'Speed', [2, 2], 2, '5–10 min', 'Easy',
     T('When you are both stuck', 'If neither player can play, each flips the top card of a side pile onto the centre pile next to it, and play carries on. If the side piles run out, shuffle the centre piles, apart from their top cards, to make new ones.', 'c', [
       draw('sideL', at('mid.0', 0.5, 0.5, 0.04), pc('9♣')), draw('sideR', at('mid.1', 0.5, 0.5, 0.04), pc('3♥')),
     ]),
-    T('How it ends', 'The first player to get rid of every card in their hand and draw pile wins. Agree beforehand whether an ace connects to both the king and the 2, and whether a card of the same rank may be played: groups differ on both.', 'all'),
+    T('How it ends', 'The first player to get rid of every card in their hand and draw pile wins. To keep score, the winner scores a point for each card the other player has left, and the first to an agreed total such as 25 wins. Agree beforehand whether an ace connects to both the king and the 2, and whether a card of the same rank may be played: groups differ on both.', 'all'),
   ],
 }))

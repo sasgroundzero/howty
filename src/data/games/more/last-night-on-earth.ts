@@ -33,26 +33,26 @@ export const lastNightOnEarth = tabletop('last-night-on-earth', 'Last Night on E
       S('Choose the heroes', 'The hero players take four hero character sheets at random and put each hero figure in its starting place.', 'town', [
         L(cards('sheets', 4, ft('#efe2bd', 'HERO', 'health and ability', '●'), 'Hero character sheets', '4 of the 8 heroes are used. A sheet shows the hero\'s health boxes, special ability and starting location.', { w: 1.5, d: 2.1, cols: 2 })),
         ...HERO_AT.map(([c, r], i) => on('town', ...g(c, r), pawns(`hero${i}`, 1, HERO_COL[i], 'Hero', 'One of the four heroes in play. Heroes move, search buildings for cards and fight zombies.', { scale: 0.55, shape: 'hero' }))),
-      ], 'A hero normally starts in the building named on its sheet. If that building is not on the table, the rulebook says where the hero starts instead.'),
+      ], 'A hero starts in any space of the building named on its sheet. If that building is not on the table, the hero starts in the centre space of the town centre and draws one free hero card.'),
       S('Shuffle the two decks', 'Shuffle the hero deck and the zombie deck separately and put each within reach of its team, leaving room for a discard pile.', 'r', [
         R(deck('herodeck', 40, f('#2e6fb7', '✦'), 'Hero deck', 'Items, weapons and events for the heroes. A hero draws one by searching inside a building.'), zone('herodisc', 0.9, 1.26, 'Discard', 'Used hero cards go here.'),
           deck('zdeck', 40, f('#5d7a3a', '✗'), 'Zombie deck', 'Nasty surprises for the zombie players to spring on the heroes.'), zone('zdisc', 0.9, 1.26, 'Discard', 'Used zombie cards go here.')),
       ]),
-      S('Zombie hand and zombie pool', `The zombie side draws a starting hand of 4 zombie cards${zPlayers === 2 ? ', split as 2 cards for each of the two zombie players' : ''}. Put the zombie figures and the dice beside the board.`, 'you', [
+      S('Zombie hand and zombie pool', `The zombie side draws a starting hand of 4 zombie cards${zPlayers === 2 ? ', split as 2 cards for each of the two zombie players' : ''}. Roll two dice${zPlayers === 2 ? ' (one each)' : ''} and place that many zombies on the spawning pits, spread as evenly as possible.`, 'you', [
         onMe('area', 0.5, 0.5, cards('zhand', zPlayers === 2 ? 2 : 4, f('#5d7a3a', '✗'), 'Zombie cards', 'Your hand as a zombie player. You refill it at the start of each zombie turn.', { gap: 0.2 })),
         R(pile('zpool', ZOMBIE, 'Zombie pool', '14 zombie figures in two colors, 7 of each, so two zombie players can take a color each.', 'meeple'),
-          dice('die', 2, '#e9e4d8', 'Dice', 'Ordinary six-sided dice used for movement, fights and spawning. The game comes with several.', { values: [3, 5], size: 0.5 })),
+          dice('die', 2, '#e9e4d8', 'Dice', 'Ordinary six-sided dice used for movement, fights and spawning. The game comes with 16.', { values: [3, 5], size: 0.5 })),
         on('town', ...g(2, 5), zombie('z0')),
         on('town', ...g(5, 2), zombie('z1')),
-      ], 'In this walkthrough you play the zombies. Whether zombies start on the board, and how many, depends on the scenario: check the scenario card and rulebook. Two are shown on spawning pits as an example.'),
-      S('Set the sun track', 'Put the sun track marker on the starting space named by the scenario.', 'track', [
+      ], 'In this walkthrough you play the zombies. Strictly, the zombie hand is first filled at the start of the first zombie turn. Two starting zombies are shown here as an example roll.'),
+      S('Set the sun track', 'Put the sun track marker on the space matching the turn count on the scenario card (15 for Die Zombies, Die!).', 'track', [
         on('track', 0.1, 0.5, discs('sun', 1, 0.2, '#e0b12f', 'Sun track marker', 'Shows how many turns remain. When it runs out the scenario says who wins.', { label: '☼' })),
       ]),
       S('Ready to play', 'Every round the zombies take their whole turn first, then the heroes take theirs.', 'all', [], 'A zombie turn moves the sun marker, refills the zombie hand, moves and fights with zombies and may spawn more. On the hero turn each hero moves or searches, then shoots or fights.'),
     ],
     turn: [
       T('Zombie turn: the sun moves', 'You start the zombie turn by moving the sun track marker one space along. Then you would draw back up to your hand size, but your hand is already full.', 'track', [mv('sun', at('track', 0.24, 0.5))]),
-      T('Roll to see if more zombies come', 'Roll two dice. If the total is higher than the number of zombies on the board, new zombies will arrive at the end of this turn.', 'r', [roll('die.0', 5), roll('die.1', 4)]),
+      T('Roll to see if more zombies come', 'Roll two dice (one each with two zombie players). If the total is higher than the number of zombies on the board, new zombies will arrive at the end of this turn.', 'r', [roll('die.0', 5), roll('die.1', 4)]),
       T('Zombies shamble and fight', 'Each zombie may move one space towards the heroes. A zombie that shares a space with a hero must fight instead.', 'town', [mv('z0', at('town', ...g(2, 4))), mv('z1', at('town', ...g(4, 2)))]),
       T('Spawn new zombies', 'Because the spawn roll succeeded, roll one die and place that many zombies from the pool on spawning pits. Here two arrive.', 'town', [
         roll('die.0', 2),
@@ -64,7 +64,7 @@ export const lastNightOnEarth = tabletop('last-night-on-earth', 'Last Night on E
         mv('hero0', at('town', ...g(2, 2))),
         draw('herodeck', at('area@1', 0.5, 0.5)),
       ]),
-      T('Fights and the finish', 'A hero in a space with a zombie fights it with dice: the zombie wins ties, and the hero usually needs a winning roll with doubles to kill it. The game ends when a side meets the scenario goal or the sun track runs out.', 'all', [], 8),
+      T('Fights and the finish', 'A hero in a space with a zombie fights it with dice: the zombie wins ties, and the hero usually needs a winning roll with doubles to kill it. The game ends when a side meets the scenario goal or the sun track runs out. In Die Zombies, Die! the heroes must kill 15 zombies, and the zombies win by killing 2 heroes.', 'all', [], 8),
     ],
   }
 })

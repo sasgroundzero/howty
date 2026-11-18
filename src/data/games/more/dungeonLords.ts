@@ -46,7 +46,7 @@ export const dungeonLords = tabletop('dungeon-lords', 'Dungeon Lords', [2, 4], 4
     S('Evilometer', 'Put each player\'s evil counter on the marked starting space of the Evilometer.', 'central', [
       OnP('central', 0.06, 0.5, discs('evil', 1, 0.14, '$', 'Evil counter', 'Shows your reputation. Nastier lords attract tougher adventurers and, at the top, the paladin.', { h: 0.08 }), [0, 0.36]),
     ]),
-    S('Ready to play', 'Give the starting player token to one player. Each round, reveal the new monsters, rooms and adventurers on offer, then everyone picks orders at the same time.', 'all', [], 'Two of your orders are out of reach each round. In the very first round of a year these are set aside at random: see the rulebook.'),
+    S('Ready to play', 'Give the starting player token to one player. Each round, reveal the new monsters, rooms and adventurers on offer, then everyone picks orders at the same time.', 'all', [], 'Two of your orders are out of reach each round. For the first round, shuffle your order cards and set 2 aside at random; after that, 2 of the 3 orders you just played take their place.'),
   ],
   turn: [
     T('Choose three orders', 'Everyone secretly picks 3 of their available order cards and lays them face down in the order they will be carried out.', 'you', [
@@ -63,6 +63,6 @@ export const dungeonLords = tabletop('dungeon-lords', 'Dungeon Lords', [2, 4], 4
       flip('orders.2'), mv('minions.1', at('central', SLOT(2)[0], SLOT(2)[1])),
       spawn(tiles('newtunnel', 1, 0.6, 0.6, '#6b5a48', 'New tunnel', 'A freshly dug tunnel. Tunnels may not form a 2 by 2 block.', { h: 0.05 }), at('dungeon', 0.3, 0.5), 'tunnelsup', undefined, 1.4),
     ], 8),
-    T('Combat and final scoring', 'At the end of each year the adventurers assigned to you march in, and you fight them with traps and monsters. After the second year, score rooms, monsters, prisoners, unconquered tiles and titles: the most points wins.', 'all'),
+    T('Combat and final scoring', 'At the end of each year the adventurers assigned to you march in, and you fight them with traps and monsters. After the second year, score unconquered rooms, monsters, prisoners and titles, minus points for conquered tiles and unpaid taxes: the most points wins.', 'all'),
   ],
 }))

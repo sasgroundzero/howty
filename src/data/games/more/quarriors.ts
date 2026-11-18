@@ -8,12 +8,12 @@ export const quarriors = tabletop('quarriors', 'Quarriors!', [2, 4], 3, '30 min'
   const goal = n === 2 ? 20 : n === 3 ? 15 : 12
   return {
     setup: [
-      S('Lay out the basic cards', 'Put the three basic cards in the middle: Basic Quiddity, Assistant and Portal. Put their dice on them.', 'basic', [
+      S('Lay out the basic cards', 'Put the three basic cards in the middle: Basic Quiddity, Assistant and Portal. Put 2 Assistant dice on the Assistant card and 5 Portal dice on the Portal card.', 'basic', [
         C(cards('basic', 3, [ft('#f3e7c5', 'Quiddity', 'basic', '◆'), ft('#f3e7c5', 'Assistant', 'basic', '●'), ft('#f3e7c5', 'Portal', 'basic', '✦')], 'Basic cards', 'These three cards are used in every game. The cards and dice in the middle of the table are called the Wilds.')),
         On('basic.2', 0.5, 0.72, dice('bdie', 1, '#5b6f8a', 'Portal dice', 'One die stands in for the stack here. Portal dice sit on the Portal card until captured.', { size: 0.4, values: [3] })),
       ]),
       S('Deal three spells', 'Shuffle the spell cards and deal 3 face up, each of a different spell. Put the matching dice on each.', 'spell', [
-        C(cards('spell', 3, ft('#dfeaf5', 'SPELL', 'cost', '✦'), 'Spell cards', '3 different spells. If you deal a second card for a spell already out, replace it.')),
+        C(cards('spell', 3, ft('#dfeaf5', 'SPELL', 'cost', '✦'), 'Spell cards', '3 different spells. If you turn up a second card for a spell already out, put it back in the box and deal another.')),
         ...[0, 1, 2].map((k) => On(`spell.${k}`, 0.5, 0.72, dice(`sdie${k}`, 1, '#8fb7d9', 'Spell dice', 'One die stands in for the 5 dice that go on each spell card.', { size: 0.4, values: [2] }))),
       ]),
       S('Deal seven creatures', 'Shuffle the creature cards and deal 7 face up, each of a different creature. Put the 5 matching dice on each.', 'creature', [

@@ -19,7 +19,7 @@ export const cheat = tabletop('cheat', 'Cheat', [2, 8], 4, '15–30 min', 'Easy'
       ], extra ? 'It does not matter that the hands are slightly uneven.' : undefined),
       S('Sort your hand', 'Pick up your cards, keep them hidden and sort them by rank so that you can see how many of each you hold.', 'hand'),
       S('Learn the calling order', 'The first player must call aces, the next player twos, then threes and so on up to kings. After kings the calls start again at aces.', 'c', [], 'This upward order is the most common rule. Some groups call downwards, or let you call one rank above or below the last call.'),
-      S('Ready to play', 'Pick any player to start. On your turn you put one or more cards face down on the pile and say how many of the required rank they are, truthfully or not.', 'all', [], 'Here you go first, so your call must be aces.'),
+      S('Ready to play', 'Pick any player to start. On your turn you put one or more cards face down on the pile and say how many of the required rank they are, truthfully or not.', 'all', [], 'Here you go first, so your call must be aces. Some groups allow at most four cards in one play.'),
     ],
     turn: [
       T('Play face down and make your call', 'You must call aces. You hold two, so you lay both face down and say "two aces". This time it is true.', 'pile', [

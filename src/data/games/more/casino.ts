@@ -10,7 +10,7 @@ export const casino = tabletop('casino', 'Casino', [2, 4], 2, '20–40 min', 'Me
   const who = n === 2 ? 'Your opponent' : 'The next player'
   return {
     setup: [
-      S('Sort out the deck', 'Casino uses one standard 52-card deck with no jokers.', 'c', [], `The name is often spelled Cassino. ${n === 4 ? 'Four can play as two partnerships, with partners sitting opposite each other.' : 'It is at its best with two players.'}`),
+      S('Sort out the deck', 'Casino uses one standard 52-card deck with no jokers.', 'c', [], `The name is often spelled Cassino. ${n === 4 ? 'Four can play as two partnerships, with partners sitting opposite each other.' : 'It works well for two, three or four players.'}`),
       S('Deal four cards each', 'The dealer shuffles and deals 4 cards face down to each player. Keep a space beside you for the cards you capture.', 'you', [
         P(hand('hand', '8♠ 9♣ 4♣ J♦', 'Your hand', 'Your 4 cards. You play one each turn, and get 4 more when everyone has run out.'), zone('won', 1.1, 1.4, 'Captured', 'Cards you capture are kept here face down until the scoring.')),
       ], 'Traditionally the cards are dealt two at a time, but dealing singly is just as common.'),
@@ -34,7 +34,7 @@ export const casino = tabletop('casino', 'Casino', [2, 4], 2, '20–40 min', 'Me
       T('Pair a picture card', `${who} plays a king and captures the king on the table. They could have taken your build instead if they held a 9.`, 'c', [
         show('hand.1@1', 'K♣'), mv('hand.1@1', at('won@1', 0.5, 0.5, 0.02)), mv('table.3', at('won@1', 0.5, 0.5)), down('hand.1@1'),
       ], 8),
-      T('Take your build', 'You play your 9 and capture the build. While your build is on the table you may not trail: you must capture, build or add to a build.', 'c', [
+      T('Take your build', 'You play your 9 and capture the build. Until someone else adds to your build, you may not trail: you must capture, build or add to a build.', 'c', [
         mv('hand.1', at('won', 0.5, 0.5, 0.1)), mv('hand.0@1', at('won', 0.5, 0.5, 0.06)), mv('hand.2', at('won', 0.5, 0.5, 0.08)), down('hand.1'),
       ], 8),
       T('How it ends', 'When all hands are empty, the dealer gives everyone 4 more cards, but none to the table. After the last cards are played, whoever captured last takes what is left on the table and the deal is scored. Deal again until someone reaches 21 points and wins.', 'all', [], 8),
