@@ -10,14 +10,14 @@ const BONE = '#f6f1e4'
 
 function build(n: number) {
   const b = new Kit()
-  const hand = n === 2 ? 7 : 5
+  const hand = n === 4 ? 6 : 7
   const S = seats(n, 7.4, 6.6)
   const MID = look(0, 0, 8)
   const MINE = look(0, 6.6, 6)
   const MIX = b.s('Shuffle the tiles', 'Turn all 28 dominoes face down on the table and mix them around with your hands.', MID, 'A double-six set has one tile for every pair of numbers from blank (0) to 6.', ['28 dominoes'])
-  const DRAW = b.s('Draw your hand', `Each player draws ${hand} tiles and stands them on edge facing themselves so nobody else can see the dots.`, MINE, 'Two players take 7 tiles each; three or four players take 5 each.', [`${hand} tiles each`])
+  const DRAW = b.s('Draw your hand', `Each player draws ${hand} tiles and stands them on edge facing themselves so nobody else can see the dots.`, MINE, 'Two or three players take 7 tiles each; four players take 6 each.', [`${hand} tiles each`])
   const YARD = b.s('Leave the boneyard', `Push the ${28 - hand * n} tiles that are left to the far edge of the play area, still face down. This is the boneyard.`, look(0, -2.6, 7), 'You draw from the boneyard whenever you cannot play.')
-  b.s('Ready to play', 'You are set up: the player holding the highest double plays it to start the line.', OVER, 'Be the first to play all of your tiles.')
+  b.s('Ready to play', 'You are set up: draw tiles to decide who leads, or use the common house rule that the highest double starts the line.', OVER, 'Be the first to play all of your tiles.')
 
   const tiles: PieceSpec<'block'>[] = []
   ALL.forEach(([a, c], i) => {
@@ -45,8 +45,8 @@ function build(n: number) {
   lay(1, b.t('Match an open end', 'The player on your left adds the 6-3, with its 6 touching your double.', MID), 0.93, Math.PI / 2, 'dom:6-3')
   lay(2, b.t('Play on either end', `${n === 2 ? 'You play' : 'The next player plays'} the 6-2 against the other side of the double, so the open ends are now 2 and 3.`, MID, 7), -0.93, Math.PI / 2, 'dom:2-6')
   b.t('Doubles go crosswise', 'Doubles are laid across the line, while every other tile is laid end to end.', look(0, 0, 6))
-  b.t('Cannot play? Draw', 'If none of your tiles match an open end, draw from the boneyard until you can play, or pass if it is empty.', look(0, -2.6, 7))
-  b.t('Go out to win', 'The first player to play their last tile wins the round and scores the dots left in everyone else’s hands.', WIDE)
+  b.t('Cannot play? Draw', 'If none of your tiles match an open end, draw from the boneyard until you can play. The last two boneyard tiles are never drawn: once only they are left, you pass.', look(0, -2.6, 7))
+  b.t('Go out to win', 'The first player to play their last tile wins the hand and scores the dots left in everyone else’s hands. If nobody can play, the lowest hand wins. Play to 100 with two, or 61 with three or four.', WIDE)
   return b.done({ w: 30, d: 20 })
 }
 

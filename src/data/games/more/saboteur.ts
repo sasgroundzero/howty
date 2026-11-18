@@ -51,7 +51,7 @@ export const saboteur = tabletop('saboteur', 'Saboteur', [3, 8], 5, '30 min', 'E
         draw('deck', by('hand.1@2', 1.04, 0), undefined, undefined, 1.6),
       ]),
       T('Reaching a goal', 'Later, when a tunnel connects to a goal card, that card is turned over. If it is stone the digging continues towards the others.', 'mine', [flip('goal0')]),
-      T('How it ends', 'If the gold is reached, the gold-diggers share out nugget cards, with the finder choosing first. If the deck and hands run out first, the saboteurs take nuggets instead. After 3 rounds, the player with the most nuggets wins.', 'all', [], 8),
+      T('How it ends', 'If the gold is reached, draw one nugget card per gold-digger: the finder picks first and passes the rest to the right. If the deck and hands run out first, the saboteurs win a fixed share of nuggets instead. After 3 rounds, the player with the most nuggets wins.', 'all', [], 8),
     ],
   }
 })

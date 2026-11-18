@@ -6,7 +6,7 @@ const [RED, BLUE, GREEN, CHILI, SOY] = [bean('#f1c9c0', 'Red'), bean('#c9dcf1', 
 
 export const bohnanza = tabletop('bohnanza', 'Bohnanza', [3, 5], 4, '45 min', 'Easy', 'Plant, trade and harvest beans for gold.', ['#3d8b4a', '#e0b12f', '#c0392b'], (n) => ({
   setup: [
-    S('Check which beans are in play', 'Some editions remove one or two bean varieties depending on the number of players. Check the rulebook table for your edition, then shuffle the cards you are using.', 'c', [
+    S('Check which beans are in play', `${n === 3 ? 'With 3 players take out the Cocoa beans' : 'With 4 or 5 players take out the Coffee beans'} and put the third bean field cards in the box. The oldest player shuffles the rest.`, 'c', [
       C(
         deck('deck', 70 - 5 * n, f('#b9892f', '◎', '#2b241c'), 'Draw pile', 'All the bean cards in play, face down. The back of every card shows a gold coin. How many cards there are depends on the edition and the player count.'),
         zone('discard', 1.1, 1.5, 'Discard pile', 'Harvested beans that were not kept as coins go here face up. It is reshuffled to make a new draw pile.'),
@@ -19,7 +19,7 @@ export const bohnanza = tabletop('bohnanza', 'Bohnanza', [3, 5], 4, '45 min', 'E
         zone('f2', 1.1, 1.6, 'Bean field', 'Your second field. A third field can be bought later for 3 gold coins.'),
         zone('gold', 1.1, 1.6, 'Gold coins', 'Harvested cards you keep are flipped to their coin side and stacked here. Each is worth 1 gold.'),
       ),
-    ], n === 3 ? 'Some editions start a 3-player game with a third field already open: check your rulebook.' : undefined),
+    ], n === 3 ? 'With 3 players everyone starts with a third bean field card and cannot buy another.' : undefined),
     S('Deal five cards each', 'Deal 5 cards face down to each player. Pick them up one at a time and keep them in exactly the order you received them.', 'you', [
       P(cards('hand', 5, [RED, BLUE, BLUE, GREEN, CHILI], 'Your hand', 'You may never rearrange your hand. The first card dealt is at the front (left here) and new cards always go to the back.')),
     ]),
@@ -28,7 +28,7 @@ export const bohnanza = tabletop('bohnanza', 'Bohnanza', [3, 5], 4, '45 min', 'E
   ],
   turn: [
     T('Plant from the front of your hand', 'You must plant the first card in your hand in one of your fields. You may then plant the next card too, and you do.', 'you', [mv('hand.0', at('f1')), mv('hand.1', at('f2'))]),
-    T('Turn up two cards', 'You turn the top 2 cards of the draw pile face up. Now you may trade them, and cards from your hand, with the other players. Only you may take part in each trade.', 'c', [
+    T('Turn up two cards', 'You turn the top 2 cards of the draw pile face up. Now you may trade them, and cards from your hand, with the other players. Every trade must include you: the other players cannot trade among themselves.', 'c', [
       draw('deck', at('offer', 0.27, 0.5), SOY, 'up1'),
       draw('deck', at('offer', 0.73, 0.5), RED, 'up2'),
     ]),
@@ -42,6 +42,6 @@ export const bohnanza = tabletop('bohnanza', 'Bohnanza', [3, 5], 4, '45 min', 'E
       draw('deck', at('hand.4', 1.8, 0.5, 0.04)),
       draw('deck', at('hand.4', 2.45, 0.5, 0.06)),
     ]),
-    T('Harvesting and the finish', 'When you need a field for a new variety you harvest one: keep some cards as coins and discard the rest. In the standard game play ends when the draw pile runs out for the third time; then everyone harvests and the most gold wins.', 'all'),
+    T('Harvesting and the finish', `When you need a field for a new variety you harvest one: keep some cards as coins and discard the rest. Play ends when the draw pile runs out for the ${n === 3 ? 'second' : 'third'} time; then everyone harvests their fields and the most gold wins.`, 'all'),
   ],
 }))

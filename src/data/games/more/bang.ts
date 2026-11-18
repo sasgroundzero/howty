@@ -17,7 +17,7 @@ export const bang = tabletop('bang', 'BANG!', [4, 7], 5, '20–40 min', 'Easy', 
       ]),
       S('Characters and bullets', 'Shuffle the character cards and deal one face up to each player. Take as many bullets (life points) as your character shows.', 'you', [
         P(
-          cards('char', 1, ft('#e8d9b5', 'Character', 'special ability', '♞'), 'Character card', 'One per player, face up. It gives you a special ability and shows your starting bullets, which is 3 or 4 for most characters.'),
+          cards('char', 1, ft('#e8d9b5', 'Character', 'special ability', '♞'), 'Character card', 'One per player, face up. It gives you a special ability and shows your starting bullets, which is 3 or 4 in the base game.'),
           discs('life', 1, 0.3, '#b9892f', 'Bullets (life points)', 'Shows how many life points you have left. Depending on the edition you track them with bullet tokens on a player board or by sliding your character over a spare card.', { label: '4', h: 0.1 }),
         ),
       ], 'This scene shows 4 bullets for everyone. Use the number on your own character.'),

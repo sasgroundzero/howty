@@ -209,7 +209,8 @@ ART['b:candy'] = pathArt(L.CANDY_PATH, '#fbe3ee', (i) => (i === 0 ? '#ffffff' : 
 ART['b:life'] = pathArt(L.LIFE_PATH, '#7fbf7a', (i) => (i === 0 ? '#ffffff' : i === 47 ? '#f6d32d' : [8, 17, 26, 36].includes(i) ? '#d63031' : i % 6 === 3 ? '#2e9e5b' : '#f4f1e6'), {
   size: 70, start: 'START', end: 'RETIRE', mark: (i) => ([8, 17, 26, 36].includes(i) ? 'STOP' : i % 6 === 3 ? '$' : ''),
 })
-const SKETCH = [['P', '#e0b12f'], ['O', '#2e6fb7'], ['A', '#d9772b'], ['D', '#3d8b4a'], ['AP', '#c0392b']]
+/** Pictionary's categories by square color, in Mattel's order: object, person/place/animal, action, difficult, miscellaneous. */
+const SKETCH = [['O', '#e0b12f'], ['P', '#2e6fb7'], ['A', '#d9772b'], ['D', '#3d8b4a'], ['M', '#c0392b']]
 ART['b:sketch'] = pathArt(L.SKETCH_PATH, '#f3ead8', (i) => (i === 54 ? '#2b241c' : SKETCH[i % 5][1]), { size: 62, start: 'START', end: 'FINISH', mark: (i) => (i === 54 ? '★' : SKETCH[i % 5][0]) })
 export const BRAIN = ['#2e6fb7', '#c0392b', '#e0b12f', '#3d8b4a']
 ART['b:brain'] = pathArt(L.BRAIN_PATH, '#efe6f5', (i) => (i % 10 === 0 || i === 39 ? '#7a4fa3' : BRAIN[i % 4]), { size: 70, start: 'START', end: 'FINISH', mark: (i) => (i % 10 === 0 || i === 39 ? '✦' : '') })

@@ -27,11 +27,11 @@ export const pinochle = tabletop('pinochle', 'Pinochle', [4, 4], 4, '60 min', 'H
       S('Learn the card order', 'In every suit the ten is the second-highest card. From high to low the order is ace, ten, king, queen, jack.', 'c', [], 'When two identical cards are played to the same trick, the one played first beats the other.'),
       S('Deal twenty cards each', 'Deal out the whole deck face down so everyone has 20. There is no kitty.', 'you', [
         P(hand('hand', MINE, 'Hand', 'A hand of 20 cards. Sort yours by suit and look for melds: marriages, runs, pinochles and four of a kind in different suits.', { cols: 7 })),
-      ], 'How many cards are dealt at a time is up to the dealer; groups have their own habits.'),
+      ], 'Cards are usually dealt four or five at a time; groups have their own habits.'),
       S('Set up the score sheet', 'Keep score on paper with a column for each side. Meld points and trick points are both written down each hand.', 'won', [
         P(zone('won', 2.2, 1.5, 'Tricks won', 'Tricks this player has taken, kept face down. Each ace, ten and king in them is worth 1 point to the side.')),
       ]),
-      S('Ready to bid', 'Bidding starts with the player on the dealer\'s left. A bid is the number of points your side promises to score from melds and tricks together; the lowest bid is 50, and a player who passes is out of the auction.', 'all', [], 'If the first three players pass, the dealer must bid 50. Some groups let the winning bidder and partner swap a few cards; the basic game has no passing.'),
+      S('Ready to bid', 'Bidding starts with the player on the dealer\'s left. A bid is the number of points your side promises to score from melds and tricks together; the lowest bid is 50, and a player who passes is out of the auction.', 'all', [], 'Bids go up by 1 to 60, then by 5. If the first three players pass, the dealer must bid 50. Some groups let the winning bidder and partner swap a few cards; the basic game has no passing.'),
     ],
     turn: [
       T('Win the auction', 'Players keep raising until three have passed. Say you win at 52. You name the trump suit, and you must hold at least a king and queen of it: you choose spades.', 'you'),

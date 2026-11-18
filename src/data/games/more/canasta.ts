@@ -12,7 +12,7 @@ export const canasta = tabletop('canasta', 'Canasta', [4, 4], 4, '60–90 min', 
     ]),
     S('Make the stock and discard pile', 'Put the rest of the cards face down in the middle as the stock and turn the top card face up beside it to start the discard pile.', 'c', [
       C(stock('stock', 63, 'Stock', 'The 63 undealt cards. Most turns begin by drawing the top one.'), shown('disc', '8♦', 'Discard pile', 'Everyone discards here. You take the whole pile or none of it, and only if you can meld its top card.')),
-    ], 'If the turned card is a joker, a two or a red three, turn another card on top of it until an ordinary card shows.'),
+    ], 'If the turned card is a joker, a two or a red three, turn another card on top of it until an ordinary card shows. The pile then starts frozen.'),
     S('Set out any red threes', 'Red threes are bonus cards and are never kept in the hand. If you were dealt one, lay it face up in front of you and draw a replacement from the stock. Do the same whenever you draw one.', 'you', [
       P(zone('melds', 5, 1.4, 'Your melds', 'Melds are laid face up here. Partners keep their melds together in front of one of them.')),
     ], 'Each red three is worth 100 points to a side that has melded, and costs 100 to a side that has not.'),

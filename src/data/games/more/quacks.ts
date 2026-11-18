@@ -11,7 +11,7 @@ export const quacks = tabletop('quacks', 'The Quacks of Quedlinburg', [2, 4], 4,
       C(board('track', 9, 6, 'g:ring:10:#e6d5a8:#8a5a2b:Scoring track', 'Scoring track', 'Victory points run round the edge. The round track in the middle counts the 9 rounds of the game. This drawing is schematic.')),
       On('track', 0.3, 0.32, discs('flame', 1, 0.2, '#e0b12f', 'Flame marker', 'Marks the current round. The game lasts 9 rounds.', { h: 0.3 })),
     ]),
-    S('Ingredient books', 'Lay out one book for each ingredient color. For a first game use the books of set 1.', 'r', [
+    S('Ingredient books', 'Lay out the orange and black books, plus the green, blue and red books of one set (set 1 for a first game). Keep the yellow and purple books aside for now.', 'r', [
       R(tiles('books', 7, 1.3, 1.7, ING.slice(1).map((c, i) => ft('#f3ecdc', INAME[i + 1].toUpperCase(), 'book', '◆')), 'Ingredient books', 'Each book shows what that color of chip does and what it costs. Yellow joins from round 2 and purple from round 3. The black book has one side for 2 players and one for 3 or 4.', { cols: 4, h: 0.03 })),
     ], n === 2 ? 'With 2 players use the black book side marked for 2.' : 'With 3 or 4 players use the black book side marked for 3 and 4.'),
     S('Chips, cards and the die', 'Sort the ingredient chips by color and value. Shuffle the fortune teller cards into a face-down deck and set the bonus die and rubies nearby.', 'all', [
@@ -25,7 +25,7 @@ export const quacks = tabletop('quacks', 'The Quacks of Quedlinburg', [2, 4], 4,
       OnP('track', 0.5, 0.95, discs('score', 1, 0.14, '$', 'Scoring marker', 'Your victory points. It starts on 0.'), [0.34, 0]),
     ]),
     S('Starting ingredients', 'Each player puts the same 9 starting chips in their bag: four white 1s, two white 2s, one white 3, one orange 1 and one green 1.', 'you', [], 'White chips are cherry bombs. If the white chips in your pot ever total more than 7, the pot explodes.'),
-    S('Ready to play', 'There is no turn order: in each round everyone draws chips at the same time.', 'all', [], 'A round is: turn up a fortune teller card, fill your pots, then score, shop and spend rubies.'),
+    S('Ready to play', 'The last person to cook something is the start player and keeps the fortune teller deck. There are no separate turns: in each round everyone draws chips at the same time.', 'all', [], 'A round is: turn up a fortune teller card, fill your pots, then score, shop and spend rubies.'),
   ],
   turn: [
     T('Turn up a fortune teller card', 'Reveal the top card and read it out. It applies to everyone this round.', 'fortune', [draw('fortune', by('fortune', 1.3, 0), ft('#efe2f3', 'FORTUNE', 'this round', '✦'))]),
@@ -38,7 +38,7 @@ export const quacks = tabletop('quacks', 'The Quacks of Quedlinburg', [2, 4], 4,
       mv('score', at('track', 0.64, 0.95)),
       spawn(chip('buy', 3, '1'), at('bag', 0.5, 0.5), 'chips.3'),
     ], 8),
-    T('Reset for the next round', 'Everything in your pot goes back in your bag and the flame marker moves on. A player whose pot exploded must choose between the points and the shopping.', 'you', [
+    T('Reset for the next round', 'Everything in your pot goes back in your bag, the fortune teller deck passes clockwise to the next start player and the flame marker moves on. A player whose pot exploded must choose between the points and the shopping.', 'you', [
       hide('c1'), hide('c2'), hide('c3'), hide('buy'), mv('flame', at('track', 0.37, 0.32)),
     ]),
     T('End of the game', 'After round 9, leftover coins and rubies convert into a few extra points as the rulebook describes. The player with the most victory points wins.', 'all'),

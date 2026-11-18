@@ -23,7 +23,7 @@ export const resistance = tabletop('resistance', 'The Resistance', [5, 8], 6, '3
         ...sizes.map((s, k) => on('tab', 0.14 + k * 0.18, 0.4, discs(`m${k}`, 1, 0.45, '#cfd8dc', `Mission ${k + 1}`, `Mission ${k + 1} needs a team of ${s}.${k === 3 && n >= 7 ? ' With 7 or more players this mission only fails if at least two Fail cards are played.' : ''}`, { label: `${s}`, h: 0.03 }))),
         C(zone('msn', 3.6, 1.5, 'Mission cards played', 'Team members play one mission card each here, face down.')),
       ], 'The real game plays up to 10. This version stops at 8.'),
-      S('Round and vote markers', 'Put the round marker on the first mission and the vote track marker on the first space of the vote track.', 'tab', [
+      S('Round and vote markers', 'Put the round marker on the first mission. If your tableau has a vote track, put a marker on its first space to count rejected teams.', 'tab', [
         on('m0', 0.5, 0.5, discs('round', 1, 0.2, '#e0b12f', 'Round marker', 'Shows which mission is being attempted.', { h: 0.08 })),
         on('tab', 0.14, 0.86, discs('votemk', 1, 0.14, '#e9e4d8', 'Vote track marker', 'Counts rejected teams in a row. If five teams in a row are voted down, the spies win.', { h: 0.08 })),
       ]),

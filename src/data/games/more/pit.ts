@@ -39,6 +39,6 @@ export const pit = tabletop('pit', 'Pit', [3, 8], 5, '30 min', 'Easy', 'Shout, s
       mv('hand.0', at('hand@1', ...slot(5))), mv('hand.1', at('hand@1', ...slot(6))),
     ]),
     T('Corner!', 'The first player holding all 9 cards of one commodity rings the bell and calls out the corner, for example "Corner on Corn!". Trading stops at once.', 'bell'),
-    T('Score and play again', 'That player scores the value printed on the commodity. Shuffle, deal again, and keep playing rounds until someone reaches the agreed target. The usual target is 500 points.', 'all'),
+    T('Score and play again', 'That player scores the value printed on the commodity, then shuffles and deals the next round. The first to reach 500 points wins, or 250 for a shorter game.', 'all'),
   ],
 }))
