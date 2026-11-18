@@ -1,11 +1,43 @@
 /** Web Speech API wrappers: narration (speech synthesis) and voice commands (recognition). */
 export const voice = { on: false }
 
+/** macOS novelty and old robotic voices: never pick these. */
+const NOVELTY = /^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Fred|Good News|Hysterical|Jester|Junior|Kathy|Organ|Pipe Organ|Princess|Ralph|Superstar|Trinoids|Whisper|Wobble|Zarvox|Eddy|Flo|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley)\b/i
+
+/** Scores an installed voice: the device's high-quality voices first, then well-known clear ones. */
+function score(v: SpeechSynthesisVoice, want: string) {
+  if (!/^en/i.test(v.lang) || NOVELTY.test(v.name)) return -1
+  let s = v.lang.replace('_', '-').toLowerCase() === want ? 10 : 0
+  if (/premium/i.test(v.name)) s += 60
+  else if (/enhanced/i.test(v.name)) s += 50
+  else if (/natural/i.test(v.name)) s += 55 // Edge's neural voices
+  else if (/^(Ava|Zoe|Evan|Nathan|Samantha|Karen|Daniel|Moira|Serena|Tessa|Google (US|UK) English)\b/i.test(v.name)) s += 20
+  if (v.default) s += 5
+  return s
+}
+let chosen: SpeechSynthesisVoice | null | undefined
+/** The clearest English voice this device has, matching the reader's own English where possible. */
+function bestVoice() {
+  if (chosen !== undefined) return chosen
+  const vs = window.speechSynthesis.getVoices()
+  if (!vs.length) return null // still loading; ask again next time
+  const lang = (navigator.language || 'en-US').toLowerCase()
+  const want = lang.startsWith('en') ? lang : 'en-us'
+  const best = vs.map((v) => [score(v, want), v] as const).filter(([s]) => s >= 0).sort((a, b) => b[0] - a[0])[0]
+  return (chosen = best ? best[1] : null)
+}
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.addEventListener?.('voiceschanged', () => (chosen = undefined))
+
 /** Reads text aloud if narration is on. `onEnd` runs when it finishes (not at all if speech is unavailable). */
 export function speak(text: string, onEnd?: () => void) {
   if (!voice.on || !('speechSynthesis' in window)) return false
   window.speechSynthesis.cancel()
   const u = new SpeechSynthesisUtterance(text)
+  const v = bestVoice()
+  if (v) {
+    u.voice = v
+    u.lang = v.lang
+  }
   u.rate = 1.02
   if (onEnd) u.onend = onEnd
   window.speechSynthesis.speak(u)
