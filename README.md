@@ -93,7 +93,7 @@ sides and in front of each player, and it positions everything, sizes the table 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [scripts/AUTHORING.md](scripts/AUTHORING.md).
 
 **Rules checks are the most valuable contribution.** The guides were written from memory or from
-public rules references. Eighty-one of the most popular (listed in
+public rules references. Ninety-seven of the most popular (listed in
 `src/data/games/verified.ts`) have been checked step by step against the published rules; the rest have not. Each unchecked page says so and links to a "Verify"
 issue: if you have the box, check the guide and report back, and the page is marked "Checked against the
 published rules" with your edition (see `src/data/games/verified.ts`).

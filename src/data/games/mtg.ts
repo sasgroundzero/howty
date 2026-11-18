@@ -25,7 +25,7 @@ function build(): GameSetup {
   const MATS = b.step({
     title: 'Sit across from each other',
     instruction: 'Each player lays out a playmat and brings their own deck: 100 cards for Commander.',
-    detail: 'Playing Standard instead? Use a 60-card deck, 20 life, and skip the Command Zone.',
+    detail: 'Playing Standard instead? Use a deck of at least 60 cards, 20 life, and skip the Command Zone.',
     needs: ['2 playmats', '2 decks'],
     focus: FOCUS.overview,
   })
@@ -34,6 +34,13 @@ function build(): GameSetup {
     instruction: 'Your battlefield has a front row for creatures and a back row for lands, with the library, graveyard and exile stacked on the right.',
     detail: 'The Command Zone and your life counter sit on the left.',
     focus: FOCUS.mine,
+  })
+  const FIRST = b.step({
+    title: 'Roll to go first',
+    instruction: 'Settle who goes first before shuffling: each player rolls a die and the higher roll chooses who takes the first turn. Here you roll 5 against 2.',
+    detail: 'Any method both players agree on works, such as a coin flip.',
+    needs: ['1 die each'],
+    focus: FOCUS.center,
   })
   const CMDSTEP = b.step({
     title: 'Reveal your commander',
@@ -55,16 +62,10 @@ function build(): GameSetup {
     needs: ['2 spindown d20s each'],
     focus: FOCUS.left,
   })
-  const FIRST = b.step({
-    title: 'Roll to go first',
-    instruction: 'Each player rolls a die and the higher roll chooses who takes the first turn: here you roll 5 against 2.',
-    needs: ['1 die each'],
-    focus: FOCUS.center,
-  })
   const DRAW = b.step({
     title: 'Draw 7 cards',
     instruction: 'Each player draws 7 cards from the top of their library as their opening hand.',
-    detail: 'Not happy? Take a mulligan: shuffle your hand back, draw 7 again, then put 1 card on the bottom for each mulligan taken.',
+    detail: 'Not happy? Take a mulligan: shuffle your hand back, draw 7 again, then put 1 card on the bottom for each mulligan taken. In multiplayer Commander the first mulligan is free.',
     needs: ['7 cards each'],
     focus: FOCUS.hand,
   })

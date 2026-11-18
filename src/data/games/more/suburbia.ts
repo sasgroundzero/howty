@@ -8,6 +8,9 @@ const On = (parent: string, u: number, v: number, item: Item): Place => ({ ...On
 const SLOT = (i: number) => 0.1 + i * 0.133
 const KIND = ['#3d8b4a', '#8a8f98', '#e0b12f', '#2e6fb7']
 const COST = ['+10', '+8', '+6', '+4', '+2', '+0', '+0']
+/** A, B and C stack sizes per player count (solo uses the 2-player stacks). */
+const STACK: Record<number, number[]> = { 1: [14, 12, 17], 2: [14, 12, 17], 3: [18, 15, 23], 4: [22, 20, 29] }
+const ONE_MORE: Record<number, number> = { 1: 6, 2: 6, 3: 9, 4: 12 }
 const market = (id: string, k: number) => hexes(id, 1, 0.5, KIND[k % 4], 'Market tile', 'A building for sale. You pay the price printed on the tile plus the extra cost of the market slot it sits in.')
 
 export const suburbia = tabletop('suburbia', 'Suburbia', [1, 4], 3, '90 min', 'Medium', 'Buy hex buildings and grow your borough.', ['#3d8b4a', '#e0b12f', '#2e6fb7'], (n) => ({
@@ -16,18 +19,18 @@ export const suburbia = tabletop('suburbia', 'Suburbia', [1, 4], 3, '90 min', 'M
       C(board('market', 10.5, 2.2, 'g:plain:0:#d9d2c0:#6b7a8f:Real Estate Market', 'Real estate market', 'Seven slots for tiles. The slots add from 10 down to 0 to the price, cheapest at the far end from where new tiles arrive.')),
       C(board('pop', 10.5, 1.6, 'g:lanes:14:#efe6d2:#b0563a:Population', 'Population board', 'The scoring track. Population is your score, and crossing each red line on the track lowers your income and reputation by 1.')),
     ]),
-    S('Build the tile stacks', 'Sort the building tiles by the letter on their backs into A, B and C stacks, using the number of tiles the rulebook gives for your player count. Mix the "1 More Round" tile into the C stack as the rulebook describes.', 'stacks', [
-      R(hexes('stacks', 3, 0.5, ['#c9b48a', '#b89a6a', '#9c7d52'], 'Building tile stacks', 'Face-down stacks marked A, B and C, used in that order. The size of each stack depends on the player count: check the rulebook.', { label: ['A', 'B', 'C'], gap: 0.3 })),
-      R(hexes('basic', 3, 0.5, [KIND[0], KIND[1], KIND[2]], 'Basic tiles', 'Three stacks that are always for sale: Suburbs, Community Park and Heavy Factory.', { label: ['S', 'P', 'F'], gap: 0.3 })),
+    S('Build the tile stacks', `Sort the building tiles by the letter on their backs and shuffle ${STACK[n].join(', ')} tiles into face-down A, B and C stacks. Mix the "1 More Round" tile with ${ONE_MORE[n]} C tiles and put them under the C stack, then move 5 tiles from the top of the C stack to the bottom. Set 4 each of Suburbs, Community Park and Heavy Factory beside the board.`, 'stacks', [
+      R(hexes('stacks', 3, 0.5, ['#c9b48a', '#b89a6a', '#9c7d52'], 'Building tile stacks', 'Face-down stacks marked A, B and C, used in that order. The size of each stack depends on the player count.', { label: ['A', 'B', 'C'], gap: 0.3 })),
+      R(hexes('basic', 3, 0.5, [KIND[0], KIND[1], KIND[2]], 'Basic tiles', 'Suburbs, Community Park and Heavy Factory, 4 of each. They are for sale on any turn until a stack runs out.', { label: ['S', 'P', 'F'], gap: 0.3 })),
     ]),
     S('Fill the market', 'Turn over tiles from the A stack to fill all 7 slots of the market.', 'market',
       [0, 1, 2, 3, 4, 5, 6].map((i) => On('market', SLOT(i), 0.5, market(`mk${i}`, i + 1))),
       `Slot costs from left to right: ${COST.join(', ')} (in millions).`,
     ),
-    S('Reveal the goals', n > 1 ? `Turn ${n} goal tiles face up beside the board, one per player. Then deal 2 goal tiles to each player, who keeps 1 secretly and returns the other to the box.` : 'Set out goal tiles as the solo rules in the rulebook describe.', 'goals', [
+    S('Reveal the goals', n > 1 ? `Turn ${n} goal tiles face up beside the board, one per player. Then deal 2 goal tiles to each player, who keeps 1 secretly and returns the other to the box.` : 'The basic solo game uses no goal tiles, so leave them in the box.', 'goals', [
       L(cards('goals', n, ft('#f3e7c5', 'GOAL', 'most or fewest', '★'), 'Public goals', '20 goal tiles in the game. A public goal gives bonus population at the end to the one player who meets it best.', { w: 1, d: 1 })),
       L(pile('bank', '#e0b12f', 'Money', 'Coins in millions of dollars. Income is paid from here at the end of every turn.', 'disc')),
-    ], n === 1 ? 'Solo play uses its own variant rules, which change the goals and the market: check the rulebook.' : undefined),
+    ], n === 1 ? 'In the solo game, crossing a red line costs 2 income and 2 reputation, and each turn you also clear one extra market tile and add two new ones. A second solo mode against a bot is in the rulebook.' : undefined),
     S('Borough boards and starting tiles', 'Each player takes a borough board and places one Suburbs, one Community Park and one Heavy Factory in a column below it, in that order.', 'you', [
       P(mat('borough', 4, 1.6, '$', 'Borough', 'Borough board', 'Tracks your income (money gained or lost each turn) and your reputation (population gained or lost each turn).')),
       P(
@@ -38,10 +41,10 @@ export const suburbia = tabletop('suburbia', 'Suburbia', [1, 4], 3, '90 min', 'M
         cubes('invest', 3, '$', 'Investment markers', '3 per player. Pay a tile\'s price again to put one on it and double its effect.', { s: 0.25, gap: 0.1 }),
       ),
     ]),
-    S('Set the starting markers', 'Put your income cylinder on 0 and your reputation cylinder on 1, and your population marker on the starting space of the population board.', 'borough', [
+    S('Set the starting markers', 'Put your income cylinder on 0 and your reputation cylinder on 1, and your population marker on space 2 of the population board.', 'borough', [
       On('borough', 0.3, 0.55, discs('inc', 1, 0.14, '#e0b12f', 'Income marker', 'Starts at 0. At the end of each turn you gain or pay this much money.', { h: 0.25 })),
       On('borough', 0.7, 0.55, discs('rep', 1, 0.14, '#2e6fb7', 'Reputation marker', 'Starts at 1. At the end of each turn your population changes by this much.', { h: 0.25 })),
-      OnP('pop', 0.08, 0.5, cubes('score', 1, '$', 'Population marker', 'Your score. The rulebook marks the starting space on the population board.', { s: 0.22 }), [0, 0.28]),
+      OnP('pop', 0.08, 0.5, cubes('score', 1, '$', 'Population marker', 'Your score. It starts on space 2 of the population board.', { s: 0.22 }), [0, 0.28]),
     ]),
     S('Ready to play', 'Pick a start player at random and give them the start player marker. Play passes clockwise.', 'all', [], 'On your turn: take a tile or place an investment marker, collect or pay income, adjust your population, then refill the market.'),
   ],
@@ -64,6 +67,6 @@ export const suburbia = tabletop('suburbia', 'Suburbia', [1, 4], 3, '90 min', 'M
       spawn(hexes('extra', 1, 0.5, KIND[0], 'Suburbs tile', 'A basic tile: cheap, and it adds population straight away.', { label: 'S' }), by('start.2@1', 0.92, 0), 'basic.0'),
       hide('mk6'),
     ]),
-    T('One more round', 'When the "1 More Round" tile turns up, finish the current round and play one more full round. Then score the goals and convert money to population: the biggest population wins.', 'all'),
+    T('One more round', 'When the "1 More Round" tile turns up, finish the current round and play one more full round. Then score the goals and convert money to population at 5 to 1: the biggest population wins.', 'all'),
   ],
 }))

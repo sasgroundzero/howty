@@ -31,6 +31,13 @@ function build(): GameSetup {
     detail: 'A Stadium card, when one is played, sits between the two players and affects both.',
     focus: FOCUS.mine,
   })
+  const COIN = b.step({
+    title: 'Flip a coin',
+    instruction: 'Flip a coin: the winner decides who goes first. Keep damage counters nearby.',
+    detail: 'The player who goes first cannot attack or play a Supporter card on their first turn.',
+    needs: ['1 coin', 'Damage counters'],
+    focus: FOCUS.center,
+  })
   const DECKS = b.step({
     title: 'Shuffle and place your deck',
     instruction: 'Shuffle your 60-card deck well and put it face down on the Deck zone.',
@@ -47,7 +54,7 @@ function build(): GameSetup {
   const ACT = b.step({
     title: 'Choose your Active Pokémon',
     instruction: 'Pick a Basic Pokémon from your hand and put it face down in your Active Spot.',
-    detail: 'No Basic in your hand? Show it, shuffle it back, and draw 7 again. Your opponent may draw 1 extra card.',
+    detail: 'No Basic in your hand? Show it to your opponent, shuffle it back, and draw 7 again. Each time you do this, your opponent may draw 1 extra card.',
     needs: ['1 Basic Pokémon each'],
     focus: FOCUS.center,
   })
@@ -63,13 +70,6 @@ function build(): GameSetup {
     detail: 'You take one Prize card each time you Knock Out an opponent’s Pokémon. Take all 6 and you win.',
     needs: ['6 Prize cards each'],
     focus: FOCUS.left,
-  })
-  const COIN = b.step({
-    title: 'Flip a coin',
-    instruction: 'Flip a coin: the winner decides who goes first. Keep damage counters nearby.',
-    detail: 'The player who goes first cannot attack or play a Supporter card on their first turn.',
-    needs: ['1 coin', 'Damage counters'],
-    focus: FOCUS.center,
   })
   const FLIP = b.step({
     title: 'Reveal your Pokémon',

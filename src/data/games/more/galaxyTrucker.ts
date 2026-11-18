@@ -14,15 +14,15 @@ export const galaxyTrucker = tabletop('galaxy-trucker', 'Galaxy Trucker', [2, 4]
       C(board('flight', 8, 3.6, 'g:ring:10:#1f2a44:#e0b12f:Flight board', 'Flight board', 'A loop of spaces showing who is ahead during the flight. The real board is an oval and marks the starting spaces for each round.')),
       C(tiles('heap', 14, 0.8, 0.8, '#6b7a8c', 'Component tiles', 'Well over a hundred ship parts in the real heap: cabins, engines, cannons, cargo holds, batteries, shields and pipes. Only a few are shown.', { cols: 7 })),
     ]),
-    S('Ship boards and starting cabins', 'Each player takes the ship board for the first round and places the starting cabin of their color on its centre square. Keep your two rocket markers nearby.', 'you', [
+    S('Ship boards and starting cabins', 'Each player takes the class I ship board and places the starting cabin of their color on the square marked I. Keep your two rocket markers nearby.', 'you', [
       P(
         mat('ship', 4.2, 3.6, '$', 'Ship I', 'Ship board', 'One per player per round. You build your ship on its grid; each round uses a bigger ship class.'),
-        pawns('rocket', 2, '$', 'Rocket markers', '2 per player. One marks your position on the flight board; the other is a spare for marking laps or your color.', { scale: 0.6 }),
+        pawns('rocket', 2, '$', 'Rocket markers', '2 per player. One marks your position on the flight board; the other marks the planet you land on when a Planets card comes up.', { scale: 0.6 }),
       ),
       On('ship', 0.5, 0.5, tiles('cabin', 1, 0.8, 0.8, f('$', '⌂'), 'Starting cabin', 'The tile every ship grows from. Each new tile must connect to a tile already on your ship.')),
     ]),
-    S('Prepare the adventure cards', 'For the first round, deal level I adventure cards face down into four small piles beside the flight board.', 'r', [
-      R(deck('adv', 2, f('#3b2f55', 'I'), 'Adventure card piles', 'Four piles for the round. During building you may peek at three of them; the fourth stays secret. The number of cards per pile is given in the rulebook.', { n: 4, gap: 0.2 })),
+    S('Prepare the adventure cards', 'For the first round, deal 2 random level I adventure cards face down into each of four piles. Three piles go on the flight board; the fourth stays aside, unseen.', 'r', [
+      R(deck('adv', 2, f('#3b2f55', 'I'), 'Adventure card piles', '8 cards in round 1. Once you have placed a tile you may peek at the three piles on the board; the fourth stays secret. In later rounds each pile gets 2 cards of that round\'s level plus 1 from each lower deck.', { n: 4, gap: 0.2 })),
     ]),
     S('Timer, order tiles and dice', 'Place the sand timer, the numbered order tiles and the two dice within reach.', 'r', [
       R(
@@ -39,7 +39,7 @@ export const galaxyTrucker = tabletop('galaxy-trucker', 'Galaxy Trucker', [2, 4]
         pile('cells', '#3d8b4a', 'Battery tokens', 'Loaded onto battery tiles. They power shields, double cannons and double engines.', 'disc'),
       ),
     ]),
-    S('Ready to play', 'Nobody takes turns while building. On "Go!" everyone builds at the same time, using one hand.', 'all', [], 'The base game is played over three rounds, each with a larger ship and tougher adventure cards.'),
+    S('Ready to play', 'Nobody takes turns while building. The boldest player says "Go!" and starts the timer, and everyone builds at the same time, using one hand.', 'all', [], 'The base game is played over three rounds, each with a larger ship and tougher adventure cards.'),
   ],
   turn: [
     T('Grab a tile', 'You take one face-down tile from the heap, bring it to your board and only then look at it. If it fits, you join it to your ship.', 'you', [mv('heap.3', at('ship', 0.7, 0.5)), set('heap.3', { top: PART[0] })]),
@@ -47,7 +47,7 @@ export const galaxyTrucker = tabletop('galaxy-trucker', 'Galaxy Trucker', [2, 4]
       mv('heap.9', at('ship', 0.5, 0.25)), set('heap.9', { top: PART[1] }),
       mv('heap.5', at('ship@1', 0.3, 0.5)), set('heap.5', { top: PART[2] }),
     ]),
-    T('Finish and take a number', 'When you are happy with your ship, take the lowest order tile left. Then put your rocket on the matching starting space of the flight board.', 'flight', [
+    T('Finish and take a number', 'When you are happy with your ship, take the lowest order tile left. After the ships are checked, tile 1 puts its rocket on the starting space and each next tile goes two spaces behind.', 'flight', [
       mv('order.0', at('ship', 0.12, 0.88)),
       mv('rocket.0', at('flight', LOOP(6)[0], LOOP(6)[1])),
       mv('rocket.0@1', at('flight', LOOP(4)[0], LOOP(4)[1])),
@@ -56,6 +56,6 @@ export const galaxyTrucker = tabletop('galaxy-trucker', 'Galaxy Trucker', [2, 4]
       spawn(pawns('astro', 2, '#e9e4d8', 'Astronauts', 'A starting cabin holds 2 human crew.', { scale: 0.3, gap: 0.08 }), at('cabin', 0.5, 0.5), 'crew'),
       draw('adv.0', at('flight', 0.5, 0.5), ft('#e6e0f0', 'METEORS', '', '●')),
     ], 8),
-    T('Payday and the finish', 'At the end of each flight you get credits for your finishing place, for goods delivered and for the best-looking ship, and you pay for lost parts. After the third round, everyone with at least 1 credit has won, and the richest trucker wins a little more.', 'all'),
+    T('Payday and the finish', 'At the end of each flight you get credits for your finishing place, for goods delivered and for the best-looking ship, and you pay 1 credit per lost part, up to the cap printed on your ship board. After the third round, everyone with at least 1 credit has won, and the richest trucker wins a little more.', 'all'),
   ],
 }))

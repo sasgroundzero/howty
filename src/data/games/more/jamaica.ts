@@ -16,7 +16,7 @@ export const jamaica = tabletop('jamaica', 'Jamaica', [2, 6], 4, '30–60 min', 
     ]),
     S('Ships at Port Royal', `All ${n} ships start together on the Port Royal space.`, 'map', [
       OnP('map', ...loop(0), pawns('ship', 1, '$', 'Ship', 'Your ship. It races once round the island and back to Port Royal.', { scale: 0.3 }), [0.2, 0]),
-    ]),
+    ], n === 2 ? 'The 2-player game adds the black Ghost Ship at Port Royal, moved by the captain each round. Its setup and rules are in the rulebook.' : undefined),
     S('Treasures', 'Put one treasure token on each of the 9 pirate lair spaces. Shuffle the 12 treasure cards and stack 9 of them face down beside the board. The other 3 go back in the box unseen.', 'map', [
       ...LAIRS.map((s, i) => on('map', ...loop(s), discs(`lair${i}`, 1, 0.2, '#8a5a2b', 'Treasure token', 'Marks an unclaimed treasure. The first ship to stop here takes the token off and draws a treasure card.', { label: '✦', ink: '#ffffff', h: 0.06 }))),
       R(deck('treasure', 9, f('#8a5a2b', '✦'), 'Treasure cards', 'Some are worth points, some are cursed and lose points, and a few give a lasting power.')),
@@ -31,7 +31,7 @@ export const jamaica = tabletop('jamaica', 'Jamaica', [2, 6], 4, '30–60 min', 
         cards('hand', 3, ACTION, 'Action cards', 'Each card has a morning action on the left and an evening action on the right: load something or move forward or backward.'),
         zone('played', 1.1, 1.46, 'Played', 'The card you choose each round goes here, face down until everyone has chosen.')),
     ]),
-    S('Supplies and dice', 'Put the doubloons, food and gunpowder tokens in the bank beside the board, with the two action dice and the combat die.', 'r', [
+    S('Supplies and dice', 'Sort the doubloons, food and gunpowder tokens into a bank beside the board. The combat die sits on the fortress printed on the board, and the two action dice go to the captain.', 'r', [
       R(discs('bank', 1, 0.25, '#e0b12f', 'Doubloon bank', 'The supply of gold doubloons.', { h: 0.35 }),
         pile('foodbank', '#e9e4d8', 'Food supply', 'The supply of food tokens.'),
         pile('powder', '#3a3a3a', 'Gunpowder supply', 'Gunpowder tokens. Spend them to add to your combat die roll.')),
@@ -39,7 +39,7 @@ export const jamaica = tabletop('jamaica', 'Jamaica', [2, 6], 4, '30–60 min', 
         dice('combat', 1, '#3a3a3a', 'Combat die', 'Rolled by both sides when two ships share a space. One face is a star that wins outright.', { size: 0.5, ink: '#ffffff', values: [2] }),
         discs('compass', 1, 0.3, '#c9b98a', 'Compass', 'Marks the captain, who rolls the dice and acts first. It passes to the left every round.', { label: '✧', h: 0.06 })),
     ]),
-    S('Ready to play', 'Give the compass to the first captain. In this walkthrough that is you.', 'all', [], 'Each round the captain rolls and places the dice, everyone secretly picks one card, then players take turns doing its morning and evening actions.'),
+    S('Ready to play', 'Pick the first captain at random and give them the compass and the two action dice. In this walkthrough that is you.', 'all', [], 'Each round the captain rolls and places the dice, everyone secretly picks one card, then players take turns doing its morning and evening actions.'),
   ],
   turn: [
     T('The captain rolls', 'As captain you roll both action dice, a 4 and a 2, and decide which goes on the morning side and which on the evening side.', 'map', [
@@ -60,6 +60,6 @@ export const jamaica = tabletop('jamaica', 'Jamaica', [2, 6], 4, '30–60 min', 
     T('Draw back up', 'Once everyone has acted, each player draws back up to 3 cards and the compass passes to the left.', 'you', [
       draw('adeck', by('hand.1', -1.04, 0), ACTION[0]),
     ]),
-    T('How it ends', 'The round in which a ship reaches Port Royal is the last. Each player scores the number on the space their ship reached, plus their doubloons and treasure cards, minus any cursed treasures. The highest total wins.', 'all', [], 8),
+    T('How it ends', 'The round in which a ship reaches Port Royal is the last. Each player scores the number on the space their ship reached, plus their doubloons and treasure cards, minus any cursed treasures. A ship still on the -5 space or behind it loses 5. The highest total wins.', 'all', [], 8),
   ],
 }))

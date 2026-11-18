@@ -11,7 +11,7 @@ const u = (k: number, m: number) => (k * (W + G) + W / 2) / (m * W + (m - 1) * G
 const worker = (id: string, k: number, count: number, what: string) =>
   On('tech', u(k, 6), 0.42, discs(id, count, 0.14, YEL, 'Worker', `${count} yellow token${count > 1 ? 's' : ''} on ${what}. A token on a card is a building or unit of that kind.`, { h: 0.08, gap: 0.05 }))
 
-export const throughTheAges = tabletop('through-the-ages', 'Through the Ages: A Story of Civilization', [2, 4], 3, '2–4 hours', 'Hard', 'Build a civilization from antiquity onward.', ['#b9892f', '#2e6fb7', '#e9e4d8'], (n) => {
+export const throughTheAges = tabletop('through-the-ages', 'Through the Ages: A New Story of Civilization', [2, 4], 3, '2–4 hours', 'Hard', 'Build a civilization from antiquity onward.', ['#b9892f', '#2e6fb7', '#e9e4d8'], (n) => {
   const cut = n === 2 ? 3 : n === 3 ? 2 : 1
   const left = [...(n === 2 ? [] : [2]), 4, 5, 6, 7, 8, 9, 10, 11, 12]
   return {
@@ -20,10 +20,10 @@ export const throughTheAges = tabletop('through-the-ages', 'Through the Ages: A 
         C(cards('row', 13, CIV, 'Card row', '13 civil cards anyone can take. The first 5 cost 1 civil action each, the next 4 cost 2, and the last 4 cost 3.', { w: W, d: D, gap: G })),
         R(
           deck('civil', 12, f('#b9892f', 'A'), 'Civil deck', 'Refills the card row. When Age A runs out, the Age I deck takes over, then II and III. Check the rulebook for cards removed with fewer players.', { w: W, d: D }),
-          deck('mil', 10, f('#7a2f2f', 'A'), 'Military deck', 'Events, aggressions and bonus cards. Age A military cards are used to seed the first events.', { w: W, d: D }),
+          deck('mil', 10, f('#7a2f2f', 'A'), 'Military deck', 'Events, aggressions and bonus cards. At setup, deal Age A military cards equal to the number of players plus 2 as the first events; the rest of Age A goes back in the box.', { w: W, d: D }),
         ),
       ]),
-      S('Score board', 'Lay out the scoring tracks and put each player’s culture and science markers at 0.', 'score', [
+      S('Score board', 'Lay out the boards. Put each player’s culture and science point counters at 0, and the rating markers at science 1, culture 0 and strength 1.', 'score', [
         C(board('score', 11.6, 2.4, 'g:plain:0:#e6dcc0:#b9892f:Culture and science tracks', 'Scoring tracks', 'Tracks for culture points and science points, and for how much of each a civilization makes per turn. This drawing is schematic.')),
         OnP('score', 0.1, 0.3, discs('cul', 1, 0.15, '$', 'Culture marker', 'Your culture points. The most culture at the end wins.', { h: 0.14 }), [0.34, 0]),
         OnP('score', 0.1, 0.72, discs('sci', 1, 0.15, '$', 'Science marker', 'Your science points, spent to play technology cards.', { h: 0.14 }), [0.34, 0]),
@@ -31,20 +31,20 @@ export const throughTheAges = tabletop('through-the-ages', 'Through the Ages: A 
       S('Starting technologies', 'Each player lays out the six starting cards of their color: Despotism, Philosophy, Religion, Agriculture, Bronze and Warriors.', 'you', [
         P(cards('tech', 6, TECH, 'Starting technologies', 'Six cards every civilization begins with: a government, a lab, a temple, a farm, a mine and a military unit.', { w: W, d: D, gap: G })),
       ]),
-      S('Fill your banks', 'Take the yellow and blue tokens of your civilization and put them in their two banks. Most of the yellow tokens stay in the yellow bank.', 'bank', [
+      S('Fill your banks', 'Fill your player board: 16 blue tokens on the blue bank and 18 yellow tokens on the yellow bank. Put 4 white and 2 red action tokens next to Despotism.', 'bank', [
         P(
           mat('bank', 2.2, 1.3, '$', 'Banks', 'Yellow and blue banks', 'The yellow bank holds population you have not yet grown. The blue bank holds the tokens that become food and resources.'),
           discs('civil4', 4, 0.18, '#f1ece0', 'Civil actions', 'Despotism gives 4 civil actions a turn. Spend them to take cards, grow population, build and play technologies.', { h: 0.08 }),
           discs('mil2', 2, 0.18, '#c0392b', 'Military actions', 'Despotism gives 2 military actions a turn, for units, tactics and political moves.', { h: 0.08 }),
         ),
-        On('bank', 0.2, 0.55, discs('ybank', 1, 0.2, YEL, 'Yellow bank', 'Your spare population tokens. The exact number depends on the edition: follow the spaces printed on your card or board.', { h: 0.5 })),
-        On('bank', 0.52, 0.55, discs('bbank', 1, 0.2, BLU, 'Blue bank', 'Blue tokens. When moved onto a farm or mine card they count as food or resources. The number depends on the edition.', { h: 0.45 })),
+        On('bank', 0.2, 0.55, discs('ybank', 1, 0.2, YEL, 'Yellow bank', 'Your spare population: 18 yellow tokens, one on each square of the yellow bank.', { h: 0.5 })),
+        On('bank', 0.52, 0.55, discs('bbank', 1, 0.2, BLU, 'Blue bank', '16 blue tokens, one on each square of the blue bank. When moved onto a farm or mine card they count as food or resources.', { h: 0.45 })),
       ]),
       S('Place your starting workers', 'Put 1 yellow token on Warriors, 2 on Agriculture, 2 on Bronze and 1 on Philosophy. One more yellow token waits as an unused worker.', 'you', [
         worker('wPhi', 1, 1, 'Philosophy'), worker('wAgr', 3, 2, 'Agriculture'), worker('wBro', 4, 2, 'Bronze'), worker('wWar', 5, 1, 'Warriors'),
         On('bank', 0.85, 0.55, discs('idle', 1, 0.14, YEL, 'Unused worker', 'A worker with no job yet. Spend a civil action and resources to turn it into a building or unit.', { h: 0.08 })),
       ], 'Religion and Despotism start with no tokens on them.'),
-      S('Ready to play', `Choose a starting player. In the first round players may only take cards from the row: the first player has 1 civil action, the second 2${n > 2 ? ', the third 3' : ''}${n > 3 ? ', the fourth 4' : ''}.`, 'all', [], 'From the second round on, a full turn is: refresh the card row, an optional political action, spend your civil and military actions, then production.'),
+      S('Ready to play', `Choose a starting player. In the first round players may only take cards from the row: the first player has 1 civil action, the second 2${n > 2 ? ', the third 3' : ''}${n > 3 ? ', the fourth 4' : ''}.`, 'all', [], 'From the second round on, a full turn is: refresh the card row, an optional political action, spend your civil and military actions, then production and drawing military cards. Nobody has military actions in the first round.'),
     ],
     turn: [
       T('Round 1: take a card', 'You are first, so you have a single civil action. You spend it on one of the five cheapest cards in the row and take it into your hand.', 'row', [

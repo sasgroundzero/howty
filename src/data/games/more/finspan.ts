@@ -7,7 +7,7 @@ const FISH = ft('#fbf6ea', 'FISH', 'zone and cost', '◆')
 export const finspan = tabletop('finspan', 'Finspan', [2, 5], 3, '45–60 min', 'Medium', 'Fill your ocean with fish over four weeks.', ['#1f5a7a', '#4fb7b0', '#e0b12f'], (n) => ({
   setup: [
     S('Achievement board', 'Place the achievement board in the middle with the week tracker on week 1. Use side A if anyone is new to the game.', 'c', [
-      C(board('ach', 6, 2.2, 'g:plain:0:#dfeef3:#1f5a7a:Achievements', 'Achievement board', 'Shows what scores at the end of each of the 4 weeks. Side A is fixed; side B uses randomly chosen week tiles.')),
+      C(board('ach', 6, 2.2, 'g:plain:0:#dfeef3:#1f5a7a:Achievements', 'Achievement board', 'Shows what scores at the end of weeks 1 to 3; week 4 has no achievement. Side A is fixed; side B uses random tiles for weeks 1 to 3 and a 3-point bonus for the week\'s top scorer.')),
       On('ach', 0.14, 0.3, discs('week', 1, 0.18, '#e0b12f', 'Week tracker', 'Marks which of the 4 weeks you are in.', { h: 0.08 })),
     ]),
     S('Fish deck and supply', 'Shuffle the main fish deck and place it face down. Put the egg, young and school tokens in a general supply.', 'r', [
@@ -38,9 +38,9 @@ export const finspan = tabletop('finspan', 'Finspan', [2, 5], 3, '45–60 min', 
     T('Dive', 'Next turn you dive instead: a diver travels down one dive site, top to bottom, and you collect the bonuses of each zone where you have a fish and trigger those fish. Here that draws you a card.', 'you', [
       mv('diver.1', at('ocean', 0.25, 0.95)), draw('fish', at('hand.3', 1.15, 0.5, 0.02)),
     ]),
-    T('End of the week', 'When everyone has used all 6 divers the week ends. Score that week’s achievement, take your divers back, pass the first-player token and move the week tracker on.', 'all', [
+    T('End of the week', 'When everyone has used all 6 divers the week ends. After weeks 1 to 3, score that week’s achievement, take your divers back, pass the first-player token clockwise and move the week tracker on.', 'all', [
       mv('diver.0', by('diver.2', -0.92, 0)), mv('diver.1', by('diver.2', -0.46, 0)), mv('week', at('ach', 0.38, 0.3)),
     ]),
-    T('End of the game', 'After week 4 add your achievement points to the points on your fish, 1 point per egg and per young, and 6 per school, plus anything else the rulebook lists. The highest total wins.', 'all'),
+    T('End of the game', 'After week 4 use any game-end abilities, then add your achievement points, the points on visible fish, 1 per consumed fish, 1 per egg and per young, and 6 per school. The highest total wins.', 'all'),
   ],
 }))

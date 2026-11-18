@@ -33,7 +33,7 @@ export const skat = tabletop('skat', 'Skat', [3, 3], 3, '45–90 min', 'Hard', '
         C(hidden('skat', 'Q♣ 8♦', 'Skat', 'Two face-down cards. The declarer may pick them up to improve their hand, and their points count for the declarer at the end.')),
       ]),
       S('Learn the card values', 'An ace is worth 11 points, a ten 10, a king 4, a queen 3 and a jack 2; the 9, 8 and 7 are worth nothing. That makes 120 points.', 'c', [], 'In a suit game the four jacks are the highest trumps, in the order clubs, spades, hearts, diamonds, followed by the trump suit\'s ace, ten, king, queen, 9, 8, 7. The other suits run ace, ten, king, queen, 9, 8, 7.'),
-      S('Ready to bid', 'Bids are numbers that stand for the value of the game you think you can play; the lowest is 18. Middlehand bids to forehand first, who answers yes or passes. Then rearhand bids against whoever is left.', 'all', [], 'Have paper and a pencil ready to record each hand. If nobody bids, forehand may play at 18 or the hand is thrown in.'),
+      S('Ready to bid', 'Bids are numbers that stand for the value of the game you think you can play; the lowest is 18. Middlehand bids to forehand first, who answers yes or passes. Then rearhand bids against whoever is left.', 'all', [], 'Have paper and a pencil ready to record each hand. If nobody bids, forehand may play at 18 or the hand is thrown in; many groups play Ramsch instead.'),
     ],
     turn: [
       T('Win the bidding', 'Say you hold the bid at 20 and the others pass. You are the declarer and play alone against the other two. You pick up the skat.', 'skat', [0, 1].flatMap((i) => [set(`skat.${i}`, { faceUp: true }), mv(`skat.${i}`, at('hand', ...slot(10 + i, 6, 2)), 0.3 + i * 0.5)])),

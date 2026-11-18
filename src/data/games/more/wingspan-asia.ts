@@ -21,7 +21,7 @@ export const wingspanAsia = tabletop('wingspan-asia', 'Wingspan Asia', [2, 2], 2
       P(mat('pmat', 6, 3.6, '$', 'Player mat', 'Player mat', 'Three habitat rows of five bird spaces: forest (gain food), grassland (lay eggs) and wetland (draw cards). Playing a bird is the fourth action.')),
       On('pmat', 0.6, 0.5, discs('duet', 15, 0.16, '$', 'Duet tokens', '15 per player, one on each bird space. When you play a bird there, the token moves to the Duet map.', { cols: 5, gap: 0.58, h: 0.08 })),
     ]),
-    S('Starting birds and food', 'Deal each player 5 bird cards and give them 1 of each of the 5 food types. Keep any 5 of those 10 things and discard the rest.', 'you', [
+    S('Starting birds and food', 'Deal each player 5 bird cards and 2 bonus cards, and give them 1 of each of the 5 food types. Keep any 5 of the 10 birds and food, discard the rest, and keep 1 of the 2 bonus cards.', 'you', [
       P(cards('hand', 3, BIRD, 'Bird cards in hand', 'The birds you chose to keep. Here you kept 3 birds and 2 food; any split adding up to 5 is allowed.'), cards('bonus', 1, ft('#f3e7c5', 'BONUS', 'end of game', '★'), 'Bonus card', 'Deal 2 bonus cards to each player, who keeps 1.')),
       P(discs('food', 2, 0.18, [FOOD[0], FOOD[3]], 'Food tokens', 'The food you kept. You discard one food for every bird card you keep.', { h: 0.06 }), cubes('act', 8, '$', 'Action cubes', '8 per player. You use one per turn, and one stays on a goal tile at the end of each round, so the rounds last 8, 7, 6 and 5 turns.', { s: 0.22, cols: 4, gap: 0.08 })),
     ], 'The swift-start guides in the box can choose these for you in a first game.'),

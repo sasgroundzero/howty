@@ -15,12 +15,12 @@ export const warOfTheRing = tabletop('war-of-the-ring', 'War of the Ring', [2, 4
     S('Lay out the board and pick sides', 'Unfold the map of Middle-earth. One side plays the Free Peoples and the other plays the Shadow.', 'c', [
       C(board('map', 13, 9, 'g:map:0:#cdbf96:#7a8f5a:Middle-earth', 'Game board', 'A map of regions, with the Fellowship track along the top, the Hunt box and the political track. This drawing is schematic, not the real map.')),
       P(zone('hand', 3, 1.6, 'Event cards', 'Your hand of event cards. You start with none and draw at the start of every turn.')),
-    ], n > 2 ? 'With 3 or 4 players you play in two teams and split the nations of each side between team mates: check the rulebook for the split.' : 'Here you play the Free Peoples and the player opposite plays the Shadow.'),
+    ], n > 2 ? 'With 3 players one player takes the Free Peoples and two share the Shadow; with 4, each side is split between two players. The rulebook lists which nations each player controls.' : 'Here you play the Free Peoples and the player opposite plays the Shadow.'),
     S('Place the starting armies', 'Put every army figure, leader and Nazgul on the region shown for it in the setup diagram. Unused figures wait beside the board as reinforcements.', 'map', [
       army('fa1', 6, BLUE, 'Free Peoples'), army('fa2', 7, BLUE, 'Free Peoples'), army('fa3', 11, BLUE, 'Free Peoples'),
       army('sa1', 3, RED, 'Shadow'), army('sa2', 8, RED, 'Shadow'), army('sa3', 13, RED, 'Shadow'),
     ], 'The exact units per region are printed on the board and in the rulebook; only a few stand-in figures are shown here.'),
-    S('The Fellowship sets out', 'Place the Fellowship figure in Rivendell. Put the progress counter, hidden side up, and the corruption counter on step 0 of the Fellowship track.', 'map', [
+    S('The Fellowship sets out', 'Place the Ring-bearers figure in Rivendell and the companions in the Fellowship box, with Gandalf the Grey as guide. Put the progress counter, hidden side up, and the corruption counter on step 0 of the Fellowship track.', 'map', [
       On('map', cityUV(1)[0], cityUV(1)[1], pawns('fellowship', 1, '#e9e4d8', 'Fellowship of the Ring', 'One figure that marks where the Ring-bearers were last seen. The companions start together, guided by Gandalf the Grey.', { scale: 0.6, shape: 'hero' })),
       On('map', 0.05, 0.045, discs('corruption', 1, 0.2, '#3a3a3a', 'Corruption counter', 'Tracks the Ring-bearers\' corruption. If it reaches 12 the Shadow wins.', { label: 'C', h: 0.08 })),
       On('map', 0.1, 0.045, discs('progress', 1, 0.2, '#e0b12f', 'Fellowship progress counter', 'Counts the steps the Fellowship has moved since it was last revealed.', { label: 'F', h: 0.08, ink: '#2b241c' })),
@@ -52,7 +52,7 @@ export const warOfTheRing = tabletop('war-of-the-ring', 'War of the Ring', [2, 4
       draw('schar', at('hand@1', 0.3, 0.5)), draw('sstrat', at('hand@1', 0.7, 0.5)),
     ]),
     T('Fellowship phase and Hunt allocation', 'The Free Peoples may declare the Fellowship\'s position. Then the Shadow may set action dice aside in the Hunt box instead of rolling them.', 'map', [mv('sdice.6', at('map', 0.85, 0.12))], 8),
-    T('Action roll', 'Both sides roll their remaining action dice. Each face allows a kind of action: character, army, muster, event and so on.', 'all', [
+    T('Action roll', 'Both sides roll their remaining action dice. Each face allows a kind of action: character, army, muster, event and so on. Any Shadow die showing the Eye goes straight to the Hunt box.', 'all', [
       roll('fdice.0', 1), roll('fdice.1', 4), roll('fdice.2', 6), roll('fdice.3', 2),
       roll('sdice.0', 3), roll('sdice.1', 5), roll('sdice.2', 1), roll('sdice.3', 6),
     ]),
