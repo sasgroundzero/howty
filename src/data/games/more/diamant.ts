@@ -11,12 +11,12 @@ export const diamant = tabletop('diamant', 'Diamant', [3, 8], 5, '30 min', 'Easy
       S('Lay out the five caves', 'Place the 5 cave tiles in a row. Each one is an expedition, and the game lasts five expeditions.', 'c', [
         C(tiles('caves', 5, 1.1, 1.1, [1, 2, 3, 4, 5].map((v) => ft('#b7a27a', `${v}`, '', '▲')), 'Cave tiles', '5 tiles, one per expedition. Flip or remove one at the end of each round to count them down.')),
       ]),
-      S('Shuffle the expedition deck', 'Shuffle the treasure and hazard cards together into one deck. Keep the 5 relic cards in a separate pile.', 'r', [
+      S('Shuffle the expedition deck', 'Shuffle the treasure and hazard cards together into one deck. If you play with relics, stack the 5 relic cards in a separate pile from lowest to highest value.', 'r', [
         R(
           deck('exp', 30, f('#5a4634', '?'), 'Expedition deck', '15 treasure cards with different gem values and 15 hazard cards: 5 kinds of danger with 3 cards each.'),
-          deck('relics', 5, f('#e0b12f', '★', '#2b241c'), 'Relic cards', '5 relics. One is shuffled into the deck at the start of each expedition. Their gem value is printed in the rulebook.'),
+          deck('relics', 5, f('#e0b12f', '★', '#2b241c'), 'Relic cards', '5 relics worth 5, 7, 8, 10 and 12 points (a variant in Diamant). In order, one is shuffled into the deck at the start of each expedition.'),
         ),
-      ], 'Before each expedition, shuffle one relic into the deck.'),
+      ], 'With relics, shuffle the next one into the deck before each expedition.'),
       S('Set out the gems', 'Put the rubies and diamonds in a supply everyone can reach.', 'r', [
         R(pile('rubies', '#c0392b', 'Rubies', 'Worth 1 each.'), pile('diamonds', '#e9e4d8', 'Diamonds', 'Worth 5 rubies each. Used for making change.')),
       ]),
@@ -44,7 +44,7 @@ export const diamant = tabletop('diamant', 'Diamant', [3, 8], 5, '30 min', 'Easy
         ...(share ? [hide('g1', 0.9)] : []),
       ]),
       T('A hazard appears', 'The next card is a hazard. The first of each kind is only a warning. If a second card of the same kind turns up, everyone still in the cave drops their unbanked gems and the expedition ends.', 'path', [draw('exp', at('path', 0.26, 0.5), ft('#e6d6d0', 'HAZARD', 'snakes', '⚔'))]),
-      T('Five expeditions, then count', 'An expedition also ends when everyone has left. After the fifth one, open the chests: the player with the most gem value wins.', 'all'),
+      T('Five expeditions, then count', 'An expedition also ends when everyone has left. Then remove that cave tile, return gems left on the path, discard the second matching hazard if there was one, and shuffle the revealed cards back into the deck. After the fifth expedition, open the chests: the most gem value, plus any relics, wins.', 'all'),
     ],
   }
 })

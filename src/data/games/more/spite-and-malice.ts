@@ -24,7 +24,7 @@ export const spiteAndMalice = tabletop('spite-and-malice', 'Spite & Malice', [2,
       S('Deal the pay-off piles', 'Deal 20 cards face down to each player as a pay-off pile. Each player turns the top card of their pile face up.', 'pay', [
         P(zone('s0', 1.05, 1.4, 'Side', 'One of your four side stacks, used for discards.'), zone('s1', 1.05, 1.4, 'Side', 'One of your four side stacks, used for discards.'), zone('s2', 1.05, 1.4, 'Side', 'One of your four side stacks, used for discards.'), zone('s3', 1.05, 1.4, 'Side', 'One of your four side stacks, used for discards.')),
         P(payoff),
-      ], 'Twenty is the size given by the standard reference rules. Many families deal 26, or fewer for a quicker game.'),
+      ], 'Twenty is the size given by the standard reference rules. Some groups deal 21, 25 or 26 instead, or fewer for a quicker game.'),
       S('Deal five cards each', 'Deal a hand of 5 more cards to each player.', 'hand', [
         P(seated(hand('hand', 'A♣ 2♦ 3♠ K♥ 8♣', 'Your hand', HAND), hand('hand', '4♥ 5♣ 9♠ Q♦ 7♥', 'Your hand', HAND))),
       ]),

@@ -19,14 +19,14 @@ export const zooloretto = tabletop('zooloretto', 'Zooloretto', [2, 5], 4, '45 mi
       ]),
       S('Two coins each', 'Give each player 2 coins and put the rest in the bank.', 'you', [
         P(discs('coins', 2, 0.22, '#e0b12f', 'Your coins', 'Each player starts with 2 coins. Money actions cost 1, 2 or 3 coins.', { h: 0.08 })),
-        L(pile('bank', '#e0b12f', 'Bank', 'The remaining coins. Filling an enclosure and some of its bonus spaces pay out from here.', 'disc')),
+        L(pile('bank', '#e0b12f', 'Bank', 'The remaining coins. Filling the last space of an enclosure pays the coin bonus shown on it from here.', 'disc')),
       ]),
-      S('Delivery trucks', `Place ${trucks} delivery trucks in the middle of the table${n === 2 ? '. The two-player game uses three trucks and a few special rules: check the rulebook' : ', one per player'}.`, 'truck', [
+      S('Delivery trucks', `Place ${trucks} delivery trucks in the middle of the table${n === 2 ? '. With two players, put 1 hay bale in one truck and 2 in another to block those spaces for the whole game, and give each player a second expansion board' : ', one per player'}.`, 'truck', [
         C(tiles('truck', trucks, 0.9, 2.5, '#b98a5a', 'Delivery truck', 'Each truck has 3 spaces for tiles. On your turn you may take one truck with everything on it.', { h: 0.05, gap: 0.5 })),
       ]),
-      S('Sort out the tiles', `Use ${types} of the 8 animal types with ${n} players and return the others, with their offspring, to the box. Put the round offspring tiles to one side.`, 'r', [
+      S('Sort out the tiles', `Use ${types} of the 8 animal types with ${n} players and return the others, with their offspring, to the box. Return all tiles of one vending stall type too, so four types are used. Put the round offspring tiles to one side.`, 'r', [
         R(discs('babies', 1, 0.33, '#f1c9a0', 'Offspring tiles', 'Round baby animal tiles. A fertile male and female of one type in the same enclosure produce one.', { label: '●', h: 0.2, ink: '#2b241c' })),
-      ], 'Fewer players means fewer animal types: all 8 with five players, one fewer for each player below that.'),
+      ], 'Fewer players means fewer animal types: all 8 with five players, one fewer for each player below that. Any balloon stall, tray or hay bales are not used in the basic game.'),
       S('Set aside the last 15 tiles', 'Mix the square tiles face down. Count off 15 into a separate stack and put the red disc on top of it. The rest form the draw stacks.', 'draw', [
         C(
           deck('draw', 18, BACK, 'Draw stacks', 'Animals, vending stalls and coin tiles, all face down. Split them into as many stacks as you like.', { ...TILE, per: 0.03, n: 3, gap: 0.3 }),
@@ -42,13 +42,13 @@ export const zooloretto = tabletop('zooloretto', 'Zooloretto', [2, 5], 4, '45 mi
         draw('draw.1', at('truck.0', 0.5, 0.5), ANIMAL('#cfe3c0', '●'), 'tB'),
         draw('draw.2', at('truck.1', 0.5, 0.2), ANIMAL('#f3e2b0', '▲'), 'tC'),
       ]),
-      T('Take a truck', 'Back on your turn you take a truck instead. Its tiles go straight into your zoo, and you are out until the round ends.', 'you', [
+      T('Take a truck', 'Back on your turn you take a truck instead (it must hold at least one tile). Its tiles go straight into your zoo, and you are out until the round ends.', 'you', [
         mv('tA', at('zoo', 0.15, 0.3)),
         mv('tB', at('zoo', 0.6, 0.3)),
         mv('truck.0', by('zoo', 3.1, 0)),
       ]),
       T('Money actions', 'Instead you could spend coins: 1 to move or swap animals, 2 to buy an animal from another barn or discard one of yours, 3 to add your expansion board.', 'you', [mv('coins.0', at('bank', 0.5, 0.5))]),
-      T('Last round and scoring', 'When everyone has a truck, return the trucks and start a new round. The round in which the final stack is first used is the last. Score full and nearly full enclosures and stall types, lose points for the barn: most points wins.', 'all'),
+      T('Last round and scoring', 'When everyone has a truck, return the trucks and start a new round with whoever took the last truck. The round in which the final stack is first used is the last. Score full and nearly full enclosures and stall types, lose points for the barn: most points wins.', 'all'),
     ],
   }
 })

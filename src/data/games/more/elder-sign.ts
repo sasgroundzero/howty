@@ -18,7 +18,7 @@ export const elderSign = tabletop('elder-sign', 'Elder Sign', [1, 8], 4, '60–9
         cards('adv', 6, ADV, 'Adventure cards', 'Each shows rows of dice symbols called tasks, the reward for completing all of them and the penalty for failing.', { ...BIG, cols: 3 }),
         deck('oworld', 8, f('#3b2a5a', '◎'), 'Other World deck', 'Harder adventures that only come into play when a gate opens.', BIG)),
     ]),
-    S('Choose investigators', 'Each player takes an investigator card, sanity and stamina tokens equal to the values printed on it, and the starting items it lists.', 'you', [
+    S('Choose investigators', 'Each player takes an investigator card, sanity and stamina tokens equal to the values printed on it, and the starting items and clue tokens it lists.', 'you', [
       P(cards('inv', 1, ft('#efe2bd', 'INVESTIGATOR', 'ability', '♙'), 'Investigator card', 'One of 16 investigators. It shows your maximum sanity and stamina, a special ability and your starting items.', { w: 1.3, d: 1.8 }),
         discs('sanity', 1, 0.22, '#2e6fb7', 'Sanity tokens', 'A stack equal to your maximum sanity. If it runs out your investigator is devoured.', { h: 0.25 }),
         discs('stamina', 1, 0.22, '#c0392b', 'Stamina tokens', 'A stack equal to your maximum stamina. If it runs out your investigator is devoured.', { h: 0.25 }),
@@ -28,7 +28,7 @@ export const elderSign = tabletop('elder-sign', 'Elder Sign', [1, 8], 4, '60–9
     S('Markers on the entrance', 'Every player puts their investigator marker on the entrance sheet.', 'entrance', [
       OnP('entrance', 0.5, 0.62, discs('marker', 1, 0.13, '$', 'Investigator marker', 'Shows which adventure you are attempting, or that you are resting at the entrance.', { h: 0.1 }), [0.3, 0]),
     ]),
-    S('Decks, tokens and dice', 'Shuffle the Common Item, Unique Item, Spell and Ally decks and the Mythos deck. Put the monster markers in a cup and the other tokens and the dice within reach.', 'r', [
+    S('Decks, tokens and dice', 'Shuffle the Common Item, Unique Item, Spell and Ally decks and the Mythos deck. Put the monster markers in a cup (the Mask monsters only if Nyarlathotep is the Ancient One) and the other tokens and the dice within reach.', 'r', [
       R(deck('idecks', 12, [f('#8a6a44', '◆'), f('#3d8b4a', '✦'), f('#7a4fa3', '✦'), f('#2e6fb7', '●')], 'Item decks', '4 small decks: Common Items, Unique Items, Spells and Allies. Rewards let you draw from them.', { n: 4, w: 0.65, d: 1 }),
         deck('mythos', 30, f('#2b2233', '☾'), 'Mythos deck', 'One card is drawn each time the clock strikes midnight. It has an immediate effect and a lingering one.'),
         zone('mdisc', 0.9, 1.26, 'Mythos', 'The current Mythos card sits here until the next midnight.')),
@@ -41,10 +41,10 @@ export const elderSign = tabletop('elder-sign', 'Elder Sign', [1, 8], 4, '60–9
         discs('signs', 1, 0.25, '#e9e4d8', 'Elder sign tokens', 'Collect enough of these as a team to seal away the Ancient One and win.', { label: '✦', h: 0.3 }),
         discs('doom', 1, 0.25, '#2b241c', 'Doom tokens', 'Placed on the Ancient One\'s doom track. When it is full the Ancient One awakens.', { label: '✗', ink: '#ffffff', h: 0.3 })),
     ]),
-    S('Resolve one Mythos card', 'Before the first turn, draw the top Mythos card and carry out its effects. Check the rulebook for the details of this step.', 'mythos', [
+    S('Resolve one Mythos card', 'Choose a first player. Before the first turn they draw the top Mythos card and carry out its effects.', 'mythos', [
       on('mdisc', 0.5, 0.5, cards('myth0', 1, ft('#d9d2e6', 'MYTHOS', 'effect', '☾'), 'Mythos card', 'The top part happens at once. The bottom part lasts until the next Mythos card replaces it.')),
     ]),
-    S('Ready to play', 'Pick a first player, then take turns clockwise. On your turn you move, resolve where you are, then advance the clock 3 hours.', 'all', [], n === 1 ? 'Playing solo you may control one investigator or several.' : 'Everyone wins or loses together.'),
+    S('Ready to play', 'Play goes clockwise from the first player. On your turn you move, resolve where you are, then advance the clock 3 hours.', 'all', [], n === 1 ? 'Playing solo you may control one investigator or several.' : 'Everyone wins or loses together.'),
   ],
   turn: [
     T('Move to an adventure', 'You move your marker from the entrance onto the adventure you want to attempt.', 'adv', [mv('marker', at('adv.1', 0.5, 0.86))]),

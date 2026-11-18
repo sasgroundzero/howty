@@ -9,7 +9,7 @@ const house = (id: string) => cubes(id, 1, '$', 'Settlement', 'A settlement stay
 
 export const kingdomBuilder = tabletop('kingdom-builder', 'Kingdom Builder', [2, 4], 3, '45 min', 'Easy', 'Build settlements where your card allows.', ['#cfd8a0', '#3d8b4a', '#e0b12f'], (n) => ({
   setup: [
-    S('Build the map', 'Shuffle the 8 board sections, pick 4 at random and join them into one large rectangle.', 'c', [
+    S('Build the map', 'Choose any 4 of the 8 board sections and join them into one large rectangle.', 'c', [
       C(board('map', 12, 9, 'g:hex:20x20:#cfd8a0:#6f8f4a:Kingdom', 'Game board', 'Four of the 8 sections, joined two by two. Each section is 10 by 10 hexes of grass, forest, desert, flower field, canyon, water and mountain. The shading here is schematic.')),
     ]),
     S('Place the location tiles', 'Each section has location hexes of one kind. Put 2 matching location tiles on every location hex.', 'map', LOCS.map(([c, r], i) => On('map', ...hx(c, r), discs(`loc${i}`, 1, 0.2, '#e9dfc8', 'Location tiles', 'Build next to a location hex to take one of its tiles. A tile gives you an extra action on every later turn. Only one location hex per section is drawn here.', { label: '⌂', h: 0.16 }))), 'Put the summary card for each of the four kinds of location beside the board.'),
@@ -19,10 +19,10 @@ export const kingdomBuilder = tabletop('kingdom-builder', 'Kingdom Builder', [2,
     S('Shuffle the terrain cards', 'Shuffle the terrain cards into a face-down deck and leave room for a discard pile.', 'tdeck', [
       R(deck('tdeck', 25 - n, f('#6b7f52', '▲'), 'Terrain deck', '25 terrain cards: 5 each of grass, forest, desert, flower field and canyon. When it runs out, shuffle the discards.'), zone('tdiscard', 1.1, 1.4, 'Discard', 'Used terrain cards go here face up.')),
     ]),
-    S('Settlements and a terrain card', 'Each player takes the 40 settlements of one color and draws 1 terrain card, keeping it secret.', 'you', [
+    S('Settlements and a terrain card', 'Each player takes the 40 settlements and the gold marker of one color and draws 1 terrain card, keeping it secret. Turn an unused board section over beside the map: its back is the gold track.', 'you', [
       P(pile('houses', '$', 'Settlements', '40 settlements per player. The game ends in the round in which someone builds their last one.'), cards('terrain', 1, TERRAIN, 'Your terrain card', 'You only ever hold 1. It names the terrain you must build on this turn.', { down: true, back: f('#6b7f52', '▲') })),
     ]),
-    S('Ready to play', 'The rulebook names the start player (the oldest, in the base rules), who takes the start player tile. Play passes clockwise.', 'all', [], 'On your turn you show your terrain card, build 3 settlements on that terrain, use any location tiles you hold, then discard the card and draw a new one.'),
+    S('Ready to play', 'The oldest player takes the start player tile and goes first. Play passes clockwise.', 'all', [], 'On your turn you show your terrain card, build 3 settlements on that terrain, use any location tiles you hold, then discard the card and draw a new one.'),
   ],
   turn: [
     T('Show your terrain card', 'You turn your card face up. It shows grass, so your 3 settlements this turn must go on grass hexes.', 'terrain', [flip('terrain')]),

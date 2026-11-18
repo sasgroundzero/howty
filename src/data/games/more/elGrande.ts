@@ -18,26 +18,26 @@ export const elGrande = tabletop('el-grande', 'El Grande', [2, 5], 4, '90–120 
     S('Action card stacks', 'Sort the action cards by their backs into four stacks and shuffle each one. The single King\'s card forms a fifth stack.', 'r', [
       R(deck('act', 11, [1, 2, 3, 4].map((v) => f('#5a4634', `${v}`)).concat(f('#e0b12f', '♛', '#2b241c')), 'Action card stacks', 'Five stacks: four of 11 cards each and the lone King\'s card. Each card shows how many caballeros you may move onto the board and a special action.', { n: 5, gap: 0.2 })),
     ]),
-    S('Pieces and power cards', 'Each player takes the Grande and the 30 caballeros of one color and the 13 power cards of that color. Put 7 caballeros in your court; the rest wait in the provinces.', 'you', [
+    S('Pieces and power cards', 'Each player takes the Grande, the caballeros and the 13 power cards of one color, plus a secret region disc. Put 7 caballeros in your court, 1 on the start of the scoring track and 2 aside for your home region; the rest wait in the provinces.', 'you', [
       P(zone('court', 3.2, 1.1, 'Court', 'Caballeros in your court are ready to be placed on the board.'), zone('played', 1.1, 1.5, 'Power card', 'The power card you play this round goes here.')),
       P(
         pile('province', '$', 'Provinces', 'Your general supply. Caballeros must move from here to your court before they can reach the board.'),
         deck('power', 13, f('$', '⚑'), 'Power cards', '13 cards numbered 1 to 13. Each can be played once; high cards act first, low cards bring more caballeros to your court.'),
       ),
-      On('court', 0.4, 0.5, cubes('cab', 7, '$', 'Caballeros in court', '7 of your 30 caballeros start here.', { s: 0.22, gap: 0.1 })),
+      On('court', 0.4, 0.5, cubes('cab', 7, '$', 'Caballeros in court', '7 of your caballeros start here.', { s: 0.22, gap: 0.1 })),
     ]),
-    S('Home regions', 'Shuffle the region cards. Each player draws one and places their Grande and 2 caballeros in that region.', 'map', [
+    S('Home regions', 'Shuffle the region cards and turn the top one up for the King (next step). Each player then draws one of the rest and places their Grande and 2 caballeros in that region.', 'map', [
       R(deck('regions', 9, ft('#f3e7c5', 'REGION', '', '⌂'), 'Region cards', '9 cards, one per region. Used to assign home regions and the King\'s starting region.')),
       ...Array.from({ length: n }, (_, i) => [
         On('map', G(...HOME[i])[0] - 0.05, G(...HOME[i])[1], cubes(`grande${i}`, 1, SEAT[i], 'Grande', 'Your large cube. It marks your home region, which scores you a bonus if you lead there.', { s: 0.42 })),
         On('map', G(...HOME[i])[0] + 0.03, G(...HOME[i])[1], cubes(`start${i}`, 2, SEAT[i], 'Starting caballeros', '2 caballeros begin in your home region.', { s: 0.22, gap: 0.1 })),
       ]).flat(),
     ], 'The home regions shown are just an example draw.'),
-    S('King and markers', 'Draw one more region card and stand the King there. Put the round marker on round 1 and every scoring marker on the start of the track.', 'map', [
+    S('King and markers', 'Stand the King in the region turned up first. Put the round marker on round 1 and the two movable scoreboards beside the map.', 'map', [
       On('map', G(1, 1)[0], G(1, 1)[1], pawns('king', 1, '#3a3a3a', 'King', 'Nothing may be moved into or out of the King\'s region, and new caballeros may only enter regions next to it.', { scale: 0.8, shape: 'boss' })),
-      OnP('map', 0.5, 0.975, discs('score', 1, 0.13, '$', 'Scoring marker', 'Moves along the scoring track in the scoring rounds.', { h: 0.08 }), [0.34, 0]),
+      OnP('map', 0.5, 0.975, discs('score', 1, 0.13, '$', 'Scoring marker', 'One of your caballeros, moved along the scoring track as you score.', { h: 0.08 }), [0.34, 0]),
     ]),
-    S('Ready to play', 'Choose a starting player for the first round. The game lasts 9 rounds, with a scoring after rounds 3, 6 and 9.', 'all', [], n === 2 ? 'The two-player game uses a few adjustments: see the rulebook.' : 'Each round: reveal action cards, play power cards, then act in order from the highest power card down.'),
+    S('Ready to play', 'The youngest player plays the first power card in round 1; after that, whoever acted last leads. The game lasts 9 rounds, with a scoring after rounds 3, 6 and 9.', 'all', [], n === 2 ? 'With 2 players only first place scores in each region (with 3, first and second): see the rulebook.' : 'Each round: reveal action cards, play power cards, then act in order from the highest power card down.'),
   ],
   turn: [
     T('Reveal the action cards', 'Turn the top card of each of the four stacks face up. The King\'s card is always available.', 'r', [0, 1, 2, 3].map((k) => draw(`act.${k}`, by(`act.${k}`, 0, -1.5), ft('#f3e7c5', `${k + 1}`, 'action', '⚔'), `shown${k}`))),

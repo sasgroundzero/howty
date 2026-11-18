@@ -35,7 +35,7 @@ export const golf = tabletop('golf', 'Golf', [2, 8], 4, '30–45 min', 'Easy', '
       T('The next player makes a pair', 'The player on your left has a 6 showing. They take the 6♠ you just discarded and put it in the same column, throwing out the card that was there. A matching column scores 0.', 'grid@1', [
         mv('grid.2', at('grid@1', ...slot(3, 3, 2))), flip('grid.3@1'), mv('grid.3@1', at('discard', 0.5, 0.5, 0.02), 1.4),
       ], 9),
-      T('Ending the deal', 'The deal ends when one player has all six cards face up. Usually every other player then takes one more turn. All remaining cards are turned over and everyone adds up their layout.', 'all'),
+      T('Ending the deal', 'The deal ends as soon as one player has all six cards face up. Many groups let every other player take one more turn first. All remaining cards are turned over and everyone adds up their layout.', 'all'),
       T('How it ends', 'Write down the scores and deal again. A game is nine deals, like nine holes, and the player with the lowest total wins.', 'all', [], 6),
     ],
   }

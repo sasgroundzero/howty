@@ -15,8 +15,8 @@ export const forSale = tabletop('for-sale', 'For Sale', [3, 6], 4, '30 min', 'Ea
         C(deck('props', 30 - out - n, f('#3d8b4a', '⌂'), 'Property deck', 'Properties numbered 1 to 30, from a cardboard box to a space station. Higher is better.')),
         C(deck('cheques', 30 - out, f('#b88a2a', '$'), 'Currency deck', '30 cheques: two each of the values from $2,000 to $15,000, and two worth nothing. Set aside until the second half.')),
       ], 'Three players remove 6 cards from each deck, four players remove 2, and five or six players use them all.'),
-      S('Hand out coins', 'Give every player the same amount of starting money in coins. Players keep their coins hidden.', 'you', [
-        P(discs('coins', 1, 0.3, '#d8b24a', 'Your coins', 'Your bidding money. The amount depends on the player count and on the edition (in recent editions $18,000 each with 3 or 4 players and $14,000 with 5 or 6): check your rulebook.', { h: 0.3, label: '$' }), zone('bid', 1.3, 1.3, 'Bid', 'Push the coins you are bidding here.'), zone('owned', 2.6, 1.4, 'Your cards', 'Properties you buy, and later the cheques you sell them for, are kept face down here.')),
+      S('Hand out coins', `Give every player ${n <= 4 ? '$18,000 in coins (two $2,000 and fourteen $1,000)' : '$14,000 in coins (two $2,000 and ten $1,000)'}. Players keep their coins hidden.`, 'you', [
+        P(discs('coins', 1, 0.3, '#d8b24a', 'Your coins', 'Your bidding money: $18,000 each with 3 or 4 players and $14,000 each with 5 or 6.', { h: 0.3, label: '$' }), zone('bid', 1.3, 1.3, 'Bid', 'Push the coins you are bidding here.'), zone('owned', 2.6, 1.4, 'Your cards', 'Properties you buy, and later the cheques you sell them for, are kept face down here.')),
       ]),
       S('Turn up the first properties', `Turn ${n} property cards face up in the middle, one for each player.`, 'c', [
         C(cards('lot', n, VALS.slice(0, n).map(prop), 'Properties for sale', 'One property per player is turned up each round, and everyone ends the round with one of them.')),
@@ -39,7 +39,7 @@ export const forSale = tabletop('for-sale', 'For Sale', [3, 6], 4, '30 min', 'Ea
         mv(`lot.${n - 1}`, at('owned@1', 0.25, 0.5)),
       ]),
       T('Second half: sell', `Once every property is bought, turn up ${n} cheques. Everyone secretly picks one of their properties and all reveal together: the highest property takes the highest cheque, and so on down.`, 'c', Array.from({ length: n }, (_, k) => draw('cheques', by('cheques', 1.1 + k * 1.04, 0), cheque([0, 5, 8, 11, 13, 15][k]), undefined, 0.3 + k * 0.3))),
-      T('The finish', 'When all properties are sold, add up your cheques and any coins you kept. The richest player wins.', 'all'),
+      T('The finish', 'When all properties are sold, add up your cheques and any coins you kept. The richest player wins; a tie goes to whoever has more coins left.', 'all'),
     ],
   }
 })

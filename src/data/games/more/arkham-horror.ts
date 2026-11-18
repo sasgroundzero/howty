@@ -31,14 +31,14 @@ export const arkhamHorror = tabletop('arkham-horror', 'Arkham Horror', [1, 8], 4
       P(cards('items', 3, [f('#8a6a44', '◆'), f('#3d8b4a', '✦'), f('#e0b12f', '★')], 'Starting possessions', 'Your investigator\'s items, spells and skills. The exact cards depend on the investigator, so three are shown as an example.', { w: 0.65, d: 1 }),
         zone('play', 2.2, 1.4, 'Encounters', 'Cards you draw during your turn are read here, then discarded or kept.')),
     ]),
-    S('Monsters, gates and the other decks', 'Put every monster marker in an opaque cup. Shuffle the gate markers into a face-down stack. Shuffle the nine location decks, the Mythos deck and the Gate deck.', 'r', [
+    S('Monsters, gates and the other decks', 'Put the monster markers in an opaque cup, leaving out the five Mask monsters unless Nyarlathotep is the Ancient One. Shuffle the gate markers into a face-down stack. Shuffle the nine location decks, the Mythos deck and the Gate deck.', 'r', [
       R(box('cup', 1.1, 0.9, 1.1, '#3a3a3a', 'Monster cup', 'Holds the monster markers so they can be drawn at random. Use any opaque container.', { round: true }),
         discs('gates', 1, 0.3, '#3b2a5a', 'Gate markers', 'A face-down stack of gate markers. One is placed whenever a gate opens.', { h: 0.4 }),
         deck('mythos', 60, f('#2b2233', '☾'), 'Mythos deck', 'One Mythos card is drawn at the end of every round. It opens a gate, moves monsters and adds a headline, environment or rumor.'),
         zone('mdisc', 0.9, 1.26, 'Mythos', 'The Mythos card just drawn is read here.'),
         deck('gatedeck', 45, f('#3b2a5a', '◎'), 'Gate deck', 'Encounter cards for investigators exploring the Other Worlds.')),
       L(deck('locs', 7, f('#8a7a4a', '⌂'), 'Location decks', '9 small decks, one per neighborhood. You draw from the matching deck when you have an encounter at a location.', { n: 9, cols: 3, w: 0.65, d: 1 })),
-    ], `The monster limit is the number of players plus 3, so ${n + 3} in this game. Past that, new monsters go to the Outskirts.`),
+    ], `The monster limit is the number of players plus 3, so ${n + 3} in this game. Past that, new monsters go to the Outskirts.${n >= 5 ? " With 5 or more investigators, two monsters come out of each new gate." : ""}`),
     S('Seed the clue tokens', 'Place one clue token on every location marked as unstable (a red diamond on the board).', 'map',
       CLUE_AT.map((c, i) => on('map', ...city(c), discs(`clue${i}`, 1, 0.15, '#4f9a5a', 'Clue token', 'Pick clues up by ending your move on them. Spend them for extra dice on skill checks or to seal a gate.', { h: 0.05 }))),
       'Only some unstable locations are shown here.'),
@@ -47,7 +47,7 @@ export const arkhamHorror = tabletop('arkham-horror', 'Arkham Horror', [1, 8], 4
       on('map', ...city(12, 0.045, 0), monster('mon0')),
       on('ancient', 0.14, 0.75, doom('doom0')),
     ], 'If the first card drawn is a Rumor, discard it and draw again until you get one that is not.'),
-    S('Ready to play', 'Give the first player marker to whoever was chosen to start. Each round has five phases, and everyone acts in each phase in turn order.', 'all', [], 'The phases are Upkeep, Movement, Arkham Encounters, Other World Encounters and Mythos. The first player marker passes to the left every round.'),
+    S('Ready to play', 'The first player, picked at random at the start of setup, holds the first player marker. Each round has five phases, and everyone acts in each phase in turn order.', 'all', [], 'The phases are Upkeep, Movement, Arkham Encounters, Other World Encounters and Mythos. The first player marker passes to the left every round.'),
   ],
   turn: [
     T('Upkeep', 'Refresh any used cards, then adjust your skill sliders. You may move them a total number of stops equal to your Focus.', 'sheet', [mv('slide.0', at('sheet', 0.8, 0.345))]),

@@ -23,7 +23,7 @@ export const heyThatsMyFish = tabletop('hey-thats-my-fish', 'Hey, That\'s My Fis
   const each = n === 2 ? 4 : n === 3 ? 3 : 2
   return {
     setup: [
-      S('Start the ice floe', 'Shuffle the 60 hexagonal ice tiles face up and start laying them out in rows that alternate between 7 and 8 tiles.', 'c', [
+      S('Start the ice floe', 'Shuffle the 60 hexagonal ice tiles face down, then turn them face up and lay them out in rows that alternate between 7 and 8 tiles, starting with a row of 7.', 'c', [
         C(zone('floe', ZW, ZD, 'Ice floe', 'The 60 tiles fit together here in 8 rows.')),
         ...CELLS.map((c, k) => k).filter((k) => CELLS[k][0] < 4).map((k) => on('floe', ...uv(k), tile(k))),
       ], 'The tiles are drawn with gaps between them. On a real table they touch.'),
@@ -37,7 +37,7 @@ export const heyThatsMyFish = tabletop('hey-thats-my-fish', 'Hey, That\'s My Fis
           const [i, j] = [q % n, Math.floor(q / n)]
           return on(`ice${START[q]}`, 0.5, 0.5, pawns(`pen${i}_${j}`, 1, SEAT[i], i === 0 ? 'Your penguin' : `Player ${i + 1}'s penguin`, 'Slides in a straight line across the ice. A penguin that can no longer move is stuck where it is.', { scale: 0.45 }))
         })),
-      S('Ready to play', 'The player who placed the first penguin moves first, then play passes clockwise.', 'all', [], 'On your turn you move one of your penguins, then take the tile it started on.'),
+      S('Ready to play', 'The youngest player moves first, then play passes clockwise.', 'all', [], 'On your turn you move one of your penguins, then take the tile it started on.'),
     ],
     turn: [
       T('Slide a penguin', 'You move one penguin in a straight line in any of the six directions, as far as you like. It cannot change direction, jump a gap or pass another penguin.', 'c', [mv('pen0_0', at('ice19', 0.5, 0.5))]),

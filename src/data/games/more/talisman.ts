@@ -18,15 +18,15 @@ export const talisman = tabletop('talisman', 'Talisman', [2, 6], 4, '90 min or m
       R(deck('adv', 100, f('#3d6b3a', '?'), 'Adventure deck', '104 cards: enemies, strangers, objects, followers, places and events met on the board.'),
         zone('advdisc', 0.9, 1.26, 'Discard', 'Used Adventure cards go here.'),
         deck('spells', 24, f('#7a4fa3', '✦'), 'Spell deck', 'Spells for characters with enough Craft to hold them.')),
-      R(deck('purchase', 20, ft('#efe2bd', 'BUY', 'gear', '◆'), 'Purchase cards', 'Weapons, armour and other gear bought for gold at certain spaces.'),
+      R(deck('purchase', 28, ft('#efe2bd', 'BUY', 'gear', '◆'), 'Purchase cards', 'Weapons, armour and other gear bought for gold at certain spaces.'),
         deck('talismans', 4, ft('#efe2bd', 'TALISMAN', '', '✦'), 'Talisman cards', 'You need a Talisman to pass through the Valley of Fire to the Crown of Command.')),
     ]),
     S('Deal a character to each player', 'Shuffle the character cards and deal one to each player. Put each character\'s figure on the starting space named on its card.', 'map', [
       P(cards('char', 1, ft('#efe2bd', 'CHARACTER', 'Strength, Craft', '♙'), 'Character card', 'One of 14 characters. It shows your starting Strength, Craft, Fate and Life, your special abilities and where you start.', { w: 1.5, d: 2.1 })),
       ...Array.from({ length: n }, (_, i) => on('map', ...loop(i * 4), pawns(`fig${i}`, 1, SEAT[i], i === 0 ? 'Your character' : `Player ${i + 1}'s character`, 'A character figure. It moves round the board by die roll and meets whatever is on the space where it lands.', { scale: 0.55, shape: 'hero' }))),
     ], 'The figures are spread round the Outer Region here. Your real starting space depends on your character.'),
-    S('Take lives, fate and gold', 'Each player takes 4 life counters, fate tokens equal to the Fate value on their character card, and 1 gold coin. A character who starts with spells draws them now.', 'you', [
-      P(discs('life', 4, 0.15, '#3d8b4a', 'Life counters', 'You start with 4 lives. Lose your last one and your character is dead.', { cols: 2, h: 0.14 }),
+    S('Take lives, fate and gold', 'Each player takes life counters equal to the Life value on their character card, fate tokens equal to its Fate value, and 1 gold coin. A character who starts with spells draws them from the Spell deck, and one who starts with objects takes them from the Purchase cards.', 'you', [
+      P(discs('life', 4, 0.15, '#3d8b4a', 'Life counters', 'Green cones, one per life. You start with as many as the Life value on your card. Lose your last one and your character is dead.', { cols: 2, h: 0.14 }),
         discs('fate', 1, 0.18, '#e9e4d8', 'Fate tokens', 'A stack equal to your Fate value. Spend one to reroll a die you have just rolled.', { h: 0.12 }),
         discs('gold', 1, 0.18, '#e0b12f', 'Gold coin', 'Everyone starts with 1 gold. Spend gold at shops and with certain strangers.', { h: 0.06 })),
       P(zone('kept', 4.4, 1.5, 'Your cards and trophies', 'Objects, followers and spells you carry, plus enemies you have defeated, are kept here.')),
@@ -37,7 +37,7 @@ export const talisman = tabletop('talisman', 'Talisman', [2, 6], 4, '90 min or m
       L(dice('die', 1, '#e9e4d8', 'Die', 'Rolled for movement and added to Strength or Craft in fights. The game comes with several.', { values: [1] }),
         discs('bank', 1, 0.22, '#e0b12f', 'Gold supply', 'The stock of gold coins.', { h: 0.3 })),
     ]),
-    S('Ready to play', 'Everyone rolls a die and the highest roller takes the first turn. Play then passes clockwise.', 'all', [], 'On your turn you roll a die, move that many spaces in either direction, then follow the instructions on the space or meet a character there.'),
+    S('Ready to play', 'The owner of the game takes the first turn. Play then passes clockwise.', 'all', [], 'On your turn you roll a die, move that many spaces in either direction, then follow the instructions on the space or meet a character there.'),
   ],
   turn: [
     T('Roll for movement', 'You roll one die and get a 3.', 'l', [roll('die', 3)]),
