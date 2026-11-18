@@ -18,12 +18,12 @@ export const mageKnight = tabletop('mage-knight', 'Mage Knight Board Game', [1, 
       ),
       C(hexes('portal', 1, 1.5, '#6fa8c9', 'Starting tile', 'The starting tile, A side up, with the magic portal where every hero begins.', { label: 'A' })),
     ], 'The scenario book sets the map shape, the number of rounds and how many tiles go in the stack for your player count.'),
-    S('Tile stack and enemy tokens', 'Build the map tile stack as the scenario says, with countryside tiles on top of core tiles. Sort the enemy tokens face down into piles by the color of their backs.', 'l', [
+    S('Tile stack and enemy tokens', 'Build the map tile stack as the scenario says, with countryside tiles on top of core tiles. Sort the enemy and ruin tokens face down into piles by their backs, then put 2 orc tokens face up on the two marked spaces of the starting map.', 'l', [
       L(
         hexes('tiledeck', 1, 0.8, '#7a8f5a', 'Map tile stack', 'Countryside tiles on top, core and city tiles underneath. How many of each depends on the scenario and player count.', { label: '?' }),
         tiles('daynight', 1, 2.4, 1.6, ft('#f3e2a0', 'DAY', 'round 1'), 'Day and night board', 'Starts on the day side. It also holds the mana dice of the source.', { h: 0.05 }),
       ),
-      L(discs('enemies', 6, 0.28, ENEMY, 'Enemy token piles', 'Six kinds, sorted by back: marauding orcs, keep garrisons, mage tower guardians, dungeon monsters, draconum and city defenders.', { h: 0.3 })),
+      L(discs('enemies', 6, 0.28, ENEMY, 'Enemy token piles', 'Sorted by back into face-down piles: marauding orcs, keep garrisons, mage tower guardians, dungeon monsters, draconum, city defenders and ruin tokens.', { h: 0.3 })),
       On('map.0', 0.3, 0.35, discs('orc', 1, 0.25, '#3d8b4a', 'Enemy token', 'When a tile is revealed, enemy tokens go on the sites that call for them. Rampaging enemies are placed face up.', { label: '⚔', h: 0.08 })),
     ]),
     S('Fame and reputation', 'Each player puts one shield token on 0 of the fame track and one on the middle space of the reputation track.', 'fame', [
@@ -39,7 +39,7 @@ export const mageKnight = tabletop('mage-knight', 'Mage Knight Board Game', [1, 
         deck('spelldeck', 16, f('#7a4fa3', '✦'), 'Spell deck', 'Spells are learned at mage towers and after conquering certain sites.'),
         cards('spells', 3, ft('#e3d9f0', 'SPELL', 'day or night', '✦'), 'Spell offer', '3 spells on offer.'),
       ),
-    ]),
+    ], 'In First Reconnaissance the advanced action and spell offers start empty: deal them when someone first levels up or reveals a mage tower.'),
     S('Source, artifacts, wounds and tactics', `Roll ${n + 2} mana dice for the source (players plus 2), rerolling as the rules require if too many show gold or black. Set out the artifact deck, the wound pile and the day tactic cards.`, 'r', [
       R(
         dice('source', n + 2, MANA, 'Mana source', `${n + 2} dice. On your turn you may use one die from the source to power a card, then reroll it.`, { values: [1, 2, 3, 4, 5, 6], size: 0.5, ink: '#8a8f98' }),
@@ -48,7 +48,7 @@ export const mageKnight = tabletop('mage-knight', 'Mage Knight Board Game', [1, 
       ),
       R(cards('tactics', 6, ft('#f3e2a0', 'TACTIC', 'day', '★'), 'Day tactic cards', '6 day tactics. Each player picks one every round: its number sets turn order and it gives a small benefit.', { w: 0.75, d: 1.05 })),
     ]),
-    S('Choose heroes', 'Each player takes a hero: the figure, hero card, 16-card deed deck, skill, level and shield tokens. Shuffle your deed deck and draw 5 cards. Put the figures on the portal.', 'you', [
+    S('Choose heroes', 'Each player takes a hero: the figure, hero card, 16-card deed deck, skill, level and shield tokens. Shuffle your deed deck and draw 5 cards. Figures wait in front of you and enter the map on the portal on your first turn.', 'you', [
       P(zone('play', 6, 1.3, 'Play area', 'Cards you play this turn are laid here, then discarded at the end of the turn.')),
       P(deck('deed', 11, f('#5a4634', '⚔'), 'Deed deck', 'Your 16 basic action cards, less the 5 in your hand. When it runs out you may announce the end of the round.'), cards('hand', 5, ACTION, 'Your hand', 'You start with 5 cards. Cards give movement, influence, attack or block, and can be played sideways for 1 of anything.')),
       P(
@@ -57,7 +57,7 @@ export const mageKnight = tabletop('mage-knight', 'Mage Knight Board Game', [1, 
         pile('shields', '$', 'Shield tokens', 'Mark the keeps, mage towers and other sites you conquer.', 'disc'),
         zone('discard', 0.9, 1.26, 'Discard', 'Your discard pile.'),
       ),
-      OnP('portal', 0.5, 0.5, pawns('hero', 1, '$', 'Hero figure', 'Your Mage Knight. Everyone starts on the portal space of the starting tile.', { scale: 0.6, shape: 'hero' }), [0.55, 0]),
+      OnP('portal', 0.5, 0.5, pawns('hero', 1, '$', 'Hero figure', 'Your Mage Knight. It is placed on the portal space of the starting tile on your first turn.', { scale: 0.6, shape: 'hero' }), [0.55, 0]),
     ], n === 1 ? 'Solo play also uses a dummy player to pace the rounds: see the scenario rules.' : undefined),
     S('Ready to play', 'Each round begins with everyone choosing a tactic card. Turns then go in the order of the tactic numbers, lowest first.', 'all', [], 'On your turn you move and then take one action, such as fighting or talking to locals, playing cards from your hand to pay for it all.'),
   ],
@@ -78,6 +78,6 @@ export const mageKnight = tabletop('mage-knight', 'Mage Knight Board Game', [1, 
       draw('deed', by('hand.2', -2.08, 0), ACTION[2]),
       draw('deed', by('hand.2', -1.04, 0), ACTION[1]),
     ]),
-    T('Rounds and the finish', 'A round ends after a player whose deed deck is empty announces it: everyone else gets one more turn, then day turns to night. The scenario says when the game ends; in First Reconnaissance the highest fame wins.', 'all'),
+    T('Rounds and the finish', 'A round ends after a player whose deed deck is empty announces it: everyone else gets one more turn, then day turns to night. First Reconnaissance gives 1 fame per tile revealed and ends once the city tile is revealed and everyone has had one more turn, or after 3 rounds. The highest fame wins.', 'all'),
   ],
 }))

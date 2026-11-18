@@ -11,12 +11,12 @@ export const jawsOfTheLion = tabletop('jaws-of-the-lion', 'Gloomhaven: Jaws of t
     S('Open the scenario book', 'Open the scenario book to the scenario you are playing and lay it flat in the middle of the table. The page itself is the map.', 'c', [
       C(board('book', 9, 6.6, 'g:hex:8x6:#cdbf9f:#6b5a45:Scenario book', 'Scenario book', 'The spiral-bound book is the board. Each scenario page shows the hex map, where monsters start, the goal and any special rules. This drawing is schematic.')),
     ], 'Start with scenario 1. The first five scenarios teach the rules a little at a time, so follow the book where it differs from this overview.'),
-    S('Choose characters', `Each player picks one of the four characters, takes its mat, health and experience dials, and stands its miniature on a starting hex. That is ${n} here.`, 'you', [
+    S('Choose characters', `Each player picks one of the four characters, takes its mat, a dial, its initiative token and its modifier deck, and stands its miniature on a starting hex. That is ${n} here.`, 'you', [
       P(mat('cmat', 3.4, 2.2, '$', 'Character', 'Character mat', 'Shows your hand size, your health at each level and reminders. One per character.'), deck('mod', 20, f('#5a4634', '±'), 'Your attack modifier deck', 'A 20-card deck for your character. You flip one card every time you attack; it adjusts the damage or misses.')),
-      On('cmat', 0.8, 0.35, discs('dials', 2, 0.25, ['#c0392b', '#2e6fb7'], 'Health and experience dials', 'Two dials per character. Set health to the starting value on your mat and experience to 0.', { h: 0.06, label: ['HP', 'XP'] })),
+      On('cmat', 0.8, 0.35, discs('dials', 1, 0.25, '#c0392b', 'Hit point dial', 'One two-sided dial per character. Set the red side to the level 1 health shown on your mat; the blue experience side is not used at first.', { h: 0.06, label: 'HP' })),
       OnP('book', 0.5, H(0, 0)[1], pawns('hero', 1, '$', 'Character miniature', 'One per character. It starts on one of the starting hexes marked on the map.', { shape: 'hero' }), [0.953, 0]),
     ], n === 1 ? 'Playing solo, you control two characters yourself. Only one is drawn here.' : 'The four characters are the Demolitionist, Hatchet, Red Guard and Voidwarden.'),
-    S('Ability cards', 'Take your character\'s ability cards into your hand. The mat shows your hand size; the first tutorial scenarios use a smaller starter set, as the book explains.', 'hand', [
+    S('Ability cards', 'Take your character\'s ability cards into your hand. Scenario 1 uses just the six cards marked A; the Learn to Play guide adds the rest over the first scenarios.', 'hand', [
       P(cards('hand', 4, ABILITY, 'Ability cards', 'Your hand, shown here as four cards. Each card has an initiative number, a top action and a bottom action. Your hand is also your stamina: run out and you are exhausted.'), zone('played', 2, 1.4, 'Cards in play', 'The two cards you chose for this round go here.')),
     ]),
     S('Monsters', 'Place the monster standees on the hexes the map marks for your number of characters, and put their stat card nearby.', 'book', [
@@ -30,12 +30,12 @@ export const jawsOfTheLion = tabletop('jaws-of-the-lion', 'Gloomhaven: Jaws of t
   ],
   turn: [
     T('Choose two cards', 'You pick two ability cards from your hand and place them face down. One of them is your leading card: its number is your initiative this round.', 'you', [mv('hand.0', at('played', 0.27, 0.5)), mv('hand.1', at('played', 0.73, 0.5))]),
-    T('Act in initiative order', 'Everyone reveals. On your turn you use the top action of one card and the bottom action of the other. Here you move next to a monster.', 'book', [mv('hero', at('book', ...H(2, 3)))]),
+    T('Act in initiative order', 'Everyone reveals and initiative tokens are lined up from lowest to highest. On your turn you use the top action of one card and the bottom action of the other, in either order, then discard them. Here you move next to a monster.', 'book', [mv('hero', at('book', ...H(2, 3)))]),
     T('Attack', 'You attack the adjacent monster. Flip the top card of your attack modifier deck, apply it to the attack value, and put that much damage on the monster.', 'book', [
       draw('mod', at('cmat', 0.3, 0.55), ft('#fbf6ea', '+1', 'modifier', '±')),
       spawn(discs('dmg', 1, 0.12, '#c0392b', 'Damage token', 'Marks damage on a monster. When damage equals its health, remove the monster.', { h: 0.05, label: '3' }), by('m0', 0.4, 0), 'tokens'),
     ]),
-    T('Monsters act', 'On their initiative the monsters move toward the nearest character and attack if they can, flipping a card from the monster modifier deck.', 'book', [mv('m1', at('book', ...H(4, 2))), draw('mmod', at('mdisc'), ft('#e9e4d8', '-1', 'modifier', '±'))]),
-    T('Winning and losing', 'At the end of the round your played cards go to your discard pile, or are lost if the action says so. You win together by meeting the scenario goal, and lose if every character becomes exhausted.', 'all'),
+    T('Monsters act', 'On their initiative the monsters move toward the character they focus on, usually the closest, and attack if they can, flipping a card from the monster modifier deck.', 'book', [mv('m1', at('book', ...H(4, 2))), draw('mmod', at('mdisc'), ft('#e9e4d8', '-1', 'modifier', '±'))]),
+    T('Winning and losing', 'At the end of the round, shuffle any modifier deck that showed a shuffle card, and you may short rest to take your discards back, losing one at random. You win together by meeting the scenario goal, and lose if every character becomes exhausted.', 'all'),
   ],
 }))

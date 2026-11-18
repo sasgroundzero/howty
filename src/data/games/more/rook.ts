@@ -1,4 +1,4 @@
-/** Rook (Kentucky Discard, the tournament game): bid for the nest, name a trump color, win the counters. */
+/** Rook (the original four-player partnership game, close to Kentucky Discard): bid for the nest, name a trump color, win the counters. */
 import type { Face } from '../../../engine/types'
 import { C, P, R, S, T, at, cards, f, ft, mv, set, tabletop, zone, type Act, type Item } from '../compose'
 import { BACK, slot, stock } from '../playing'
@@ -34,7 +34,7 @@ export const rook = tabletop('rook', 'Rook', [4, 4], 4, '45–60 min', 'Medium',
       S('Sort the Rook deck', 'A Rook deck has 57 cards: four colors (black, red, green and yellow) numbered 1 to 14, plus the Rook bird card. For this game take out every 1, 2, 3 and 4, leaving 41 cards.', 'r', [
         C(zone('trick', 3.4, 3, 'Trick', 'Each player plays one card here in turn. The highest trump wins, or the highest card of the color led if no trump was played.')),
         R(stock('out', 16, 'Cards taken out', 'The sixteen 1s, 2s, 3s and 4s. They go back in the box and are not used.')),
-      ], 'This version is called Kentucky Discard or Tournament Rook, and is the partnership game in the official rules. Other versions use all 57 cards or leave the 1s in as high cards.'),
+      ], 'This is the Original Partnership Game from the rules sheet in the box, which is close to Kentucky Discard, the tournament version. Other versions use all 57 cards or leave the 1s in as high cards.'),
       S('Sit opposite your partner', 'Rook is for four players in two partnerships. Partners sit across the table from each other.', 'all', [
         P(zone('won', 2.2, 1.5, 'Tricks won', 'Tricks this player has taken, kept face down. Only the counters in them score.')),
       ]),
@@ -53,7 +53,7 @@ export const rook = tabletop('rook', 'Rook', [4, 4], 4, '45–60 min', 'Medium',
       T('The first lead', 'The player on the dealer\'s left leads any card. That is you, and you lead the green 14.', 'trick', [mv('hand.0', at('trick', ...spot(0, n)))]),
       T('Follow the color', 'Going clockwise, each player must play a card of the color led if they have one, and otherwise may play anything. Your partner gives you the green 10.', 'trick', [...play(1, 0, 'G6', n), ...play(2, 0, 'G10', n), ...play(3, 0, 'G9', n)]),
       T('Take the trick', 'The 14 is the highest green card, so you win the trick and lead next. The 14 and the 10 in it are 20 points for your side.', 'won', take(['hand.0', 'hand.0@1', 'hand.0@2', 'hand.0@3'], 0), 8),
-      T('The Rook, scoring and winning', 'The Rook bird is the highest trump and may be played at any time, even when you could follow color. The winner of the last trick also takes the nest. A side that makes its bid scores its counters; if not, it loses the bid instead. The first side to 300 wins.', 'all', [], 10),
+      T('The Rook, scoring and winning', 'The Rook bird is the highest trump and may be played at any time, even when you could follow color; if it is led, everyone else must play a trump. The winner of the last trick also takes the nest. A side that makes its bid scores its counters; if not, it loses the amount of the bid. The other side always scores its counters. The first side to 300 wins.', 'all', [], 10),
     ],
   }
 })

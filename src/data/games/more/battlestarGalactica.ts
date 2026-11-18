@@ -22,7 +22,7 @@ export const battlestarGalactica = tabletop('battlestar-galactica', 'Battlestar 
         On('board', 0.2, 0.82, cubes('viper', 2, '#d8d8d8', 'Viper', '2 vipers start in space. Pilots can fly them; the others wait in the reserve.', { s: 0.28, gap: 0.2 })),
         On('board', 0.88, 0.5, tiles('civ', 2, 0.6, 0.45, '#c9b98a', 'Civilian ship', '2 start behind Galactica, face down. Each one destroyed costs resources, usually population.', { h: 0.06, cols: 1, gap: 0.3 })),
       ]),
-      S('Choose characters', 'Starting with the first player, everyone picks a character, takes its sheet, and stands its piece on the location named on the sheet. You must pick from the type that has the most characters left, apart from support characters.', 'galactica', [
+      S('Choose characters', 'Pick a first player at random. Starting with them and going clockwise, everyone picks a character, takes its sheet, and stands its piece on the location named on the sheet. You must pick from the type that has the most characters left, apart from support characters.', 'galactica', [
         P(mat('sheet', 3.4, 2, '$', 'Character', 'Character sheet', 'Lists your skill set (the cards you draw each turn), your abilities and your weakness, and where you start.')),
         OnP('galactica', 0.5, 0.72, pawns('crew', 1, '$', 'Character piece', 'Shows where your character is. Each starts on the location named on their sheet; they are grouped on Galactica here.', { scale: 0.6 }), [0.6, 0]),
       ]),
@@ -30,14 +30,14 @@ export const battlestarGalactica = tabletop('battlestar-galactica', 'Battlestar 
         R(deck('skill', 21, SK, 'Skill decks', 'Five decks: Politics, Leadership, Tactics, Piloting and Engineering. Cards are used for their action or added to skill checks.', { n: 5 })),
         R(
           deck('quorum', 17, f('#b9892f', '♛'), 'Quorum deck', 'Cards only the President may draw and play.'),
-          deck('crisis', 60, f('#7a2f2f', '⚑'), 'Crisis deck', 'One is drawn at the end of every turn: usually a skill check or a Cylon attack.'),
+          deck('crisis', 70, f('#7a2f2f', '⚑'), 'Crisis deck', 'One is drawn at the end of every turn: usually a skill check or a Cylon attack.'),
           deck('destiny', 10, f('#4a4a5a', '?'), 'Destiny deck', '2 cards from each of the five skill decks, shuffled. Two are added blind to every skill check.'),
-          deck('dest', 20, f('#2e4f7a', '✦'), 'Destination deck', 'The Admiral draws from it at each jump to choose where the fleet goes and how far it travels.'),
+          deck('dest', 22, f('#2e4f7a', '✦'), 'Destination deck', 'The Admiral draws from it at each jump to choose where the fleet goes and how far it travels.'),
         ),
       ], 'The Admiral also holds the nuke tokens. The Kobol objective card and the Super Crisis deck are set beside the board.'),
       S('Build the Loyalty deck', `With ${n} players shuffle ${cylons} "You are a Cylon" card${cylons > 1 ? 's' : ''} with ${humans} "You are not a Cylon" cards and deal 1 face down to each player. Keep the rest for the sleeper agent phase.`, 'you', [
         P(cards('loyal', 1, ft('#efe6d2', 'Loyalty', 'secret', '?'), 'Loyalty card', 'Tells you in secret whether you are human or Cylon. A second card is dealt to everyone halfway through the game.', { down: true, back: f('#3a3a4a', '?') })),
-      ], `Add 1 more "not a Cylon" card for each of Baltar and Boomer if they are in play${n === 4 || n === 6 ? `, and with ${n} players the Sympathizer card joins the deck at the sleeper phase` : ''}. Check these counts against the rulebook table.`),
+      ], `Add 1 more "not a Cylon" card for each of Baltar and Boomer if they are in play${n === 4 || n === 6 ? `, and with ${n} players the Sympathizer card joins the deck at the sleeper phase` : ''}.`),
       S('Starting skill cards', 'Every player except the first draws 3 skill cards, chosen from the types in their skill set.', 'you', [
         P(cards('hand', 3, [SK[1], SK[2], SK[0]], 'Skill cards', 'Your hand. Each card has a color, a strength from 1 to 5 and an ability. The hand limit is 10 at the end of a turn.')),
       ], 'The first player skips this because they draw at the start of their turn. The scene shows 3 cards for everyone.'),

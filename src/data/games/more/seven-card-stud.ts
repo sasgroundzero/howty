@@ -42,7 +42,7 @@ export const sevenCardStud = tabletop('seven-card-stud', 'Seven-Card Stud', [2, 
         spawn(chip('see', 'Call', 'The extra chips that match the completed bet.'), at('bet@1', 0.45, 0.5), 'chips.0@1', undefined, 2.2),
       ], 9),
       T('Fourth street', 'Each player still in is dealt another card face up. From now on the player whose face-up cards show the best poker hand acts first, and may check or bet. Here that is the ace on your left.', 'you', street(1, '7♦', 'A♣'), 9),
-      T('Fifth and sixth street', 'Two more rounds follow in the same way: one more face-up card each, then betting. From fifth street every bet is the big bet. Your pair of queens showing now makes you first to act.', 'you', [
+      T('Fifth and sixth street', 'Two more rounds follow in the same way: one more face-up card each, then betting. From fifth street every bet is the big bet; in casino rules a pair showing on fourth street already lets players bet big. Your pair of queens showing now makes you first to act.', 'you', [
         ...street(2, 'Q♠', '10♥'), ...street(3, '3♣', '2♥', 2.2),
       ], 10),
       T('Seventh street', 'The last card is dealt face down to each player, and the final betting round is opened by the same player as on sixth street.', 'you', [

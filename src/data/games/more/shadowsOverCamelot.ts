@@ -7,7 +7,7 @@ const HAND = [ft('#fbf6ea', 'Merlin', 'special', '★'), ft('#fbf6ea', 'Grail', 
 
 export const shadowsOverCamelot = tabletop('shadows-over-camelot', 'Shadows over Camelot', [3, 7], 5, '60–90 min', 'Medium', 'Knights on quests, and perhaps one traitor.', ['#5a6b8a', '#e9e4d8', '#2b2630'], (n) => ({
   setup: [
-    S('Lay out the boards', 'Put the main Camelot board in the middle and the three smaller quest boards around it: the Holy Grail, Excalibur, and Lancelot with the Dragon.', 'all', [
+    S('Lay out the boards', 'Put the main Camelot board in the middle and the three smaller quest boards around it: the Holy Grail, Excalibur, and Lancelot with the Dragon, Lancelot side up.', 'all', [
       C(board('camelot', 10, 7, 'g:plain:0:#cdbf9a:#5a6b8a:Camelot', 'Main board', 'Shows Camelot with the Round Table and the quests around it: the tournament against the Black Knight and the wars against the Saxons and the Picts. This drawing is schematic.')),
       L(board('grail', 3.6, 2.6, 'g:plain:0:#e6dcc0:#b9892f:Holy Grail', 'Holy Grail quest', 'A track that fills with Grail cards from one end and Despair cards from the other.')),
       L(board('excal', 3.6, 2.6, 'g:plain:0:#c9d9e6:#2e6fb7:Excalibur', 'Excalibur quest', 'The sword drifts towards or away from the shore as cards are discarded and black cards are drawn.')),
@@ -20,19 +20,19 @@ export const shadowsOverCamelot = tabletop('shadows-over-camelot', 'Shadows over
       On('lance', 0.5, 0.45, tiles('armor', 1, 0.6, 0.7, '#9aa3ad', 'Lancelot’s Armor', 'A relic won by defeating Lancelot.', { h: 0.2 })),
       R(pile('siege', '#5a4634', 'Siege engines', '12 siege engines. If all 12 ever stand around Camelot, the knights lose.')),
     ]),
-    S('Choose your knights', 'Each player takes a coat of arms, the matching knight and a die of that color. Stand the knight at the Round Table and set the die to 4: your starting life points.', 'you', [
+    S('Choose your knights', 'Deal each player a coat of arms at random, with the matching knight and a die of that color. Stand the knight at the Round Table and set the die to 4: your starting life points.', 'you', [
       P(mat('arms', 3.2, 1.9, '$', 'Coat of arms', 'Coat of arms', 'Shows your knight’s special power and summarises the turn.')),
       On('arms', 0.78, 0.5, dice('life', 1, '$', 'Life die', 'Tracks your life points. You start with 4 and can never have more than 6. At 0 your knight dies.', { values: [4], size: 0.5, ink: '#ffffff' })),
       OnP('rtable', 0.5, 0.62, pawns('knight', 1, '$', 'Knight', 'Your figure. It moves between Camelot and the quests.', { scale: 0.6 }), [0.56, 0]),
     ]),
     S('Deal loyalty cards', 'Shuffle the 8 loyalty cards, 7 Loyal and 1 Traitor, and deal one face down to each player. Look at yours in secret and put the rest away unseen.', 'you', [
       P(cards('loyal', 1, ft('#efe6d2', 'Loyal', 'secret', '⚑'), 'Loyalty card', `One per player from a deck of 8, so with ${n} players there may be no traitor at all.`, { down: true, back: f('#5a6b8a', '?') })),
-    ], n === 3 ? 'The rules suggest how to handle the traitor with only 3 knights: check the rulebook.' : undefined),
-    S('Deal the white cards', 'Give each knight 1 Merlin card and 5 more white cards. Shuffle the rest of the white deck and the black deck and set them by the board.', 'you', [
+    ], n === 3 ? 'With 3 knights the rules suggest a first game without the traitor. If you do include him, nobody looks at their loyalty card until 6 swords lie on the Round Table.' : undefined),
+    S('Deal the white cards', 'Give each knight 1 Merlin card, shuffle the rest of the white deck, then deal 5 more white cards to each knight. Shuffle the black deck and set both decks in Camelot.', 'you', [
       R(deck('white', 60, WHITE, 'White deck', 'Cards that help the knights: Fight cards numbered 1 to 5, Grail cards and special cards such as Merlin.'), deck('black', 60, BLACK, 'Black deck', 'Cards that advance the forces of evil on the quests, plus some nasty special cards.'), zone('bdisc', 1.1, 1.5, 'Black discards', 'Resolved black cards.')),
       P(cards('hand', 6, HAND, 'White cards', 'Your hand: 1 Merlin card and 5 others to start. You may talk about your cards in general terms but never show them or state exact values.')),
-    ]),
-    S('Ready to play', 'The rules start with the player who has King Arthur if he is in play; otherwise choose. Play passes clockwise.', 'all', [], 'Every turn has two parts: first the progression of evil, then one heroic action.'),
+    ], 'Before the first turn each knight lays one white card face up on the Round Table, and the group agrees how to share them out. If you cannot agree, shuffle them and deal them back at random.'),
+    S('Ready to play', 'King Arthur goes first if he is in play; otherwise the youngest player starts. Play passes clockwise.', 'all', [], 'Every turn has two parts: first the progression of evil, then one heroic action.'),
   ],
   turn: [
     T('Progression of evil', 'You must choose one: draw a black card, add a siege engine to Camelot, or lose 1 life point. You draw a black card. It is a Saxon, so a Saxon lands on the main board.', 'camelot', [

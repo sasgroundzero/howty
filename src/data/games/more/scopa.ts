@@ -31,7 +31,7 @@ export const scopa = tabletop('scopa', 'Scopa', [2, 4], 2, '20–30 min', 'Easy'
         mv('hand.1', at('table', ...slot(1, 4))),
       ]),
       T('Deal again', 'When everyone has played all 3 cards, the dealer gives out 3 more each from the stock. No new cards go to the table. Carry on until the stock is gone and every card has been played.', 'stock'),
-      T('Score the deal', 'Whoever made the last capture takes the cards left on the table. Then score 1 point each for: most cards, most diamonds (coins), the 7 of diamonds, the best "primiera", and every sweep.', 'all'),
+      T('Score the deal', 'Whoever made the last capture takes the cards left on the table. Then score 1 point each for: most cards, most diamonds (coins), the 7 of diamonds, the best "primiera", and every sweep. Taking the last cards with the very last play of the deal is not a sweep.', 'all'),
       T('How it ends', 'The primiera goes to the side with the best four cards, one from each suit, where sevens count most, then sixes, then aces. Deal again until a player or team reaches 11 points and wins.', 'all'),
     ],
   }

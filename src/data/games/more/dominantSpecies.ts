@@ -29,34 +29,34 @@ export const dominantSpecies = tabletop('dominant-species', 'Dominant Species', 
         On('sea', 0.5, 0.5, hexes('tundra', 1, 0.36, '#f3f0e6', 'Tundra tile', 'Glaciation spreads tundra over other terrain, removing most of the species there.')),
         ...RING.map(([c, r], k) => On('earth', ...H(c, r), hexes(`terr${k}`, 1, 0.62, LAND[k], `${LNAME[k]} tile`, 'A terrain tile. Species score for the tiles they live on, and more valuable terrain scores more.'))),
       ]),
-      S('Starting elements', 'Put element discs on the starting corners marked on the board, and the rest in the bag.', 'earth', [
+      S('Starting elements', 'Put two discs of each of the six elements on the starting corners marked on the board. Put the rest in the bag, then draw 4 at random for each of the Adaptation, Abundance and Wanderlust sections of the action display.', 'earth', [
         ...RING.map((_, k) => On(`terr${k}`, 0.5, 0.18, discs(`el${k}`, 1, 0.13, ELEMENT[k], 'Element disc', 'Six kinds: grass, grub, meat, seed, sun and water. Elements sit on tile corners and feed the animals matched to them.'))),
         R(box('bag', 0.9, 0.5, 0.9, '#6b4a34', 'Element bag', 'The remaining element discs are drawn from this bag.', { round: true })),
       ], 'The discs are drawn on the tiles here: on the real board they sit on the corners where tiles meet.'),
-      S('Choose your animals', `Each player takes one animal display and its matching pieces. With ${n} players each player uses ${ap} action pawns and ${cubesEach} species cubes.`, 'you', [
+      S('Choose your animals', `Each player chooses an animal, takes its display and picks a color. With ${n} players each player takes ${ap} action pawns and ${cubesEach} species cubes, plus 10 domination cones. Unused animals go back in the box.`, 'you', [
         P(
           mat('animal', 4, 2.2, '$', 'Animal', 'Animal display', 'Mammals, reptiles, birds, amphibians, arachnids or insects. It shows the elements your animal needs and your special ability.'),
           pile('species', '$', 'Species cubes', `Your gene pool: ${cubesEach} cubes each with ${n} players. Cubes on the Earth are your living species.`),
         ),
         P(pawns('ap', ap, '$', 'Action pawns', `${ap} each with ${n} players. Each one claims one action space per round.`, { scale: 0.45 })),
-      ], 'Check the rulebook table if your edition lists different numbers for your player count.'),
-      S('Starting species', 'Each player places starting species cubes on the tiles the board marks for their animal.', 'earth',
+      ], 'From 2 to 6 players: 7, 6, 5, 4 or 3 action pawns and 55, 50, 45, 40 or 35 cubes each.'),
+      S('Starting species', 'Each player puts 4 species cubes from their gene pool on the starting tiles: 2 on their home terrain and 1 on each of two neighbours. Insects: 2 savannah, 1 wetland, 1 desert. Arachnids: 2 jungle, 1 forest, 1 wetland. Amphibians: 2 wetland, 1 jungle, 1 savannah. Birds: 2 forest, 1 mountain, 1 jungle. Reptiles: 2 desert, 1 savannah, 1 mountain. Mammals: 2 mountain, 1 desert, 1 forest.', 'earth',
         Array.from({ length: n }, (_, i) => [
           On(`terr${i % 6}`, 0.3, 0.48, cubes(`spA${i}`, 1, PC[i], 'Species cube', 'One species of that player\'s animal living on this tile.', { s: 0.2 })),
           On(`terr${(i + 1) % 6}`, 0.7, 0.66, cubes(`spB${i}`, 1, PC[i], 'Species cube', 'One species of that player\'s animal living on this tile.', { s: 0.2 })),
         ]).flat(),
-        'The exact tiles and numbers are printed on the board for each animal.',
+        'The drawing shows two cubes per animal. Each animal starts out dominating the tile where it has 2 species.',
       ),
-      S('Initiative and score', 'Line up the initiative markers in reverse food-chain order, so the animal lowest on the food chain acts first. Everyone starts with no points.', 'acts', [
+      S('Initiative and score', 'Line up the initiative markers in reverse food-chain order, insects first, so the animal lowest on the food chain acts first. Each player puts one of their cubes on 0 of the score track.', 'acts', [
         OnP('acts', 0.5, 0.08, discs('init', 1, 0.12, '$', 'Initiative marker', 'Sets the order in which players place action pawns. The Initiative action moves you up.'), [0.34, 0]),
         OnP('acts', 0.5, 0.92, cubes('vp', 1, '$', 'Score marker', 'Victory points, mostly earned when tiles are scored.', { s: 0.18 }), [0.3, 0]),
       ]),
-      S('Dominance cards and spare tiles', 'Set the Ice Age card aside, shuffle the other dominance cards and put Ice Age at the bottom. Deal 5 cards face up. Stack the remaining terrain and tundra tiles nearby.', 'r', [
+      S('Dominance cards and spare tiles', 'Set the Survival card aside. Take out the Ice Age card, shuffle the other 25 dominance cards and stack them on top of it. Deal 5 cards face up. Stack the 11 spare tundra tiles face up on the Glaciation space, and shuffle the other 24 terrain tiles into three face-down stacks of 8 on the Wanderlust spaces, turning the top tile of each face up.', 'r', [
         R(cards('dom', 5, DOM, 'Dominance cards', '5 face-up cards. The player who dominates a scored tile chooses one and carries out its event.')),
         R(deck('domdeck', 21, f('#3d6b8a', '✦'), 'Dominance deck', '26 cards in all, with the Ice Age card at the bottom.')),
         L(hexes('spare', 3, 0.5, [LAND[1], LAND[3], '#f3f0e6'], 'Spare tiles', 'Terrain tiles for the Wanderlust action and tundra tiles for Glaciation.', { gap: 0.3 })),
       ]),
-      S('Ready to play', 'Each round has three phases: planning, where players place action pawns one at a time in initiative order; execution; and reset.', 'all'),
+      S('Ready to play', 'The animal first on the initiative track places first. Each turn has three phases: planning, where players place action pawns one at a time in initiative order; execution; and reset.', 'all'),
     ],
     turn: [
       T('Planning', 'In initiative order, each player puts one action pawn on an empty space of the action display, round and round until all pawns are placed.', 'acts', [
@@ -72,13 +72,13 @@ export const dominantSpecies = tabletop('dominant-species', 'Dominant Species', 
         spawn(cubes('born', 2, '$', 'New species', 'Species added by Speciation.', { s: 0.2 }), at('terr2', 0.5, 0.88), 'species@1', PC[1]),
         mv('ap.0@1', by('ap.2@1', -1, 0)),
       ]),
-      T('Domination', 'Your Domination pawn scores one tile: players with the most species there gain points. The animal that dominates the tile then picks a dominance card and carries it out.', 'acts', [
+      T('Domination', 'Your Domination pawn scores one tile: the animals with the most and second most species there gain points for that terrain. The animal that dominates the tile then may pick a dominance card and carry it out.', 'acts', [
         mv('vp', at('acts', 0.88, 0.92)),
         hide('dom.0'),
         mv('ap.1', by('ap.2', -0.5, 0)),
       ]),
-      T('Reset', 'Species with no matching element on their tile die out, the leader on tundra scores a bonus, and the display is restocked with new elements and dominance cards.', 'r', [draw('domdeck', by('dom.1', -1.04, 0), DOM)]),
-      T('The Ice Age', 'Once the Ice Age card has been chosen, the game ends after that round. Every tile is scored one last time and the highest score wins.', 'all'),
+      T('Reset', 'Endangered species die out, the animal with the most species on tundra takes the Survival card and scores a bonus, and the display is restocked with new elements, tiles and dominance cards.', 'r', [draw('domdeck', by('dom.1', -1.04, 0), DOM)]),
+      T('The Ice Age', 'Once the Ice Age card has been chosen, the game ends after that turn. Every tile is scored one last time, without dominance cards, and the highest score wins; ties go to the animal higher on the food chain.', 'all'),
     ],
   }
 })

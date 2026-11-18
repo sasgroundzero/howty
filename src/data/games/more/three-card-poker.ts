@@ -38,9 +38,9 @@ export const threeCardPoker = tabletop('three-card-poker', 'Three Card Poker', [
       spawn(chip('win2', 'Winnings', 'Even money paid on your Play bet.', '#e9e4d8'), at('play', 0.7, 0.5), 'dealer.1', undefined, 0.9),
     ], 9),
     T('If the dealer does not qualify', 'When the dealer has less than queen high, every player who stayed in is paid even money on the Ante and simply gets the Play bet back.', 'dealer', [], 7),
-    T('Pair Plus and bonuses', 'Pair Plus is settled on your cards alone. It wins with a pair or better and loses otherwise, so here your pair of eights wins. Many tables also pay an Ante bonus for a straight or better, whatever the dealer holds.', 'you', [
+    T('Pair Plus and bonuses', 'Pair Plus is settled on your cards alone. It wins with a pair or better and loses otherwise, so here your pair of eights wins; most tables settle it even if you fold. If you stayed in, a straight or better also earns an Ante bonus, whatever the dealer holds.', 'you', [
       spawn(chip('win3', 'Winnings', 'The payout on your Pair Plus bet.', '#e9e4d8'), at('pp', 0.7, 0.5), 'dealer.1', undefined, 0.4),
     ], 8),
-    T('How it ends', 'Stronger hands pay more on Pair Plus and the Ante bonus, but the paytables vary from casino to casino, so read the one printed on the table. The cards are then collected and shuffled for a new round. There is no overall winner: you play as many rounds as you like.', 'all'),
+    T('How it ends', 'A common Pair Plus table pays 1 to 1 for a pair, 4 (or 3) to 1 for a flush, 6 to 1 for a straight, 30 to 1 for three of a kind and 40 to 1 for a straight flush; the Ante bonus usually pays 1, 4 and 5 to 1 for a straight, three of a kind and straight flush. Paytables vary, so read the one printed on the table. The cards are then collected and shuffled for a new round. There is no overall winner: you play as many rounds as you like.', 'all'),
   ],
 }))

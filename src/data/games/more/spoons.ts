@@ -6,7 +6,7 @@ export const spoons = tabletop('spoons', 'Spoons', [3, 8], 5, '15–20 min', 'Ea
   const last = n - 1
   return {
     setup: [
-      S('Sort out the deck', 'Spoons uses one standard 52-card deck with no jokers.', 'c', [], 'Pig and Donkey are the same game without the spoons: players touch their nose instead. One deck is enough for up to 13 players, but this guide stops at 8.'),
+      S('Sort out the deck', 'Spoons uses one standard 52-card deck with no jokers.', 'c', [], 'Pig is the same game without the spoons: players touch their nose instead. One deck is enough for up to 13 players, but this guide stops at 8.'),
       S('Put the spoons in the middle', `Lay ${n - 1} spoons in the centre of the table, within reach of everyone. That is one fewer than the number of players.`, 'spoon', [
         C(discs('spoon', n - 1, 0.28, '#c9ccd1', 'Spoons', `${n - 1} spoons for ${n} players, always one fewer than the number playing. These discs stand in for them.`, { h: 0.06, gap: 0.3 })),
       ]),
