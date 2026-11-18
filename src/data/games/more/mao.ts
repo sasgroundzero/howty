@@ -34,7 +34,7 @@ export const mao = tabletop('mao', 'Mao', [3, 8], 5, '20–40 min', 'Medium', 'N
         draw('stock', at('hand.6', 1.15, 0.5, 0.02), pc('3♣'), 'd1'),
       ]),
       T('Work out the hidden rules', 'The dealer\'s group has extra rules: certain cards may do something special, or you may have to say or do something at the right moment. Break one and you get a penalty card, usually one per mistake. Watch what earns a penalty and what does not.', 'all', [], 9),
-      T('How it ends', 'The first player to get rid of all their cards wins the round. In many groups the winner then adds one new secret rule of their own before the next round.', 'all'),
+      T('How it ends', 'The first player to get rid of all their cards wins the round. Most groups make you say "last card" when one card is left and "Mao" as you play it; forget and you take a penalty. Nobody claims a single correct rule set, and in many groups the winner then adds one new secret rule of their own.', 'all'),
     ],
   }
 })

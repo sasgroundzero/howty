@@ -40,9 +40,9 @@ export const zetema = tabletop('zetema', 'Zetema', [2, 6], 3, '45 min', 'Medium'
         draw('stock', at('hand', ...slot(2, size)), pc('5♥'), 'd0'), mv('hand.0', at('r3', 0.5, 0.35), 1.3),
       ], 8),
       T('Declare a combination', `Before discarding you may show and score one combination: a sequence of ${size} cards (10 points), a flush of ${size} cards in one suit (30), both at once (50), or an assembly of all five cards of a rank (100 or more). Your discard must then come from the cards you showed.`, 'you', [], 10),
-      T('Marriages', 'A king and queen of the same suit make a marriage. One of the pair may be picked up from the rank piles as long as the other comes from your hand. One marriage scores 10, and declaring several at once scores far more. Married cards are set aside in their own pile.', 'wed', [], 10),
+      T('Marriages', 'A king and queen of the same suit make a marriage. One of the pair may be picked up from the rank piles as long as the other comes from your hand. Several may be declared together: one scores 10, two 30, three 60, four 100 and five 150. Married cards are set aside in their own pile.', 'wed', [], 10),
       T('Score a zetema', 'Whoever discards the fifth card of a rank scores a zetema: 50 points for kings or queens, 20 for jacks, 15 for aces or fives and 5 for any other rank. Those five cards are turned face down and removed.', 'done', [], 9),
-      T('How it ends', `When the stock is gone, players keep discarding without drawing until the cards run out. The game stops the moment someone reaches ${target} points, and that player wins. If nobody has, deal again.`, 'all', [], 9),
+      T('How it ends', `When the stock is gone, players keep discarding without drawing until the cards run out, and anyone with no cards drops out. With two players, completing a zetema then means discarding again. The game stops the moment someone reaches ${target} points, and that player wins. If nobody has, deal again.`, 'all', [], 9),
     ],
   }
 })

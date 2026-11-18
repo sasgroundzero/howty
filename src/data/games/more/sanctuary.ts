@@ -30,7 +30,7 @@ export const sanctuary = tabletop('sanctuary', 'Sanctuary', [2, 5], 3, '60–90 
   ],
   turn: [
     T('Take a tile', 'You take one tile from the part of the display your Projects card can reach, and add it to your holder.', 'display', [mv('offer.0', at('holder', 0.5, 0.5))]),
-    T('Perform an action', 'You choose one action card and use it at the strength of its slot, here to add the tile to your zoo next to the entrance. The used card then moves to the leftmost slot and the others slide right.', 'you', [
+    T('Perform an action', 'You choose one action card and use it at the strength of its slot, either to gain tiles or to play tiles, here to add the tile to your zoo next to the entrance. The used card then moves to the leftmost slot and the cards that were left of it slide right.', 'you', [
       mv('offer.0', at('zoo', 0.5, 0.85)),
       mv('act.3', by('act.3', -3.12, 0)), mv('act.0', by('act.0', 1.04, 0)), mv('act.1', by('act.1', 1.04, 0)), mv('act.2', by('act.2', 1.04, 0)),
     ], 9),
@@ -40,6 +40,6 @@ export const sanctuary = tabletop('sanctuary', 'Sanctuary', [2, 5], 3, '60–90 
     ]),
     T('Next player', 'The next player takes a tile within their own reach and performs an action in the same way.', 'display', [mv('offer.1', at('holder@1', 0.5, 0.5))]),
     T('Buildings, objectives and upgrades', 'After your action you may also play one building, support one objective by placing an achievement marker under it, and flip action cards whose upgrade conditions you now meet.', 'cons', [mv('ach.0', at('cons', 0.211, 0.82))]),
-    T('End of the game', 'The end is triggered when a player places all 4 achievement markers or covers their whole zoo map, after which the others get one more turn; it also ends if the tile pile runs out. Most points wins.', 'all'),
+    T('End of the game', 'The end is triggered when a player places all 4 achievement markers or covers their whole zoo map, after which everyone else gets one more turn. If the tile pile runs out first, the game ends right after that turn. Most points wins; a tie goes to more animals in the zoo.', 'all'),
   ],
 }))

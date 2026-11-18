@@ -37,8 +37,8 @@ export const yokohama = tabletop('yokohama', 'Yokohama', [2, 4], 3, '90 min', 'H
     turn: [
       T('Place assistants', 'Place either 1 assistant in each of 3 different areas, or 2 assistants in the same area. You spread three across the town.', 'c', [1, 2, 3].map((k) => spawn(helper(`a${k}`, 1), at(`area.${k}`, 0.3, 0.62), 'asst'))),
       T('Move your president', 'Your president moves step by step and may only enter areas that hold one of your assistants. It cannot stop where another president stands (passing through costs that owner 1 yen) or go back to where it started. On your first turn it comes from your hand onto any such area.', 'c', [mv('pres', at('area.2', 0.62, 0.6))]),
-      T('Take the area action', 'Your power is 2 here: the president plus one assistant. More power means a bigger reward, here a trade good. Then every assistant in that area returns to your hand.', 'area.2', [
-        spawn(cubes('gain', 1, GOODS[2], 'Trade good', 'Gained from an area action and spent to fill orders.', { s: 0.26 }), by('mine.0', -0.5, 0), 'goods'),
+      T('Take the area action', 'Your power is 2 here: the president plus one assistant. More power means a bigger reward: at the silk mill, 2 power earns one raw silk. Then every assistant in that area returns to your hand.', 'area.2', [
+        spawn(cubes('gain', 1, GOODS[1], 'Trade good', 'Gained from an area action and spent to fill orders.', { s: 0.26 }), by('mine.0', -0.5, 0), 'goods'),
         hide('a2', 1.6),
       ]),
       T('Next player', 'The next player stacks 2 assistants in a single area to build power there quickly. Placing where another president stands costs 1 yen to its owner per assistant.', 'c', [

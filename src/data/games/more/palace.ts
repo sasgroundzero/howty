@@ -13,7 +13,7 @@ const ups = (title: string, body: string): Item => {
 export const palace = tabletop('palace', 'Palace', [2, 5], 4, '15–30 min', 'Easy', 'Shed your hand, then the cards on the table.', ['#6d28d9', '#facc15', '#ffffff'], (n) => ({
   setup: [
     S('Take one pack', 'Palace uses one standard 52-card deck with no jokers. Cards rank from 3, the lowest, up to the ace. Twos and tens are special.', 'c', [],
-      'The game goes by several other names, such as Karma or Ten-Two Slide. Up to five can play with one deck. Bigger groups add jokers or a second deck, and their rules vary.'),
+      'The game goes by several other names, such as Karma or Ten-Two Slide. Up to five can play with one deck. Bigger groups add jokers or a second deck, and their rules vary. Bicycle\'s published version uses two decks for three or more players.'),
     S('Deal three cards face down', 'Deal each player a row of three cards face down. Nobody may look at these, not even their owner, until they are played at the very end.', 'you', [
       P(hidden('down', '5♠ J♦ 8♣', 'Face-down cards', 'Three unseen cards. They are the last ones you play, one at a time, without looking first.')),
     ]),
@@ -40,8 +40,8 @@ export const palace = tabletop('palace', 'Palace', [2, 5], 4, '15–30 min', 'Ea
     T('Equal or higher', 'The player on your left must play a card that is equal to or higher than your 3. They play the 8♦ and draw. Two or more cards of the same rank may be played together.', 'pile', [
       show('hand.2@1', '8♦'), mv('hand.2@1', at('pile', 0.5, 0.5, 0.02)), draw('stock', at('hand@1', ...slot(2, 3)), undefined, 'n2', 1.6),
     ], 9),
-    T('Twos, tens and four of a kind', 'A 2 can be played on anything and the next player may play anything on it. A 10 removes the whole pile from the game, and so does completing four cards of one rank on top: whoever did it plays again. Groups differ on whether a 10 may go on a higher card.', 'pile', [], 9),
+    T('Twos, tens and four of a kind', 'A 2 can be played on anything and the next player may play anything on it. A 10 can also go on anything and removes the whole pile from the game, and so does completing four cards of one rank on top: whoever did it plays again. Some groups forbid a 10 on certain cards.', 'pile', [], 9),
     T('Pick up if you cannot play', 'If you cannot or do not want to beat the top card, take the whole pile into your hand. The next player starts a new pile with any card.', 'you', [], 6),
-    T('How it ends', 'When the stock and your hand are both empty you play your face-up cards, and after those your face-down cards, turning one over blind each turn. The first player to get rid of every card wins. Many groups play on until only one player, the loser, is left.', 'all', [], 9),
+    T('How it ends', 'When the stock and your hand are both empty you play your face-up cards, and after those your face-down cards, turning one over blind each turn. If a blind card cannot beat the pile, you pick up the pile with it. The first player to get rid of every card wins. Many groups play on until only one player, the loser, is left.', 'all', [], 9),
   ],
 }))

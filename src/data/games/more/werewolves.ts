@@ -31,7 +31,7 @@ export const werewolves = tabletop('werewolves', "The Werewolves of Miller's Hol
       mv('role@5', at('gone', 0.28, 0.5)),
       set('role@5', { faceUp: true, face: VILLAGER }),
     ]),
-    T('Day: debate and vote', 'The survivors argue about who looks guilty, then all point at a suspect at the same moment. The player with the most votes is eliminated and reveals their card.', 'c', [
+    T('Day: debate and vote', 'The survivors argue about who looks guilty, then all point at a suspect at the same moment. The player with the most votes is eliminated and reveals their card. On a tie nobody is eliminated.', 'c', [
       mv('role@3', at('gone', 0.72, 0.5)),
       set('role@3', { faceUp: true, face: WOLF }),
     ]),

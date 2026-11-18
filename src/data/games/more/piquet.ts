@@ -24,7 +24,7 @@ export const piquet = tabletop('piquet', 'Piquet', [2, 2], 2, '30–45 min', 'Ha
       S('Strip the deck to 32 cards', 'Piquet is for two players and uses 32 cards: the 7 up to the ace in each suit. Take out every 2, 3, 4, 5 and 6.', 'r', [
         C(zone('trick', 3.4, 3, 'Trick', 'The leader plays a card here and the other player answers. The higher card of the suit led wins. There are no trumps.')),
         R(stock('out', 20, 'Cards taken out', 'The twenty cards from 2 to 6. They are not used.')),
-      ], 'The name is also spelled Picquet or Piquet au cent; the form described here, scored over six deals, is known as Rubicon Piquet. Aces are high.'),
+      ], 'The form described here, scored over six deals, is known as Rubicon Piquet. An older form, Piquet au Cent, is played to 100 points. Aces are high.'),
       S('Deal twelve cards each', 'The dealer deals 12 cards to each player, in packets of two or three.', 'you', [
         P(hand('hand', MINE, 'Hand', 'A hand of 12 cards. Sort yours by suit.', { cols: 6 })),
       ], 'The dealer is called younger hand and the other player elder hand. Here you are elder hand.'),
@@ -54,7 +54,7 @@ export const piquet = tabletop('piquet', 'Piquet', [2, 2], 2, '30–45 min', 'Ha
       T('Declare your combinations', 'You announce, in order, your point (most cards in one suit), your best sequence (three or more in a row in one suit) and your best set (three or four aces, kings, queens, jacks or tens). In each class only the player with the better holding scores.', 'you', [], 10),
       T('Lead to the first trick', 'Elder hand leads. You play the A♠ and score 1 point for leading. The dealer must follow suit if able and plays the 7♠.', 'trick', [mv('hand.0', at('trick', ...spot(0, n))), ...play(1, 5, '7♠', n, 1.4)]),
       T('Win tricks for points', 'The higher card of the suit led wins and its winner leads next. You score 1 for each card you lead, 1 for winning a trick the other player led, and 1 extra for the last trick.', 'won', take(['hand.0', 'hand.5@1'], 0)),
-      T('Scoring and winning', 'Whoever wins more of the 12 tricks adds 10, or 40 for winning all of them. A game, called a partie, is six deals with the deal alternating, and the higher total wins. There are large bonuses, pique and repique, for reaching 30 before your opponent scores at all.', 'all', [], 10),
+      T('Scoring and winning', 'Whoever wins more of the 12 tricks adds 10, or 40 for winning all of them. A game, called a partie, is six deals with the deal alternating, and the higher total wins, with 100 extra if the loser stays under 100. Reaching 30 before your opponent scores anything earns a bonus: 60 for a repique from declarations alone, 30 for a pique counting play.', 'all', [], 10),
     ],
   }
 })

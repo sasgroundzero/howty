@@ -52,6 +52,6 @@ export const nertz = tabletop('nertz', 'Nertz', [2, 8], 4, '15–30 min', 'Mediu
       draw('stock', at('waste', 0.25, 0.5), pc('J♣'), 'w0'), draw('stock', at('waste', 0.5, 0.5, 0.02), pc('4♦'), 'w1'), draw('stock', at('waste', 0.75, 0.5, 0.04), pc('2♣'), 'w2'), mv('w2', at('work.2', 0.5, 0.5, 0.02), 2.4),
     ], 9),
     T('Call Nertz', 'The moment your Nertz pile is empty you may shout "Nertz!" and play stops at once. Sort the foundation cards by their backs: you score 1 point for each of your cards in the middle and lose 2 for each card left in your Nertz pile.', 'all', [], 9),
-    T('How it ends', 'Deal again and keep a running total. The first player to reach the agreed target, commonly 100 points, wins. If everyone gets stuck in a round, each player moves the top card of their stock to the bottom and play goes on.', 'all', [], 8),
+    T('How it ends', 'Deal again and keep a running total. The first player to reach the agreed target, commonly 100 points, wins. If everyone gets stuck, each player turns their waste pile over as a new stock, moves its top card to the bottom and play goes on.', 'all', [], 8),
   ],
 }))

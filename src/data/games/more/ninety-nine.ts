@@ -15,7 +15,7 @@ export const ninetyNine = tabletop('ninety-nine', 'Ninety-Nine', [3, 3], 3, '30â
   setup: [
     S('Make the 36-card pack', 'From a standard deck take out the 2s, 3s, 4s and 5s, leaving 36 cards that run from 6 up to ace in each suit. Cards rank A (high), K, Q, J, 10, 9, 8, 7, 6.', 'c', [
       C(zone('trick', 3.4, 3, 'Trick', 'Each player plays one card here in turn. The highest trump, or the highest card of the suit led, takes the trick.')),
-    ], 'Invented by David Parlett in 1967 and written 99 for short. This is the original three-player game; he also gives versions for two, four and five. A joker can be added as a 37th card for an optional rule.'),
+    ], 'Devised by David Parlett in 1968, first published in 1975, and written 99 for short. This is the original three-player game; he also gives versions for two, four and five. A joker can be added as a 37th card for an optional rule.'),
     S('Deal twelve cards each', 'Deal all the cards one at a time, face down. Each of the three players has 12.', 'you', [
       P(dealt('hand', MINE, { '0@1': '8â™£', '0@2': '10â™£' }, 'Hand', 'Each player is dealt 12 cards: 3 become the bid and 9 are played.', { cols: 6 })),
       P(zone('bid', 3.2, 1.4, 'Bid cards', 'Three cards laid face down. Their suits add up to the number of tricks you are promising to win.'), zone('won', 1.4, 1.4, 'Tricks won', 'Tricks you have taken. You want exactly as many as you bid.')),
@@ -35,6 +35,6 @@ export const ninetyNine = tabletop('ninety-nine', 'Ninety-Nine', [3, 3], 3, '30â
       flip('hand.0', false), mv('hand.0', at('won', 0.5, 0.5)), flip('hand.0@1', false), mv('hand.0@1', at('won', 0.5, 0.5, 0.02)), flip('hand.0@2', false), mv('hand.0@2', at('won', 0.5, 0.5, 0.04)),
     ]),
     T('Score the deal', 'After nine tricks everyone scores 1 point per trick won. Each player who took exactly the number bid adds a bonus: 10 if all three succeeded, 20 if two did, and 30 if only one did.', 'all', [], 8),
-    T('How it ends', 'A successful declare adds 30 and a successful reveal 60; if it fails, each opponent gets that bonus instead. Play an agreed number of deals, commonly nine, and the highest total wins.', 'all'),
+    T('How it ends', 'A successful declare adds 30 and a successful reveal 60; if it fails, each opponent gets that bonus instead. The first player to reach 100 points wins the game and scores a 100-point bonus. In the original joker version, a game is nine deals instead.', 'all'),
   ],
 }))

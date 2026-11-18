@@ -32,7 +32,7 @@ export const fanTan = tabletop('fan-tan', 'Fan Tan', [3, 8], 4, '15–30 min', '
         mv('hand.0', at('layout', ...slot(0, 3, 4))),
       ]),
       T('Pass only if you are stuck', 'If none of your cards fits, say "pass" or knock on the table and the turn moves on. You may not pass when you have a card that can be played.', 'you', []),
-      T('How it ends', 'The first player to play their last card wins. Some groups play for chips: everyone pays one into a pool before the deal and one more each time they pass, and the winner takes the pool.', 'all'),
+      T('How it ends', 'The first player to play their last card wins. Some groups play for chips: everyone pays one into a pool before the deal and one more each time they pass, and the winner takes the pool. Often each loser also pays one chip for every card still in hand.', 'all'),
     ],
   }
 })

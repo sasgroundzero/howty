@@ -17,20 +17,20 @@ export const projectL = tabletop('project-l', 'Project L', [2, 4], 3, '20–40 m
         C(deck('bdeck', black - 4, f('#2b2b2b', 'L'), 'Black puzzle deck', `The harder, higher-scoring puzzles. Use 12 with 2 players, 14 with 3 and 16 with 4, so ${black} here. When this deck runs out the game is nearly over.`, { w: 1.5, d: 1.5 }), cards('black', 4, BLACK, 'Black puzzles', 'Bigger puzzles that are worth more points and give better pieces.', { w: 1.5, d: 1.5 })),
       ], 'These deck sizes come from the standard rules. If your edition differs, follow the table in its rulebook.'),
       S('Piece reserve', 'Sort all the pieces by shape into a reserve that everyone can reach.', 'r', [
-        R(tiles('supply', 9, 0.6, 0.6, SHAPE, 'Piece reserve', 'Nine shapes in four levels, from a single square up to pieces of four squares. The number of each depends on your edition.', { cols: 3, h: 0.3, gap: 0.2 })),
+        R(tiles('supply', 9, 0.6, 0.6, SHAPE, 'Piece reserve', 'Nine shapes in four levels, from a single square up to pieces of four squares. Current printings have 15 of each shape, older ones 10.', { cols: 3, h: 0.3, gap: 0.2 })),
       ]),
-      S('Player mats and starting pieces', 'Deal each player a mat. Everyone takes one level 1 piece (a single square) and one level 2 piece (two squares) from the reserve.', 'you', [
+      S('Player mats and starting pieces', 'Shuffle one mat per player, including the one with the first player mark, and deal them out. Everyone takes one level 1 piece (a single square) and one level 2 piece (two squares) from the reserve.', 'you', [
         P(mat('pm', 6.4, 1.9, '$', 'Player mat', 'Player mat', 'Holds the puzzles you are working on, at most 4 at a time, and lists the actions.')),
         P(unit('p1'), tiles('p2', 1, 0.7, 0.35, SHAPE[1], 'Level 2 piece', 'A piece of two squares. Each player starts with one.', { h: 0.1 }), zone('done', 1.5, 1.5, 'Finished puzzles', 'Completed puzzles are kept here face down and scored at the end.')),
       ], 'There is also a solo variant with its own rules, which this walkthrough does not cover.'),
-      S('Ready to play', 'The player whose mat carries the first player mark starts, then play passes clockwise.', 'all', [], 'On your turn you take 3 actions, in any mix: take a puzzle, upgrade a piece, place a piece, or (once per turn) a master action.'),
+      S('Ready to play', 'The player whose mat carries the first player mark starts, then play passes clockwise.', 'all', [], 'On your turn you take 3 actions, in any mix: take a puzzle, recycle a row of puzzles, upgrade, place a piece, or (once per turn) a master action.'),
     ],
     turn: [
-      T('Action 1: take a puzzle', 'You take a white puzzle from the row onto your mat, and the gap is refilled from the deck.', 'white', [
+      T('Action 1: take a puzzle', 'You take a white puzzle from the row onto your mat, and the gap is refilled from the deck. You could instead take the top card of a deck blind.', 'white', [
         mv('white.1', at('pm', 0.15, 0.5)), draw('wdeck', by('white.0', 1.64, 0), WHITE),
       ]),
       T('Action 2: place a piece', 'You put your single square into the puzzle. Pieces must lie flat inside the outline without overlapping and stay there until the puzzle is finished.', 'you', [mv('p1', at('white.1', 0.35, 0.4))]),
-      T('Action 3: upgrade', 'An upgrade either takes a new level 1 piece from the reserve, or swaps one of your pieces for one up to a level higher. You take a new square.', 'you', [spawn(unit('p3'), by('p2', -1.025, 0), 'supply.0')]),
+      T('Action 3: upgrade', 'An upgrade either takes a new level 1 piece from the reserve, or swaps one of your pieces for one a level higher, the same level or lower. You take a new square.', 'you', [spawn(unit('p3'), by('p2', -1.025, 0), 'supply.0')]),
       T('Next player', 'The next player spends an action taking a black puzzle. Their once-per-turn master action can later place one piece into every puzzle on their mat at the same time.', 'black', [
         mv('black.2', at('pm@1', 0.15, 0.5)), draw('bdeck', by('black.1', 1.64, 0), BLACK),
       ]),
@@ -38,7 +38,7 @@ export const projectL = tabletop('project-l', 'Project L', [2, 4], 3, '20–40 m
         mv('p1', by('p2', -1.6, 0)), mv('white.1', at('done', 0.5, 0.5)),
         spawn(tiles('reward', 1, 0.7, 0.35, SHAPE[1], 'Reward piece', 'The piece printed on a finished puzzle, taken from the reserve.', { h: 0.1 }), by('p2', -2.4, 0), 'supply.1'),
       ]),
-      T('End of the game', 'When the black deck runs out, finish the round and play one more. You may then finish puzzles at a cost of 1 point per piece placed. Unfinished puzzles lose you their points; the highest total wins.', 'all'),
+      T('End of the game', 'When the black deck runs out, finish the round and play one more; from then on each player may take only 1 black puzzle per turn. You may then finish puzzles at a cost of 1 point per piece placed. Unfinished puzzles lose you their points; the highest total wins.', 'all'),
     ],
   }
 })

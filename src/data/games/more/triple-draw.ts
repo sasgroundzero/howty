@@ -33,7 +33,7 @@ export const tripleDraw = tabletop('triple-draw', '2-7 Triple Draw', [2, 6], 5, 
         P(seated(hand('hand', '2♠ 3♦ 7♣ K♥ Q♠', 'Your hand', HAND), hand('hand', '3♥ 4♣ 6♦ K♣ J♥', 'Your hand', HAND))),
         C(stock('deck', 52 - 5 * n, 'Deck', `The ${52 - 5 * n} cards left after the deal. Replacement cards in the three draws come from the top.`)),
       ]),
-      S('Know what a low hand is', 'The lowest hand wins, ranked deuce-to-seven: aces are always high, and straights and flushes count against you. The best possible hand is 7-5-4-3-2 in mixed suits.', 'hand', [], 'Compare hands from the highest card down, so 8-6-4-3-2 beats 8-7-4-3-2. Any hand with no pair beats any pair. A-5-4-3-2 is not a straight here, just a poor ace-high hand.'),
+      S('Know what a low hand is', 'The lowest hand wins, ranked deuce-to-seven: aces are always high, and straights and flushes count against you. The best possible hand is 7-5-4-3-2 in mixed suits.', 'hand', [], 'Compare hands from the highest card down, so 8-6-4-3-2 beats 8-7-4-3-2. Any hand with no pair, straight or flush beats any pair. A-5-4-3-2 is not a straight here, just a poor ace-high hand.'),
       S('Ready to play', n === 2
         ? 'There are four betting rounds with a draw between each. The dealer acts first in the first round; after each draw the other player does.'
         : 'There are four betting rounds with a draw between each. The player to the left of the big blind acts first in the first round; after each draw the first player still in to the left of the button does.', 'all', [], 'The game is usually played fixed-limit: every bet and raise is the size of the big blind in the first two rounds and double that in the last two.'),

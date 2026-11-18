@@ -31,8 +31,8 @@ export const ranterGoRound = tabletop('ranter-go-round', 'Ranter-Go-Round', [3, 
         show('card@2', 'K♠'),
       ]),
       n === 3
-        ? T('The dealer goes last', 'The dealer may swap with the top card of the pack instead of with a neighbour. Here the dealer already holds the king, so they keep it.', 'pack')
-        : T('The dealer goes last', 'Each player in turn keeps or swaps. The dealer, who has nobody left to swap with, may trade for the top card of the pack instead. Here the dealer turns up a 7 and keeps it.', 'pack', [
+        ? T('The dealer goes last', 'The dealer may cut the pack and swap for the card cut, unless that card is a king. Here the dealer already holds the king, so they keep it.', 'pack')
+        : T('The dealer goes last', 'Each player in turn keeps or swaps. The dealer, who has nobody left to swap with, may cut the pack and swap for the card cut instead, but if it is a king they must keep their own card. Here the dealer cuts a 7 and takes it.', 'pack', [
           hide(`card@${dealer}`), draw('pack', by(`lives@${dealer}`, 0, HOME), pc('7♥'), 'cut'),
         ]),
       T('Everyone shows their card', 'Once the dealer has played, all cards are turned face up and compared.', 'all', [

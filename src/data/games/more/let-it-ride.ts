@@ -40,6 +40,6 @@ export const letItRide = tabletop('let-it-ride', 'Let It Ride', [1, 6], 3, '15â€
       spawn(chip('win3', 'Winnings', 'Even money on your third bet.', '#e9e4d8'), at('b3', 0.5, 0.5, 0.08), 'comm.0', undefined, 0.8),
       ...(n > 1 ? [hide('c1@1', 1.3), hide('c2@1', 1.4), hide('c3@1', 1.5)] : []),
     ], 9),
-    T('How it ends', 'Two pair and better hands pay more than even money, up to a very large prize for a royal flush, but the paytable varies from casino to casino, so read the one at the table. The cards are then collected and shuffled for a new round. There is no overall winner: you play as many rounds as you like.', 'all'),
+    T('How it ends', 'Better hands pay more. A common paytable gives 2 to 1 for two pair, 3 to 1 for three of a kind, 5 to 1 for a straight, 8 to 1 for a flush, 11 to 1 for a full house, 50 to 1 for four of a kind, 200 to 1 for a straight flush and 1000 to 1 for a royal flush, but it varies from casino to casino, so read the one at the table. The cards are then collected and shuffled for a new round. There is no overall winner: you play as many rounds as you like.', 'all'),
   ],
 }))

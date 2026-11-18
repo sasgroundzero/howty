@@ -21,7 +21,7 @@ export const unfair = tabletop('unfair', 'Unfair', [2, 5], 3, '25 min per player
       On('city', 0.5, 0.75, cards('market', 6, PARK, 'Market', 'Six face-up park cards that anyone can build or take on their turn.')),
       R(pile('bank', '#e0b12f', 'Bank', 'The coin supply.', 'disc')),
     ]),
-    S('Gates, coins and showcases', 'Each player takes a main gate card, a loan card, 20 coins and 2 showcase cards dealt face down.', 'you', [
+    S('Gates, coins and showcases', 'Each player takes a main gate card, a loan card, a round summary card, 20 coins and 2 showcase cards dealt face down.', 'you', [
       P(cards('gate', 1, ft('#f3e7c5', 'MAIN GATE', '1 star', '⌂'), 'Main gate', 'The entrance to your park. It gives 1 star and sets your limits: 15 guests and at most 5 attractions.'), zone('park', 4.6, 1.5, 'Your park', 'Attractions go in a row beside your gate, with their upgrades tucked under them. You may have at most 5 attractions.')),
       P(cards('show', 2, ft('#efe0f3', 'SHOWCASE', 'super attraction', '♛'), 'Showcase cards', 'Two powerful attractions dealt to you at the start. They are kept apart from your hand; the rulebook explains when you may build one or trade it in.', { down: true }), cards('loan', 1, ft('#e3e3e3', 'LOAN', 'costs points', '?'), 'Loan card', 'Lets you borrow coins from the bank in exchange for points at the end of the game.', { down: true }), discs('coins', 1, 0.25, '#e0b12f', 'Your coins', 'Each player starts with 20 coins.', { h: 0.3, label: '20', ink: '#2b241c' })),
     ]),
@@ -35,7 +35,7 @@ export const unfair = tabletop('unfair', 'Unfair', [2, 5], 3, '25 min per player
       draw('events', at('hand.4', 1.15, 0.5, 0.02)), draw('citydeck', at('city', 0.28, 0.2), ft('#f3ecdc', 'CITY', 'this round', '⌂')),
     ]),
     T('Park step: build', 'In the park step each player takes 3 actions, one at a time around the table. For your first you pay the price of an attraction in your hand and build it beside your gate.', 'you', [mv('hand.1', at('park', 0.15, 0.5))]),
-    T('Park step: take a card', 'Instead of building, an action can take a card: a park card from the market or deck, an event, or a blueprint. The next player takes one from the market.', 'city', [mv('market.2', at('hand.4@1', 1.15, 0.5, 0.02))]),
+    T('Park step: take a card', 'Instead of building, an action can take a card: one from the market, or draw two park, event or blueprint cards and keep one. Demolishing a card or collecting loose change are the other choices. The next player takes one from the market.', 'city', [mv('market.2', at('hand.4@1', 1.15, 0.5, 0.02))]),
     T('Guests step', 'Count the stars in your park, up to your guest capacity, and take 1 coin from the bank for each, plus any ticket income on your cards.', 'you', [spawn(coin('income'), by('coins', 0.75, 0), 'bank')]),
     T('Cleanup and final scoring', 'Refresh the market, discard down to 5 cards and pass the starting player marker. After round 8, score each attraction by its number of icons, then blueprints, staff and coins, minus loans. Most points wins.', 'all'),
   ],

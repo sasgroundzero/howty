@@ -33,6 +33,6 @@ export const caribbeanStud = tabletop('caribbean-stud', 'Caribbean Stud Poker', 
       spawn(chip('win2', '2', 'Winnings', 'The payout on your Raise. For a pair it equals the bet.', '#e9e4d8'), at('raise', 0.7, 0.5), 'dealer.1', undefined, 0.9),
     ], 10),
     T('If the dealer does not qualify', 'When the dealer has less than ace-king, every player who raised is paid even money on the Ante and simply gets the Raise back, however good their hand is.', 'dealer', [], 7),
-    T('How it ends', 'Hands better than a pair pay more on the Raise, but the paytable varies from casino to casino, so read the one at the table. The cards are then collected and shuffled for a new round. There is no overall winner: you play as many rounds as you like.', 'all'),
+    T('How it ends', 'Hands better than a pair pay more on the Raise. A common paytable gives 2 to 1 for two pair, 3 to 1 for three of a kind, 4 to 1 for a straight, 5 to 1 for a flush, 7 to 1 for a full house, 20 to 1 for four of a kind, 50 to 1 for a straight flush and 100 to 1 for a royal flush, but it varies from casino to casino, so read the one at the table. The cards are then collected and shuffled for a new round. There is no overall winner: you play as many rounds as you like.', 'all'),
   ],
 }))

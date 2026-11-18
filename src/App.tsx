@@ -537,9 +537,15 @@ export default function App() {
                           {playing ? 'Pause' : 'Resume'}
                         </Button>
                       ) : (
-                        <Button kind="primary" icon="replay" onClick={simulate} className="flex-1 sm:flex-none">
-                          Replay
-                        </Button>
+                        <>
+                          <Button icon="replay" onClick={simulate} className="flex-1 sm:flex-none">
+                            Replay
+                          </Button>
+                          <Button kind="accent" icon="share" onClick={() => setSharing(true)} className="flex-1 sm:flex-none">
+                            <span className="whitespace-nowrap sm:hidden">Share</span>
+                            <span className="hidden whitespace-nowrap sm:inline">Send to your group</span>
+                          </Button>
+                        </>
                       )}
                     </>
                   ) : (

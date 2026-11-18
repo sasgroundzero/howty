@@ -46,7 +46,7 @@ export const schnapsen = tabletop('schnapsen', 'Schnapsen', [2, 2], 2, '20–30 
         draw('stock', at('hand', ...slot(0, 5)), pc('10♦'), 'drew'), draw('stock', at('hand@1', ...slot(0, 5)), undefined, undefined, 1.2),
       ]),
       T('Declare a marriage', 'When it is your lead and you hold the king and queen of one suit, show both and lead one of them: 20 points, or 40 in trumps. You lead the Q♥ and show the K♥. The points only count once you have won a trick.', 'trick', [mv('hand.3', at('trick', ...spot(0, n)))], 9),
-      T('Later rules and winning', 'Once the stock is gone, or a player on lead closes it by turning the trump card face down, you must follow suit and win the trick if you can. Claim the deal the moment you have 66: it earns 1 to 3 game points depending on how few points your opponent has. The first to 7 game points wins.', 'all', [], 10),
+      T('Later rules and winning', 'Once the stock is gone, or a player on lead closes it by turning the trump card face down, you must follow suit and win the trick if you can, and trump if you cannot follow. Claim the deal the moment you have 66: it earns 1 to 3 game points depending on how few points your opponent has. The first to 7 game points wins.', 'all', [], 10),
     ],
   }
 })

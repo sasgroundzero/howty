@@ -31,7 +31,7 @@ export const blitz = tabletop('blitz', 'Blitz', [2, 8], 4, '15–30 min', 'Easy'
       flip('hand.2', false), mv('hand.2', at('hand.2@1', 1.15, 0.5, 0.02)), show('hand.0@1', 'Q♦'), mv('hand.0@1', at('up', 0.5, 0.5, 0.02), 1.4),
     ]),
     T('Knock, or show 31', 'Instead of drawing, you may knock on the table. Everyone else then gets one last turn and all hands are shown. If you ever hold exactly 31, show it at once: the hand ends and every other player loses a life.', 'you'),
-    T('The lowest hand loses a life', 'After a knock, the player with the lowest total pays one counter into the kitty. If the knocker has the lowest hand outright, the knocker pays two.', 'kitty', [
+    T('The lowest hand loses a life', 'After a knock, the player with the lowest total pays one counter into the kitty. Everyone tied for lowest pays, except a knocker who ties, who is safe. If the knocker has the lowest hand outright, the knocker pays two.', 'kitty', [
       mv('lives.0@1', at('kitty', 0.5, 0.5)),
     ]),
     T('How it ends', 'Deal again, passing the deal to the left. A player with no counters left may keep playing until they lose once more, and then they are out. The last player still in wins.', 'all'),

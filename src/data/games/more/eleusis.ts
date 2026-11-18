@@ -26,7 +26,7 @@ export const eleusis = tabletop('eleusis', 'Eleusis', [4, 8], 5, '60 min', 'Hard
         On('main', line(0), 0.5, shown('starter', '5♥', 'Starter card', 'The first card of the mainline. The first play has to follow it according to the secret rule.')),
         R(stock('stock', left, 'Stock', `The ${left} cards left over. Penalty cards are dealt from here.`)),
       ]),
-      S('Ready to play', 'Pick a player to go first; play then passes clockwise, skipping the dealer. On your turn you play one card to the end of the mainline and the dealer calls it right or wrong.', 'all', [], 'The dealer never explains the rule. Players learn it only from which cards are accepted and which are refused.'),
+      S('Ready to play', 'Count clockwise from the dealer by the starter\'s rank to find who goes first, or just pick someone; play then passes clockwise, skipping the dealer. On your turn you play one card to the end of the mainline and the dealer calls it right or wrong.', 'all', [], 'The dealer never explains the rule. Players learn it only from which cards are accepted and which are refused.'),
     ],
     turn: [
       T('A correct play', 'The player on your left tries a black 7 after the red starter. That fits your rule, so you say "right" and the card stays on the mainline.', 'main', [
@@ -39,9 +39,9 @@ export const eleusis = tabletop('eleusis', 'Eleusis', [4, 8], 5, '60 min', 'Hard
       T('Playing a string', 'A player who feels sure may play a string of two, three or four cards at once. If every card is right they all join the mainline. If any is wrong the whole string is sidelined and the penalty is twice the number of cards played.', 'main', [
         draw('hand@3', at('main', line(2), 0.5), pc('9♦'), 'p3'), draw('hand@3', at('main', line(3), 0.5), pc('K♠'), 'p4'),
       ], 9),
-      T('Declaring no play', 'If you think none of your cards can be played, show your hand. If you are right and hold more than four cards, you swap them for a new hand four cards smaller. If you are wrong, the dealer plays one correct card for you and you take 5 penalty cards.', 'all', [], 10),
-      T('Becoming the prophet', 'A player who believes they know the rule may declare themselves the prophet after a correct play. The prophet stops playing cards and calls right or wrong in the dealer\'s place. A prophet who calls wrongly is overthrown and takes 5 penalty cards.', 'all', [], 10),
-      T('How it ends', 'The round ends when a player runs out of cards, or when everyone has been expelled: once about 40 cards have been played, a wrong play puts you out of the round. Fewer cards left means a better score, with a bonus for going out. The highest total after everyone has dealt wins.', 'all', [], 10),
+      T('Declaring no play', 'If you think none of your cards can be played, show your hand. If you are right, your cards are set aside and you are dealt a new hand four cards smaller; with four or fewer you go out, which ends the round. If you are wrong, the dealer plays one correct card for you and you take 5 penalty cards.', 'all', [], 10),
+      T('Becoming the prophet', 'A player who believes they know the rule may declare themselves the prophet just after any play of their own, as long as there is no prophet yet, they have not been prophet this round, and at least two other players are still in. The prophet stops playing cards and calls right or wrong in the dealer\'s place. A prophet who calls wrongly is overthrown and takes 5 penalty cards.', 'all', [], 10),
+      T('How it ends', 'The round ends when a player runs out of cards, or when everyone has been expelled: once 40 cards have been played (30 after a prophet takes over), a wrong play puts you out of the round. Each player scores the largest hand left minus their own cards, plus 4 for going out; the dealer scores as well as the best player. The highest total after everyone has dealt wins.', 'all', [], 10),
     ],
   }
 })

@@ -31,7 +31,7 @@ export const leTruc = tabletop('le-truc', 'Le Truc', [2, 2], 2, '15–20 min', '
     T('Win the second trick', 'You lead the 7♦, which nothing can beat. Your opponent plays a 9, so you have two tricks and win the hand for 2 points.', 'trick', [
       mv('hand.0', at('trick', 0.5, 0.75)), flip('hand.0@1'), mv('hand.0@1', at('trick', 0.5, 0.25)),
     ]),
-    T('Raising again', 'Each further raise adds 2 points, so a hand goes 1, 2, 4, 6 and so on. On your turn you may also stake "my remainder", the whole game; if that is accepted, the winner of the hand wins the game.', 'all', [], 8),
-    T('How it ends', 'If you each win one trick and one is spoiled, whoever won a trick first takes the hand. The deal alternates, and the first player to 12 points wins the game.', 'all'),
+    T('Raising again', 'Each further raise adds 2 points, so a hand goes 1, 2, 4, 6 and so on, though some groups allow a raise of any size. You cannot raise twice in a row. On your turn you may also stake "my remainder", the whole game; if that is accepted, the winner of the hand wins the game.', 'all', [], 8),
+    T('How it ends', 'If you each win one trick and one is spoiled, whoever won a trick first takes the hand; if all three are spoiled, the non-dealer takes it. The deal alternates, and the first player to 12 points wins the game.', 'all'),
   ],
 }))

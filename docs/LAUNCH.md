@@ -9,8 +9,8 @@ Before posting, check:
 - [x] Works in iPhone Safari (checked in the iOS simulator: home, a game page, setup steps, Share with
       QR and the iOS share sheet, the daily table). Still worth one pass on a real phone, for touch feel
       and scanning the QR with a second phone
-- [x] The 127 most popular guides checked step by step against the publishers' published rules and
-      marked on their pages (2026-11-17)
+- [x] 174 of the 176 guides checked step by step against the publishers' published rules (or pagat.com
+      for traditional card games) and marked on their pages (2026-11-18)
 - [x] Vercel Web Analytics is recording page views
 - [ ] Optional: a short custom domain (steps below)
 
@@ -34,9 +34,9 @@ Best on a weekday morning, US Eastern time. The title has to be plain; the comme
 > prerendered with the steps as plain text, and preview images are drawn from each game's layout at
 > build time. It works offline after one visit.
 >
-> The honest weak spot: only the 127 most popular guides have been checked step by step against the
-> published rules so far, and every page says whether it has been. If you own a game, checking its
-> guide is the most useful contribution.
+> 174 of the 176 guides have been checked step by step against the published rules, and each page names
+> the edition it was checked against. If you spot a mistake, every page has a one-tap "report a rules
+> error" link.
 >
 > Code (MIT): https://github.com/sasgroundzero/howty
 
@@ -68,9 +68,9 @@ Check the subreddit's self-promotion rules first; some weeks it only allows this
 >
 > I've built Howty, an open-source site that places each setup step on a 3D table and then plays a short
 > first turn. It covers 113 board games and 63 traditional card games. The guides were written from
-> public rules references; the 127 most popular have been checked against the published rules, and the
-> rest is where I'd value this community's help: each page has a "help check it" link, and checked guides are marked with
-> the edition they were checked against. https://howty.vercel.app
+> public rules references, and 174 of the 176 have since been checked against the published rules; each
+> page is marked with the edition it was checked against. If your copy differs, each page has a link to
+> report it, which is where I'd value this community's help. https://howty.vercel.app
 
 ## Short post (X, Bluesky, Threads)
 

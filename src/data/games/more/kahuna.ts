@@ -32,7 +32,7 @@ export const kahuna = tabletop('kahuna', 'Kahuna', [2, 2], 2, '30 min', 'Easy', 
       spawn(bridge('br2', 0.22, 0.6), at('sea', ...mid(5, 10)), 'bridges'),
       spawn(discs('stone1', 1, 0.2, '$', 'Kahuna stone', 'Marks an island you control. It is worth nothing itself, but controlled islands are counted in each scoring.'), at('sea', ...cityUV(10)), 'stones', undefined, 1.6),
     ]),
-    T('Draw a card', 'To end your turn you may take one face-up card or the top card of the deck. A face-up card is replaced from the deck.', 'r', [
+    T('Draw a card', 'To end your turn you take one face-up card or the top card of the deck; you may skip this only if your opponent did not skip last turn. A face-up card is replaced from the deck.', 'r', [
       mv('open.0', at('hand.2', 1.15, 0.5, 0.02)),
       draw('isles', by('open.1', -1.04, 0), ISLE),
     ]),
@@ -40,6 +40,6 @@ export const kahuna = tabletop('kahuna', 'Kahuna', [2, 2], 2, '30 min', 'Easy', 
       hide('hand.0@1'),
       spawn(bridge('br3', 0.6, 0.22), at('sea', ...mid(8, 9)), 'bridges@1', '#2e6fb7'),
     ]),
-    T('Scoring and the finish', 'A round ends when the deck and the face-up cards are used up. After round one the player with more Kahuna stones scores 1 point, after round two 2 points, and after round three the difference in stones. The higher total wins.', 'all'),
+    T('Scoring and the finish', 'A scoring comes each time the deck and the face-up cards are used up; the discards are then reshuffled. At the first the player with more Kahuna stones scores 1 point, at the second 2 points. After the third, each player takes one last turn and the player with more stones scores the difference. The higher total wins.', 'all'),
   ],
 }))

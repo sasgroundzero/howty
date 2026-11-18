@@ -16,7 +16,7 @@ export const jamaica = tabletop('jamaica', 'Jamaica', [2, 6], 4, '30–60 min', 
     ]),
     S('Ships at Port Royal', `All ${n} ships start together on the Port Royal space.`, 'map', [
       OnP('map', ...loop(0), pawns('ship', 1, '$', 'Ship', 'Your ship. It races once round the island and back to Port Royal.', { scale: 0.3 }), [0.2, 0]),
-    ], n === 2 ? 'The 2-player game adds the black Ghost Ship at Port Royal, moved by the captain each round. Its setup and rules are in the rulebook.' : undefined),
+    ], n === 2 ? 'With 2 players the black ship joins as the Ghost Ship. Give it a hold board with 5 doubloons in one hold and 3 in another, plus the Lady Beth treasure card (+2 in combat, and it can’t be stolen). After both players act, the captain moves it twice using the action dice: backward if it alone leads, forward if it alone is last, otherwise the captain picks. It never pays for spaces, and it can win.' : undefined),
     S('Treasures', 'Put one treasure token on each of the 9 pirate lair spaces. Shuffle the 12 treasure cards and stack 9 of them face down beside the board. The other 3 go back in the box unseen.', 'map', [
       ...LAIRS.map((s, i) => on('map', ...loop(s), discs(`lair${i}`, 1, 0.2, '#8a5a2b', 'Treasure token', 'Marks an unclaimed treasure. The first ship to stop here takes the token off and draws a treasure card.', { label: '✦', ink: '#ffffff', h: 0.06 }))),
       R(deck('treasure', 9, f('#8a5a2b', '✦'), 'Treasure cards', 'Some are worth points, some are cursed and lose points, and a few give a lasting power.')),

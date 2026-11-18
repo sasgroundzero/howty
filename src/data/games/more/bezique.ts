@@ -21,7 +21,7 @@ export const bezique = tabletop('bezique', 'Bezique', [2, 2], 2, '30–45 min', 
     ]),
     S('Turn up the trump card', 'Turn the next card face up: its suit is trumps. Put the other 47 cards face down next to it as the stock.', 'r', [
       R(stock('stock', 47, 'Stock pile', 'The 47 undealt cards. After every trick both players draw one, so hands stay at 8 until the stock runs out.'), shown('trump', 'K♥', 'Trump card', 'The turned-up card shows the trump suit. It is the last card drawn from the stock.')),
-    ], 'If the turned-up card is a 7, the dealer scores 10 at once.'),
+    ], 'If the turned-up card is a 7, the dealer scores 10 at once. Later, a player who has just won a trick may swap the 7 of trumps for the turned-up card and score 10.'),
     S('Know the melds', 'Melds score when declared: K and Q of one suit 20 (40 in trumps), Q♠ with J♦ (a bezique) 40, four jacks 40, four queens 60, four kings 80, four aces 100, and A 10 K Q J of trumps 250.', 'melds', [], 'Both Q♠ and both J♦ together are a double bezique worth 500. Groups differ on the finer points of reusing a melded card in another meld.'),
     S('Keep score', 'Use paper and pencil or a pair of bezique markers. Scores are written down as they happen.', 'c'),
     S('Ready to play', 'The non-dealer leads any card. While the stock lasts you may answer with any card at all: you need not follow suit.', 'all', [], 'A trick goes to the higher card of the suit led, or to a trump played on a plain suit. The winner may declare one meld, then both players draw.'),

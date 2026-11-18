@@ -30,7 +30,7 @@ export const fiveCardStud = tabletop('five-card-stud', 'Five-Card Stud', [2, 8],
         On('ups', slot(0, 4)[0], 0.5, bySeat(DOORS.map((c) => shown('door', c, 'Upcard', DOOR)))),
         C(stock('deck', 52 - 2 * n, 'Deck', `The ${52 - 2 * n} cards left after the first deal. Every later card comes from the top.`)),
       ]),
-      S('See who bets first', 'In the traditional game the player showing the highest face-up card opens the first betting round. Here that is you, with a king.', 'door', [], 'Formal casino games do it the other way round: the player showing the lowest card must post a small forced bet called the bring-in. Agree which you are using. Ties are settled by suit in some games (spades high, then hearts, diamonds, clubs) and by nearness to the dealer\'s left in others.'),
+      S('See who bets first', 'In the traditional game the player showing the highest face-up card opens the first betting round. Here that is you, with a king.', 'door', [], 'Formal casino games do it the other way round: the player showing the lowest card must post a small forced bet called the bring-in. Agree which you are using. Ties are usually settled by suit: spades high, then hearts, diamonds, clubs. Some home games give it to the tied player nearest the dealer\'s left instead.'),
       S('Ready to play', 'There are four betting rounds, one after each face-up card. In each, play goes clockwise from the opener: check or bet, and once someone has bet, fold, call or raise.', 'all', [], 'Stud is usually played with fixed limits: a small bet in the early rounds and a big bet of twice the size later. The exact amounts are whatever your group agrees.'),
     ],
     turn: [
