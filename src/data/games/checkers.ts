@@ -14,7 +14,7 @@ function build() {
     b.s('Fill the third row', 'Place your last 4 on the dark squares of your third row, for 12 checkers each.', OVER, undefined, ['4 checkers each']),
   ]
   b.s('Leave the middle open', 'The two middle rows stay empty: this is the gap the armies cross.', TOP)
-  b.s('Ready to play', 'You are set up: the darker color moves first. Men move only diagonally forward, and if you can jump, you must.', OVER, 'Capture all of your opponent’s pieces, or leave them with no legal move, to win.')
+  b.s('Ready to play', 'You are set up: Black moves first under the official rules (a few boxed sets let Red start instead). Men move only diagonally forward, and if you can jump, you must.', OVER, 'Capture all of your opponent’s pieces, or leave them with no legal move, to win.')
 
   b.board('board', BOARD, size, size, 'b:checkers', info('Checkerboard', 'An 8 by 8 board. Only the 32 dark squares are used. There is 1.'), { edge: '#2f2620' })
   const men = new Map<string, PieceSpec<'token'>>()

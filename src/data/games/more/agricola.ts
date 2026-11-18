@@ -15,6 +15,7 @@ const GREEN = ft('#cfe3c0', 'ACTION', 'extra space', '≡')
 export const agricola = tabletop('agricola', 'Agricola', [1, 5], 3, '30 min per player', 'Hard', 'Grow a farm and feed your family.', ['#3d8b4a', '#b98a5a', '#e0b12f'], (n) => {
   const extra = n < 3 ? 0 : n === 3 ? 4 : 6
   const other = n > 1 ? '@1' : ''
+  const wood = n === 1 ? 2 : 3
   return {
     setup: [
       S('Lay out the game boards', 'Put the game boards side by side in the middle of the table, and the major improvements board next to them.', 'c', [
@@ -59,12 +60,12 @@ export const agricola = tabletop('agricola', 'Agricola', [1, 5], 3, '30 min per 
     ],
     turn: [
       T('Reveal a round card', 'Turn the top round card face up onto the space for round 1. It is a new action that anyone can use from now on.', 'actions', [draw('rounds', at('actions', ...SLOT(3)), ROUND, 'r1')]),
-      T('Restock', 'Every space with an arrow gets new goods. Goods nobody took last round stay and pile up.', 'actions', [
-        spawn(cubes('w3', 3, '#8a5a34', 'Wood on a space', 'Wood that builds up here until someone takes all of it.', { s: 0.24, gap: 0.08 }), at('actions', ...SLOT(8)), 'wood'),
+      T('Restock', `Every space with an arrow gets new goods${n === 1 ? ' (in the solo game the 3-wood space gets only 2)' : ''}. Goods nobody took last round stay and pile up.`, 'actions', [
+        spawn(cubes('w3', wood, '#8a5a34', 'Wood on a space', 'Wood that builds up here until someone takes all of it.', { s: 0.24, gap: 0.08 }), at('actions', ...SLOT(8)), 'wood'),
         spawn(cubes('c1', 1, '#b0563a', 'Clay on a space', 'Clay that builds up here until someone takes all of it.', { s: 0.24 }), at('actions', ...SLOT(9)), 'clay'),
       ]),
       T('Place a family member', 'You put one family member on the wood space and take everything on it into your supply.', 'actions', [
-        ...[0, 1, 2].map((k) => mv(`w3.${k}`, at('store', 0.2 + k * 0.15, 0.5))),
+        ...Array.from({ length: wood }, (_, k) => mv(`w3.${k}`, at('store', 0.2 + k * 0.15, 0.5))),
         mv('fam1', at('actions', ...SLOT(8))),
       ]),
       T(n > 1 ? 'Next player' : 'Your second action', `${n > 1 ? 'The player on your left places one of theirs on a different space and takes the clay' : 'Then you place your other family member on a different space and take the clay'}. Carry on one at a time until everyone is placed.`, 'actions', [

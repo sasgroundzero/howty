@@ -40,12 +40,12 @@ export const stoneAge = tabletop('stone-age', 'Stone Age', [2, 4], 4, '60–90 m
       OnP('board', 0.5, 0.981, discs('score', 1, 0.12, '$', 'Score marker', 'Counts the points you score during the game.', { h: 0.2 }), [0.32, 0]),
       OnP('board', 0.94, 0.5, discs('agri', 1, 0.12, '$', 'Food track marker', 'Each step up the food track feeds one of your figures for free every round.', { h: 0.1 }), [0, 0.32]),
     ]),
-    S('Ready to play', 'Choose a start player and give them the start player figure. It passes to the left after every round.', 'all', [
+    S('Ready to play', 'The youngest player takes the start player figure. It passes to the left after every round.', 'all', [
       OnMe('pboard', 0.88, 0.25, discs('first', 1, 0.24, '#f6f1e4', 'Start player figure', 'Whoever holds this places the first figure this round.', { label: '1', h: 0.16 })),
     ], n < 4 ? 'With fewer than 4 players some places are restricted: only two of the tool maker, hut and field are used each round, and the resource sites take fewer tribes. Check the rulebook for your player count.' : 'A round has three parts: everyone places figures, everyone carries out their actions, and everyone feeds their tribe.'),
   ],
   turn: [
-    T('Place figures', 'Starting with the start player, you take turns putting any number of your figures on one place. You send 2 to the forest.', 'board', [
+    T('Place figures', 'Starting with the start player, you take turns putting one or more of your figures on one place. You send 2 to the forest.', 'board', [
       mv('fig.0', at('board', slot(1)[0] - 0.025, slot(1)[1] + 0.14)),
       mv('fig.1', at('board', slot(1)[0] + 0.025, slot(1)[1] + 0.14)),
     ]),

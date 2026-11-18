@@ -49,7 +49,7 @@ export const lordsOfWaterdeep = tabletop('lords-of-waterdeep', 'Lords of Waterde
         mv('agent.0@1', at('city', slot(4)[0], slot(4)[1])),
         spawn(discs('g1', 1, 0.22, GOLD, 'Gold', 'Gold taken this turn.', { label: '4', h: 0.12 }), at('tavern@1', 0.5, 0.28), 'goldpile', undefined, 1.2),
       ]),
-      T('Take a new quest', 'Your second agent goes to Cliffwatch Inn. You take one of the face-up quests, and the gap is filled from the deck.', 'r', [
+      T('Take a new quest', 'Your second agent goes to Cliffwatch Inn. You take one of the face-up quests, and the gap is filled from the deck. Each of the inn’s three spaces adds a bonus: 2 gold, an intrigue card, or first clearing away the 4 quests and dealing new ones.', 'r', [
         mv('agent.1', at('city', slot(7)[0], slot(7)[1])),
         mv('inn.1', at('quests.1', 0.5, -0.3, 0.02), 1),
         draw('questdeck', by('inn.0', 1.04, 0), QUEST, undefined, 1.8),

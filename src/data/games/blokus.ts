@@ -25,7 +25,7 @@ function build(n: number) {
   const BOARD = b.s('Place the board', 'Put the 20 by 20 grid in the middle of the table where everyone can reach it.', WIDE, undefined, ['1 board'])
   const COLORS = b.s('Choose colors', `${who}: all four colors are always in play.`, WIDE, 'Each color has 21 pieces: one of every shape you can make from 1 to 5 squares.', ['4 sets of 21 pieces'])
   b.s('Check your 21 pieces', 'Lay your pieces out in front of you: 1 single square, 1 domino, 2 threes, 5 fours and 12 fives.', look(0, 7.6, 7), 'Together a color’s pieces cover 89 squares.')
-  b.s('Ready to play', n === 4 ? 'You are set up: choose who goes first, then play passes clockwise round the board.' : 'You are set up: play goes Blue, Yellow, Red, then Green, clockwise round the board.', WIDE, 'Fit as many of your squares onto the board as you can.')
+  b.s('Ready to play', n === 4 ? 'You are set up: choose who goes first, then play passes clockwise round the board.' : 'You are set up: play goes Blue, Yellow, Red, then Green, clockwise round the board.', WIDE, 'Fit as many of your squares onto the board as you can. When no one can play, the fewest squares left wins. For advanced scoring, lose 1 point per square left, or gain 15 for placing every piece (20 if the single square went last).')
 
   b.board('board', BOARD, size, size, 'b:blokus', info('Board', 'A grid of 400 squares. Each color starts from its own corner. There is 1.'), { edge: '#8d8d92' })
   const S = seats(4, 7.4, 7.4)

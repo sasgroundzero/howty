@@ -15,7 +15,7 @@ function build() {
   const SPLIT = b.s('Share out the discs', 'Split the 64 discs evenly so each player has 32, and decide who plays Black and who plays White.', OVER, 'Every disc is black on one side and white on the other.', ['64 discs'])
   const W = b.s('White’s two discs', 'Place two discs white side up on the middle squares d4 and e5, touching corner to corner.', MID, undefined, ['2 discs'])
   const B = b.s('Black’s two discs', 'Place two discs black side up on the other two middle squares, d5 and e4, to finish the square.', MID, undefined, ['2 discs'])
-  b.s('Ready to play', 'You are set up: Black moves first, and each player has 30 discs left to place.', OVER, 'Whoever has more discs showing their color when the board fills up wins.')
+  b.s('Ready to play', 'You are set up: Black moves first, and each player has 30 discs left to place.', OVER, 'If you cannot flip a disc you pass. If you run out of discs while you can still move, your opponent gives you one. Whoever has more discs showing their color when neither player can move wins.')
 
   b.board('board', BOARD, size, size, 'b:othello', info('Board', '64 squares. Columns are a to h from the left, rows are 1 to 8 from the far side. There is 1.'), { edge: '#1f2a22' })
   for (const side of [0, 1])

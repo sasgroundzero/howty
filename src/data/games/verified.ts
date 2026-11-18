@@ -57,5 +57,7 @@ export const VERIFIED: Record<string, Check> = {
   jaipur: { by: '', edition: 'Jaipur, Space Cowboys 2019 rules', date: '2026-11-17' },
   patchwork: { by: '', edition: 'Patchwork, Lookout 2014 rules', date: '2026-11-17' },
   'forbidden-island': { by: '', edition: 'Forbidden Island, Gamewright 2010 rules', date: '2026-11-17' },
+  agricola: { by: '', edition: 'Agricola, Z-Man Games English edition 2008', date: '2026-11-17' },
+  'stone-age': { by: '', edition: 'Stone Age, Z-Man Games 10th Anniversary edition 2018', date: '2026-11-17' },
   'lords-of-waterdeep': { by: '', edition: 'Lords of Waterdeep, Wizards of the Coast 2012 rules', date: '2026-11-17' },
 }

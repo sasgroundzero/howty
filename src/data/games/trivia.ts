@@ -10,15 +10,16 @@ function build(n: number) {
   const S = seats(n, 8.8, 8)
   const HUB = look(0, 0, 6)
   const BOARD = b.s('Place the board', 'Put the wheel-shaped board in the middle of the table.', OVER, 'Six spokes run from the hub in the center out to six large category headquarters spaces on the rim.', ['1 board'])
-  const BOXES = b.s('Set out the question cards', 'Put the question cards beside the board where every player can reach them.', look(-8, 0, 7), 'Each card has one question for each of the six colored categories, with the answers on the back.', ['400 question cards'])
+  const BOXES = b.s('Set out the question cards', 'Put the question cards beside the board where every player can reach them.', look(-8, 0, 10), 'Each card has one question for each of the six colored categories, with the answers on the back.', ['400 question cards'])
   const PIECES = b.s('Choose a playing piece', 'Each player takes an empty round playing piece and places it on the hub.', HUB, 'The piece has six slots, one for a wedge of each color.', [`${n} playing pieces`])
   const WEDGES = b.s('Sort the wedges', 'Keep the small scoring wedges in a pile by the board, sorted by color.', look(8, 0, 7), 'You earn a wedge by answering correctly on that color’s category headquarters space.', ['Wedges in 6 colors'])
   const DIE = b.s('Choose who starts', 'Choose a player to take the first turn. Play then passes to the left.', OVER, undefined, ['1 die'])
   b.s('Ready to play', 'You are set up: on your turn, roll the die and move that many spaces in any direction.', OVER, 'Collect one wedge of every color, then return to the hub for a final question.')
 
   b.board('board', BOARD, 11, 11, 'b:wheel', info('Game board', 'A circular track with six spokes. The six big spaces on the rim are where wedges are won. There is 1.'), { edge: '#20324a' })
-  for (const k of [0, 1])
-    b.deck(`cards-${k}`, BOXES, [-8, 0, -1.4 + k * 2.8], 120, { panel: '#20324a', border: '#e0b12f', ink: '#e0b12f', glyph: '?' }, info('Question cards', 'Draw from the front and return used cards to the bottom of the deck. The player to your left reads your question.'), { w: 1.1, d: 1.7, delay: k * 0.2 })
+  // the box's 400 cards, drawn as four short piles rather than two towers
+  for (let k = 0; k < 4; k++)
+    b.deck(`cards-${k}`, BOXES, [-8.7 + (k % 2) * 1.4, 0, -1.1 + Math.floor(k / 2) * 2.2], 40, { panel: '#20324a', border: '#e0b12f', ink: '#e0b12f', glyph: '?' }, info('Question cards', 'Draw from the front of a pile and put used cards at the back. The player to your left reads your question.'), { w: 1.1, d: 1.7, delay: k * 0.15 })
   const hub = (i: number): V3 => [Math.cos((i * Math.PI * 2) / n) * 0.36, BH, Math.sin((i * Math.PI * 2) / n) * 0.36]
   const pieces = S.map((s) => b.disc(`piece-${s.i}`, PIECES, n === 1 ? [0, BH, 0] : hub(s.i), 0.26, 0.2, COLORS[s.i], info(`${s.whose} playing piece`, 'Holds up to six wedges. It starts empty on the hub.'), { delay: s.i * 0.15 }))
   WEDGE_COLORS.forEach((color, i) => b.box(`wedges-${i}`, WEDGES, [7.4 + (i % 2) * 1.1, 0, -1.6 + Math.floor(i / 2) * 1.5], 0.8, 0.3, 0.8, color, info('Wedges', 'One pile per category color. Take a wedge when you answer correctly on the matching category headquarters space.'), { delay: i * 0.1 }))
