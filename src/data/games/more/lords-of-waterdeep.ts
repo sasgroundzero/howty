@@ -19,8 +19,8 @@ export const lordsOfWaterdeep = tabletop('lords-of-waterdeep', 'Lords of Waterde
         L(pile('goldpile', GOLD, 'Gold', 'Gold pays for buildings and some quests.', 'disc')),
       ]),
       S('Quests and intrigue cards', 'Shuffle the quest deck and turn 4 quests face up at Cliffwatch Inn. Shuffle the intrigue deck.', 'r', [
-        R(deck('questdeck', 50, f('#6b4a2e', '⚑'), 'Quest deck', '60 quest cards. Each lists the adventurers and gold it costs and the reward for completing it.'), cards('inn', 4, QUEST, 'Quests at Cliffwatch Inn', '4 face-up quests. An agent sent to the inn takes one, and it is replaced from the deck.')),
-        R(deck('intdeck', 40, f('#4a2e5a', '?'), 'Intrigue deck', '50 intrigue cards. They are played by sending an agent to Waterdeep Harbor.')),
+        R(deck('questdeck', 56 - 2 * n, f('#6b4a2e', '⚑'), 'Quest deck', '60 quest cards. Each lists the adventurers and gold it costs and the reward for completing it.'), cards('inn', 4, QUEST, 'Quests at Cliffwatch Inn', '4 face-up quests. An agent sent to the inn takes one, and it is replaced from the deck.')),
+        R(deck('intdeck', 50 - 2 * n, f('#4a2e5a', '?'), 'Intrigue deck', '50 intrigue cards. They are played by sending an agent to Waterdeep Harbor.')),
       ], 'These decks have printed spaces on the real board; they are shown beside it here.'),
       S('Buildings and the round track', 'Shuffle the building tiles and turn 3 face up in Builder’s Hall. Put 3 victory point tokens on each of the 8 spaces of the round track.', 'r', [
         R(deck('bstack', 21, ft('#c9b68a', 'BUILD', 'cost', '⌂'), 'Building stack', '24 building tiles. A bought building becomes a new action space, and its owner earns a bonus whenever someone else uses it.', { w: 1.1, d: 1.1, per: 0.03 }), tiles('hall', 3, 1.1, 1.1, ft('#e9dfc8', 'BUILD', 'cost', '⌂'), 'Buildings for sale', '3 buildings on offer in Builder’s Hall.')),
@@ -30,13 +30,13 @@ export const lordsOfWaterdeep = tabletop('lords-of-waterdeep', 'Lords of Waterde
         P(mat('tavern', 3.6, 2.2, '$', 'Tavern', 'Player mat', 'Your agent pool, the adventurers and gold you have gathered (your Tavern) and your completed quests.')),
         On('tavern', 0.35, 0.72, pawns('agent', agents, '$', 'Your agents', `${agents} agents each in a ${n}-player game (4 with two players, 3 with three, 2 with four or five).`, { scale: 0.5 })),
         OnP('city', slot(9)[0], slot(9)[1] + 0.12, pawns('extra', 1, '$', 'Extra agent', 'Waits on the round track and is added to your pool at the start of round 5.', { scale: 0.5 }), [0.42, 0]),
-        OnP('city', 0.5, 0.981, discs('score', 1, 0.12, '$', 'Score marker', 'Moves round the score track at the edge of the board.', { h: 0.2 }), [0.32, 0]),
+        OnP('city', 0.5, 0.981, discs('score', 1, 0.12, '$', 'Score marker', 'Starts on 0 and moves round the score track at the edge of the board.', { h: 0.2 }), [0.32, 0]),
       ]),
       S('Deal lords, quests and intrigue', 'Deal each player 1 Lord of Waterdeep card face down, 2 quests face up and 2 intrigue cards face down.', 'you', [
         P(cards('lord', 1, ft('#f3e7c5', 'LORD', 'secret'), 'Lord of Waterdeep', 'Your secret identity. It gives bonus points at the end, usually for certain types of completed quest.', { down: true, back: f('#2f4a6b', '♛') })),
-        P(cards('quests', 2, QUEST, 'Your quests', '2 starting quests, kept face up. Completing quests is the main way to score.'), cards('intr', 2, ft('#eadcf0', 'INTRIGUE', ''), 'Your intrigue cards', '2 starting intrigue cards, kept hidden.', { down: true, back: f('#4a2e5a', '?') }), discs('gold', 1, 0.3, GOLD, 'Your gold', 'The first player starts with 4 gold, the next player clockwise with 5, the next with 6, and so on.', { label: '◆', h: 0.16 })),
+        P(cards('quests', 2, QUEST, 'Your quests', '2 starting quests, kept face up. Completing quests is the main way to score.'), cards('intr', 2, ft('#eadcf0', 'INTRIGUE', ''), 'Your intrigue cards', '2 starting intrigue cards, kept hidden.', { down: true, back: f('#4a2e5a', '?') }), discs('gold', 1, 0.3, GOLD, 'Your gold', 'The first player starts with 4 gold, the player on their left with 5, the next with 6, and so on.', { label: '◆', h: 0.16 })),
       ]),
-      S('Ready to play', 'Pick a first player and give them the first player marker. They take 4 gold, and each player after them takes 1 more than the one before.', 'all', [
+      S('Ready to play', 'The rules have the player who most recently visited another city go first; give them the first player marker. They take 4 gold, and each player after them takes 1 more than the one before.', 'all', [
         OnMe('tavern', 0.88, 0.25, discs('first', 1, 0.2, '#f6f1e4', 'First player marker', 'Its holder goes first each round. Castle Waterdeep lets another player take it.', { label: '1', h: 0.16 })),
       ], 'On your turn you assign one agent to an empty action space and take its effect, and then you may complete one quest. A round ends when all agents are placed; the game lasts 8 rounds.'),
     ],

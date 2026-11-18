@@ -2,6 +2,7 @@
 import { useMemo, useState } from 'react'
 import type { GameInfo } from '../engine/types'
 import { CARD_IDS } from '../data/games/catalog'
+import { VERIFIED } from '../data/games/verified'
 import { ALIASES, TAGS, type Tag } from '../data/games/tags'
 import { DISCLAIMER, FEATURED, SITE, TRY } from '../site'
 import { ArtFind, ArtFollow, ArtWatch } from './art'
@@ -364,8 +365,8 @@ export function Home({
           or{' '}
           <a href={`${SITE.repo}/issues?q=is%3Aissue+is%3Aopen+label%3Agame-request+sort%3Areactions-%2B1-desc`} target="_blank" rel="noreferrer" className="text-ink underline underline-offset-4">
             vote on what is next
-          </a>
-          . The most-wanted games are built first.
+          </a>{' '}
+          on GitHub. The most-wanted games are built first.
         </p>
       )}
 
@@ -375,7 +376,10 @@ export function Home({
             <Logo size={20} />
             <span className="font-display text-body font-bold text-ink">howty</span>
           </div>
-          <p className="mt-3 max-w-[52ch] text-ui text-stone-600">Board-game setup you can turn around and follow with the box open. Free and open source, with no account and no tracking: your shelf and streak stay in this browser.</p>
+          <p className="mt-3 max-w-[52ch] text-ui text-stone-600">Board-game setup you can turn around and follow with the box open. Free and open source, with no account, no ads and no cookies; the only measurement is anonymous page counts. Your shelf and streak stay in this browser.</p>
+          <p className="mt-2 max-w-[52ch] text-ui text-stone-600">
+            {Object.keys(VERIFIED).length} of the most popular guides have been checked step by step against the published rules; each page says whether it has.
+          </p>
           {SITE.repo && (
             <p className="mt-3 text-ui">
               <a href={SITE.repo} target="_blank" rel="noreferrer" className="text-stone-700 underline underline-offset-4 hover:text-ink">

@@ -54,7 +54,7 @@ function build() {
   b.t('Last stone in your store', 'The fourth stone lands in your own store. That scores a point and earns you another turn.', cam(3.5, 6, 6, 3.6, 0, 0.3), 6)
   sow(5, b.t('Go again', 'You take the 5 stones from your last pit: one goes into your store and the rest carry on round into your opponent’s pits.', ALL, 8))
   b.t('Skip their store', 'You sow into your own store as you pass it, but you always skip your opponent’s store.', ALL)
-  b.t('Capture across the board', 'If your last stone lands in an empty pit on your side, you capture it and everything in the pit directly opposite.', ALL, 7)
+  b.t('Capture across the board', 'If your last stone lands in an empty pit on your side, you capture it and everything in the pit directly opposite, and put them all in your store.', ALL, 7)
   b.t('Count your store', 'The game ends when one side’s six pits are empty; the other player keeps what is left on their side, and the bigger store wins.', ALL, 7)
   return b.done({ w: 24, d: 15 })
 }

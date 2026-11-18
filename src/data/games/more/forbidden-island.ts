@@ -16,7 +16,7 @@ const WET = ['r0.0', 'r1.0', 'r2.5', 'r3.0', 'r4.1', 'r5.1']
 export const forbiddenIsland = tabletop('forbidden-island', 'Forbidden Island', [2, 4], 4, '30 min', 'Easy', 'Rescue four treasures before the island sinks.', ['#5d8fb0', '#d9c79a', '#c0392b'], (n) => ({
   setup: [
     S('Build the island', 'Shuffle the 24 island tiles and lay them face up in a cross: rows of 2, 4, 6, 6, 4 and 2 tiles, with a small gap between them.', 'c', ROWS.map((k, r) =>
-      C(tiles(`r${r}`, k, 1.2, 1.2, r === 3 ? [LAND, LAND, LAND, ft('#e9dfc8', '', '', '✦'), LAND, LAND] : LAND, 'Island tiles', '24 tiles. Eight show a treasure symbol, six are starting gates for the pawns, and one is Fools’ Landing, the helicopter pad you must all escape from.')),
+      C(tiles(`r${r}`, k, 1.2, 1.2, r === 3 ? [LAND, LAND, LAND, ft('#e9dfc8', '', '', '✦'), LAND, LAND] : LAND, 'Island tiles', '24 tiles. Eight show a treasure symbol. Six show a starting pawn: five gates plus Fools’ Landing, the helicopter pad you must all escape from.')),
     ), 'Where each named tile lands is random, so every game has a different island.'),
     S('Treasures and decks', 'Stand the 4 treasure figures beside the island. Shuffle the flood deck and the treasure deck separately and put them on opposite sides.', 'all', [
       L(pawns('loot', 4, TRE, 'Treasures', 'The four treasures to collect. Hand in 4 matching treasure cards on one of that treasure’s two tiles to take it.', { scale: 0.6, shape: 'boss', cols: 2 })),
@@ -25,7 +25,7 @@ export const forbiddenIsland = tabletop('forbidden-island', 'Forbidden Island', 
     S('The island starts to sink', 'Draw the top 6 flood cards one at a time and flip each matching island tile to its flooded blue side. Put the cards on the flood discard pile.', 'c', WET.map((t, k) => on(t, 0.5, 0.5, flooded(`fl${k}`)))),
     S('Adventurers', 'Shuffle the 6 adventurer cards and deal one to each player. Take the pawn of that color and stand it on the island tile that shows the matching pawn.', 'c', [
       P(cards('role', 1, ft('#efe2bd', 'ROLE', 'special power', '★'), 'Adventurer card', 'One of 6 roles, such as Pilot or Engineer, each with its own special ability.')),
-      ...Array.from({ length: n }, (_, i) => on(HOME[i], 0.5, 0.5, pawns(`pawn${i}`, 1, COLORS[i], 'Adventurer pawn', 'Starts on the gate tile of its own color.', { scale: 0.55 }))),
+      ...Array.from({ length: n }, (_, i) => on(HOME[i], 0.5, 0.5, pawns(`pawn${i}`, 1, COLORS[i], 'Adventurer pawn', 'Starts on the tile that shows its color: a gate, or Fools’ Landing for the Pilot. Starting on a flooded tile is fine.', { scale: 0.55 }))),
     ]),
     S('Deal treasure cards', 'Deal 2 treasure cards face up to each player. If anyone gets a Waters Rise! card, give them a replacement and shuffle it back into the deck.', 'you', [
       P(cards('hand', 2, [TCARD[0], TCARD[2]], 'Treasure cards', 'Your hand, kept face up so the team can plan. The limit is 5 cards.')),
@@ -43,7 +43,7 @@ export const forbiddenIsland = tabletop('forbidden-island', 'Forbidden Island', 
       draw('tdeck', at('hand.1', 1.15, 0.5, 0.02), TCARD[0]),
       draw('tdeck', at('hand.1', 1.8, 0.5, 0.04), TCARD[1]),
     ]),
-    T('Draw flood cards', 'Finally draw flood cards equal to the water level, here 2, and flood the tiles they name.', 'c', [
+    T('Draw flood cards', 'Finally draw flood cards equal to the water level, here 2, and flood the tiles they name. A tile that is already flooded sinks instead.', 'c', [
       draw('flood', at('wet', 0.5, 0.5, 0.02), FLOODCARD),
       draw('flood', at('wet', 0.5, 0.5, 0.04), FLOODCARD),
       spawn(flooded('new1'), at('r4.2', 0.5, 0.5)),

@@ -37,7 +37,7 @@ export const rummy = tabletop('rummy', 'Rummy', [2, 6], 4, '20–40 min', 'Easy'
         set('hand.4', { faceUp: false, back: BACK }), mv('hand.4', at('hand.0@1', 1.15, 0.5, 0.02)),
         show('hand.1@1', '2♣'), mv('hand.1@1', at('disc', 0.5, 0.5, 0.01), 1.4),
       ], 8),
-      T('Going out', 'The deal ends the moment a player gets rid of their last card, whether by melding it, adding it to a meld or discarding it. If the stock runs out first, turn the discard pile over to make a new stock.', 'all'),
+      T('Going out', 'The deal ends the moment a player gets rid of their last card, whether by melding it, adding it to a meld or discarding it. If the stock runs out first, turn the discard pile over, without shuffling, to make a new stock.', 'all'),
       T('How it ends', 'The player who went out scores the value of all cards left in the other hands: 10 for each king, queen and jack, 1 for an ace and face value for the rest. Deal again until someone reaches the agreed target and wins.', 'all'),
     ],
   }

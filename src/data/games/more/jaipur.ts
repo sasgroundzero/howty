@@ -22,10 +22,10 @@ export const jaipur = tabletop('jaipur', 'Jaipur', [2, 2], 2, '30 min', 'Easy', 
       R(discs('bonus', 3, 0.3, '#e9e4d8', 'Bonus tokens', 'Three piles, for sales of 3, 4, and 5 or more cards. Bigger sales earn bigger hidden bonuses.', { h: 0.25, label: ['3', '4', '5'], ink: '#2b241c', gap: 0.3 })),
       R(discs('camel', 1, 0.3, '#f0dfb8', 'Camel token', 'Worth 5 rupees to whoever has the bigger herd at the end of the round.', { label: '▲', ink: '#2b241c' }), discs('seals', 3, 0.26, '#d8b24a', 'Seals of Excellence', 'The richer trader wins a seal each round. Two seals win the game.', { label: '★', ink: '#2b241c' })),
     ]),
-    S('Room for your earnings', 'Leave space in front of you for the tokens you earn; you may keep them face down.', 'you', [
+    S('Room for your earnings', 'Leave space in front of you to stack the tokens you earn.', 'you', [
       P(zone('earned', 3.4, 1, 'Your tokens', 'Tokens earned from sales. Their rupee values are added up at the end of the round.')),
     ]),
-    S('Ready to play', 'Decide who goes first; the players alternate. On your turn you either take cards or sell cards, never both.', 'all', [], 'Taking means one good, or swapping several cards, or all the camels. Selling means discarding any number of one type of good.'),
+    S('Ready to play', 'Decide who goes first; the players alternate. On your turn you either take cards or sell cards, never both.', 'all', [], 'Taking means one good, or swapping several cards, or all the camels. Selling means discarding any number of one type of good, but at least 2 for diamonds, gold or silver.'),
   ],
   turn: [
     T('Take one good', 'You take a single goods card from the market into your hand. The gap is refilled from the deck.', 'c', [
@@ -41,7 +41,7 @@ export const jaipur = tabletop('jaipur', 'Jaipur', [2, 2], 2, '30 min', 'Easy', 
       spawn(discs('got', 3, 0.3, GOOD[5], 'Leather tokens', 'Tokens earned by selling leather.', { h: 0.08 }), at('earned', 0.35, 0.5), 'tok.5', undefined, 1.2),
       spawn(discs('extra', 1, 0.3, '#e9e4d8', 'Bonus token', 'A bonus for selling 3 cards at once.', { h: 0.08, label: '3', ink: '#2b241c' }), at('earned', 0.85, 0.5), 'bonus.0', undefined, 1.8),
     ]),
-    T('Round end and the finish', 'A round ends when 3 stacks of goods tokens are empty or the deck runs out. The bigger herd takes the camel token, and the richer trader takes a Seal of Excellence. The first to win 2 seals wins the game.', 'all', [
+    T('Round end and the finish', 'A round ends at once when 3 stacks of goods tokens are empty, or when the deck cannot refill the market to 5. The bigger herd takes the camel token, and the richer trader takes a Seal of Excellence. The loser of a round starts the next one, and the first to win 2 seals wins the game.', 'all', [
       mv('seals.0', by('herd', 1.1, 0)),
     ]),
   ],

@@ -27,7 +27,7 @@ export const patchwork = tabletop('patchwork', 'Patchwork', [2, 2], 2, '15–30 
     S('Bonus tile', 'Leave the special 7 by 7 tile beside the board.', 'r', [
       R(tiles('bonus', 1, 1.4, 1.4, '#e0b12f', 'Special tile', 'Worth 7 points to the first player who completely fills a 7 by 7 square on their quilt board.'), discs('bank', 1, 0.3, '#2e6fb7', 'Button supply', 'The rest of the buttons, used as the bank.', { h: 0.4 })),
     ]),
-    S('Ready to play', 'The player who last used a needle goes first. After that, the player whose time token is further behind always takes the next turn.', 'all', [], 'On your turn either buy and place one of the three patches in front of the pawn, or advance and collect buttons.'),
+    S('Ready to play', 'The player who last used a needle goes first. After that, the player whose time token is further behind always takes the next turn. If both share a space, the token on top goes first.', 'all', [], 'On your turn either buy and place one of the three patches in front of the pawn, or advance and collect buttons.'),
   ],
   turn: [
     T('Buy a patch', 'You choose one of the three patches clockwise of the pawn, move the pawn to its place, pay its button cost and fit it onto your quilt board. Say this one costs 2 buttons.', 'c', [
@@ -38,7 +38,7 @@ export const patchwork = tabletop('patchwork', 'Patchwork', [2, 2], 2, '15–30 
       mv('tt@1', at('time', 0.5, 0.929)),
       spawn(discs('gain', 3, 0.17, '#2e6fb7', 'Buttons gained', 'One button for each space moved when advancing.', { h: 0.06 }), by('buttons@1', 0, 0.6), 'bank'),
     ]),
-    T('Income and leather patches', 'Whenever your token passes a button symbol on the track, you collect buttons equal to the buttons shown on your quilt. The first token to pass a leather patch claims it.', 'time'),
+    T('Income and leather patches', 'Whenever your token reaches or passes a button symbol on the track, you collect buttons equal to the buttons shown on your quilt. The first token to reach or pass a leather patch claims it.', 'time'),
     T('End of the game', 'The game ends when both tokens reach the last space. Count your buttons, subtract 2 for each empty square on your quilt, and add 7 if you hold the special tile. The higher score wins.', 'all'),
   ],
 }))

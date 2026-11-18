@@ -63,6 +63,6 @@ export const stoneAge = tabletop('stone-age', 'Stone Age', [2, 4], 4, '60–90 m
       ...[2, 3, 4].map((k) => mv(`fig.${k}`, at('pboard', figU(k), 0.72), 1 + k * 0.2)),
       set('food', { label: '11' }),
     ], 8),
-    T('End of the game', 'The game ends when the civilization cards cannot be refilled to 4 at the start of a round, or when a building stack is empty at the end of one. Add the points from your civilization cards to your score, and the highest total wins.', 'all'),
+    T('End of the game', 'The game ends when the civilization cards cannot be refilled to 4 at the start of a round, or when a building stack is empty at the end of one. Add the points from your civilization cards and 1 point for each resource you have left. The highest total wins.', 'all'),
   ],
 }))

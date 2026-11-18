@@ -38,6 +38,6 @@ export const solitaire = tabletop('solitaire', 'Solitaire', [1, 1], 1, '10–15 
     ], 8),
     T('Play from the waste pile', 'The red 8 fits on the black 9. Playing it frees the card beneath it in the waste pile.', 'tab', [mv('w2', at('up4', 0.5, 0.8, 0.02))]),
     T('Runs, spaces and the stock', 'You may move a whole face-up run from one column to another as a unit. Only a king, or a run headed by a king, may fill an empty column. When the stock runs out, turn the waste pile over without shuffling and go through it again.', 'tab', [], 9),
-    T('How it ends', 'You win when all 52 cards are on the foundations, each suit running from ace to king. If no move is left, the game is lost. Most people allow any number of passes through the stock; some allow only three.', 'all', [], 8),
+    T('How it ends', 'You win when all 52 cards are on the foundations, each suit running from ace to king. If no move is left, the game is lost. Most people allow any number of passes through the stock; some allow only three, or just one when turning a single card at a time.', 'all', [], 8),
   ],
 }))

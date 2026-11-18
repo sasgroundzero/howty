@@ -19,9 +19,15 @@ self.addEventListener('fetch', (e) => {
   const req = e.request
   if (req.method !== 'GET') return
   const url = new URL(req.url)
-  // pages: network first, so guides stay current; offline, the saved app opens and routes itself
+  // pages: network first, so guides stay current; offline, or on a signal too weak to answer within
+  // a few seconds (a basement, a cabin), the saved app opens and routes itself
   if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).catch(() => caches.match('/', { ignoreSearch: true, ignoreVary: true })))
+    const saved = () => caches.match('/', { ignoreSearch: true, ignoreVary: true })
+    const net = fetch(req)
+    const slow = new Promise((ok) => setTimeout(ok, 4000)).then(saved)
+    e.respondWith(
+      Promise.race([net.catch(saved), slow.then((hit) => hit || net)]).then((res) => res || net),
+    )
     return
   }
   // app files have content hashes in their names, and Google Fonts never change: cache first

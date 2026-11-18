@@ -19,7 +19,7 @@ export const agricola = tabletop('agricola', 'Agricola', [1, 5], 3, '30 min per 
     setup: [
       S('Lay out the game boards', 'Put the game boards side by side in the middle of the table, and the major improvements board next to them.', 'c', [
         C(board('actions', 12, 7, 'g:slots:6x3:#d9c9a0:#7a8f5a:Action spaces', 'Game boards', 'Printed action spaces plus empty spaces for the 14 round cards. Each space can hold only one family member per round.')),
-      ]),
+      ], 'This guide follows the original edition for 1 to 5 players. The 2016 revised edition plays 1 to 4 and uses board extensions instead of green action cards.'),
       S('Major improvements', 'Lay the 10 major improvement cards face up on their board.', 'majors', [
         R(board('majors', 4.6, 3.2, 'g:grid:5x2:#e8d9b8:#b0563a:Major improvements', 'Major improvements board', 'Holds the 10 major improvements, such as fireplaces, ovens and the well. Anyone can buy them.')),
         ...Array.from({ length: 10 }, (_, i) => On('majors', ...MAJ(i % 5, Math.floor(i / 5)), cards(`maj${i}`, 1, ft('#f6d9c9', '', '', '⌂'), 'Major improvement', 'One of 10 shared improvements. Pay its cost with an improvement action to take it.', { w: 0.7, d: 1 }))),
@@ -46,7 +46,7 @@ export const agricola = tabletop('agricola', 'Agricola', [1, 5], 3, '30 min per 
           ...(n > 1 ? [discs('food', 1, 0.22, '#e0b12f', 'Your food', 'The starting player gets 2 food and every other player 3.', { label: 'F', h: 0.16, ink: '#2b241c' })] : []),
         ),
       ], n === 1 ? 'In the solo game you start with no food: check the rulebook for the other solo changes.' : 'The starting player takes 2 food and everyone else 3.'),
-      S('Deal the hands', 'Deal each player 7 occupation cards and 7 minor improvement cards.', 'you', [
+      S('Deal the hands', 'Take out the occupation cards marked for more players than you have. Shuffle the rest and deal each player 7 occupations and 7 minor improvements.', 'you', [
         P(
           deck('occ', 7, ft('#f3e7c5', 'OCC', 'occupation', '♛'), 'Occupations', 'Your 7 occupation cards, kept hidden. Playing one needs an occupation action.'),
           deck('minor', 7, ft('#f6d9c9', 'MINOR', 'improvement', '⌂'), 'Minor improvements', 'Your 7 minor improvement cards, kept hidden.'),

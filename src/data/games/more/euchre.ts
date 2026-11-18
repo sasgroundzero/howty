@@ -24,7 +24,7 @@ export const euchre = tabletop('euchre', 'Euchre', [4, 4], 4, '20–30 min', 'Ea
     ]),
     S('Learn the trump order', 'In the trump suit the jack is highest (the right bower), then the other jack of the same color (the left bower), then A, K, Q, 10, 9. Other suits rank A, K, Q, J, 10, 9.', 'hand', [], 'The left bower counts as a trump in every way, not as a card of the suit printed on it.'),
     S('Choose trumps', 'Starting on the dealer\'s left, each player in turn may pass or accept the turned-up suit as trumps. If someone accepts, the dealer takes that card into hand and discards one face down.', 'r', [], 'If all four pass, the card is turned down and each player in turn may name a different suit or pass. If everyone passes again the next player deals, though many groups make the dealer choose.'),
-    S('Ready to play', 'The side that chose trumps are the makers and must win at least 3 of the 5 tricks. The player on the dealer\'s left leads first, and you must follow suit if you can.', 'all', [], 'The player who chose trumps may announce "alone": the partner lays their cards down and sits out the hand.'),
+    S('Ready to play', 'The side that chose trumps are the makers and must win at least 3 of the 5 tricks. The player on the dealer\'s left leads first, and you must follow suit if you can.', 'all', [], 'The player who chose trumps may announce "alone": the partner lays their cards down and sits out the hand. The player on the lone player\'s left then leads first.'),
   ],
   turn: [
     T('You order it up', 'The player on your right dealt, so you speak first. With both red jacks and the A♥ you accept hearts. The dealer picks up the 10♥ and discards a card face down.', 'r', [
@@ -38,6 +38,6 @@ export const euchre = tabletop('euchre', 'Euchre', [4, 4], 4, '20–30 min', 'Ea
       flip('hand.0', false), mv('hand.0', at('won', 0.5, 0.5)), flip('hand.0@1', false), mv('hand.0@1', at('won', 0.5, 0.5, 0.02)), flip('hand.0@2', false), mv('hand.0@2', at('won', 0.5, 0.5, 0.04)), flip('up', false), mv('up', at('won', 0.5, 0.5, 0.06)),
     ]),
     T('Score the hand', 'Makers who win 3 or 4 tricks score 1 point, and all 5 tricks score 2. If the makers win fewer than 3 they are euchred and the other side scores 2.', 'all', [], 8),
-    T('How it ends', 'A player who goes alone and wins all 5 tricks scores 4. Deal again, passing the deal to the left, until one team reaches 10 points and wins; some groups play to a different total.', 'all'),
+    T('How it ends', 'A player who goes alone and wins all 5 tricks scores 4; a lone hand that takes 3 or 4 scores 1, and one that is euchred gives the other side 2. Deal again, passing the deal to the left, until one team reaches 10 points and wins; some groups play to a different total.', 'all'),
   ],
 }))

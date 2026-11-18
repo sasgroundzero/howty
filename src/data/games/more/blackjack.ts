@@ -35,14 +35,14 @@ export const blackjack = tabletop('blackjack', 'Blackjack', [1, 7], 3, '15–60 
       T('Hit or stand', 'You have 12 and the dealer shows a ten, so you hit. The dealer gives you a 7 face up for a total of 19, and you stand.', 'you', [
         draw('deck', at('cards.1', 1.15, 0.5, 0.02), pc('7♠'), 'hit'),
       ], 8),
-      T('Double down and split', 'On your first two cards you may instead double down: add a second bet equal to the first, take exactly one more card, and stop. If your two cards are a pair you may split them into two hands, putting a matching bet on the second.', 'you', [], 9),
+      T('Double down and split', 'On your first two cards you may instead double down: add a second bet equal to the first, take exactly one more card, and stop. If your two cards are a pair you may split them into two hands, putting a matching bet on the second. Split aces usually get just one card each, and a 21 made on a split hand counts as 21, not blackjack.', 'you', [], 9),
       T('The dealer plays', `${others ? 'The other players stand on 18. ' : ''}Now the dealer turns the hole card over: 16. The dealer has no choice and must draw on 16 or less and stand on 17 or more. A 2 makes 18, so the dealer stops.`, 'dealer', [
         flip('holeD'), draw('deck', at('dealer', 0.64, 0.5), pc('2♣'), 'dealerHit', 1.2),
       ], 9),
       T('Settle the bets', `Your 19 beats the dealer's 18, so the bank pays you the same amount as your bet. ${others ? 'The players with 18 tie with the dealer: a tie is a push, and they simply keep their bets. ' : ''}A lower total than the dealer's loses the bet to the bank.`, 'bet', [
         spawn(chip('win', 'Winnings', 'A winning bet is paid at even money: one chip from the bank for each chip you bet.'), at('bet', 0.7, 0.5), 'bank.1'),
       ], 9),
-      T('Blackjack pays 3 to 2', 'A blackjack beats any other 21 and is paid at 3 to 2: three chips for every two you bet. If the dealer also has blackjack it is a push. If the dealer goes bust, every player who has not gone bust wins.', 'all', [], 9),
+      T('Blackjack pays 3 to 2', 'A blackjack beats any other 21 and is paid at 3 to 2: three chips for every two you bet. If the dealer also has blackjack it is a push. Some casinos pay only 6 to 5, which is worse for the player. If the dealer goes bust, every player who has not gone bust wins.', 'all', [], 9),
       T('How it ends', 'Gather the cards, place new bets and deal again. There is no fixed end: play for as long as you agreed, and whoever has gained the most chips has done best.', 'all'),
     ],
   }

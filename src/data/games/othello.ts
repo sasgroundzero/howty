@@ -6,7 +6,9 @@ const BLACK = '#22201f'
 const WHITE = '#f4f1e8'
 function build() {
   const b = new Kit()
-  const g = cells(8, 8, SQ8.cell)
+  const grid = cells(8, 8, SQ8.cell)
+  /** Row 1 is the far side, as in the published diagrams. */
+  const g = (c: number, r: number) => grid(c, 7 - r)
   const size = sqSize(SQ8.n, SQ8.cell, SQ8.margin)
   const MID = look(0, 0, 7)
   const BOARD = b.s('Place the board', 'Set the green 8 by 8 board between the two players.', OVER, undefined, ['1 board'])
@@ -15,7 +17,7 @@ function build() {
   const B = b.s('Black’s two discs', 'Place two discs black side up on the other two middle squares, d5 and e4, to finish the square.', MID, undefined, ['2 discs'])
   b.s('Ready to play', 'You are set up: Black moves first, and each player has 30 discs left to place.', OVER, 'Whoever has more discs showing their color when the board fills up wins.')
 
-  b.board('board', BOARD, size, size, 'b:othello', info('Board', '64 squares. Columns are a to h from the left, rows are 1 to 8 from the near side. There is 1.'), { edge: '#1f2a22' })
+  b.board('board', BOARD, size, size, 'b:othello', info('Board', '64 squares. Columns are a to h from the left, rows are 1 to 8 from the far side. There is 1.'), { edge: '#1f2a22' })
   for (const side of [0, 1])
     for (let k = 0; k < 5; k++)
       b.disc(`supply-${side}-${k}`, SPLIT, [(side ? -1 : 1) * 6.4, 0, (side ? -1 : 1) * (3.2 - k * 1.05)], 0.46, 0.9, side ? WHITE : BLACK,
