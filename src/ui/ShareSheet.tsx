@@ -6,6 +6,7 @@ import qrcode from 'qrcode-generator'
 import { useMemo, useState } from 'react'
 import { Icon } from './icons'
 import { Button } from './kit'
+import { canRecord } from './Recorder'
 import { canShareNatively, copyText, shareLink } from './share'
 
 function QR({ text }: { text: string }) {
@@ -26,7 +27,7 @@ function QR({ text }: { text: string }) {
   )
 }
 
-export function ShareSheet({ url, title, onClose }: { url: string; title: string; onClose: () => void }) {
+export function ShareSheet({ url, title, onVideo, onClose }: { url: string; title: string; /** records the setup as a vertical video */ onVideo?: () => void; onClose: () => void }) {
   const [copied, setCopied] = useState(false)
   const done = (r: string) => {
     if (r !== 'copied') return
@@ -61,6 +62,14 @@ export function ShareSheet({ url, title, onClose }: { url: string; title: string
           <Button kind={canShareNatively() ? 'secondary' : 'primary'} icon={copied ? 'check' : 'link'} onClick={() => void copyText(url).then(done)}>
             {copied ? 'Link copied' : 'Copy link'}
           </Button>
+          {onVideo && canRecord() && (
+            <>
+              <Button icon="play" onClick={onVideo}>
+                Save as video
+              </Button>
+              <p className="text-center text-meta text-stone-500">A short vertical clip of the setup, made on this device. Good for a group chat, TikTok or Reels.</p>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@ import { canListen, hush, listen, primeSpeech, speak, voice } from './engine/voi
 import { CATALOG } from './data/games/catalog'
 import { loadGame, loaded } from './data/games/load'
 import type { GameDef, GameInfo } from './engine/types'
+import { Recorder } from './ui/Recorder'
 import { ShareSheet } from './ui/ShareSheet'
 import { CustomGameModal } from './custom/CustomGameModal'
 import { SITE } from './site'
@@ -102,6 +103,7 @@ export default function App() {
   const [adding, setAdding] = useState(false)
   const [sharing, setSharing] = useState(false)
   const [teaching, setTeaching] = useState(false)
+  const [recording, setRecording] = useState(false)
 
   const step = Math.min(nav.step, total - 1)
   const s = game.steps[step]
@@ -180,6 +182,18 @@ export default function App() {
     setView('play')
     simulate()
   }
+  /** Save as video: the setup plays through once in a portrait frame while the browser records it. */
+  const record = () => {
+    hoverStore.clear()
+    hush()
+    voice.on = false
+    setNarrate(false)
+    setTeaching(false)
+    setPlaying(false)
+    setSharing(false)
+    setView('play')
+    setRecording(true)
+  }
   const exitSim = () => {
     setPlaying(false)
     setNav({ step: setupCount - 1, dir: -1, jump: true })
@@ -218,6 +232,10 @@ export default function App() {
     if (fresh) update((m) => ({ ...m, steps: m.steps + 1, done: step === setupCount - 1 ? { ...m.done, [gameId]: (m.done[gameId] ?? 0) + 1 } : m.done }))
   }, [started, inSim, gameId, step, setupCount])
 
+  useEffect(() => {
+    if (!started) setRecording(false)
+  }, [started])
+
   /* Narration */
   useEffect(() => {
     if (started && narrate) say()
@@ -241,7 +259,7 @@ export default function App() {
     const onKey = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') return
-      if (!started) return
+      if (!started || document.querySelector('[data-recording]')) return
       if (e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault()
         if (stepRef.current !== setupRef.current - 1) command.current('next')
@@ -368,7 +386,7 @@ export default function App() {
         host,
       )}
       {started ? (
-        <div ref={setSlot} className="absolute inset-0" />
+        !recording && <div ref={setSlot} className="absolute inset-0" />
       ) : (
         <div ref={page} className="absolute inset-0 select-text overflow-y-auto overflow-x-hidden">
           <TopBar onHome={goHome} onDaily={openDaily} onAdd={() => setAdding(true)} />
@@ -413,7 +431,19 @@ export default function App() {
         </div>
       )}
       {adding && <CustomGameModal onClose={() => setAdding(false)} onCreate={addCustom} />}
-      {sharing && <ShareSheet url={window.location.href} title={def.meta.title} onClose={() => setSharing(false)} />}
+      {sharing && <ShareSheet url={window.location.href} title={def.meta.title} onVideo={record} onClose={() => setSharing(false)} />}
+      {recording && started && (
+        <Recorder
+          host={host}
+          slot={setSlot}
+          title={def.meta.title}
+          link={def.custom ? window.location.host : `${window.location.host}/g/${gameId}`}
+          steps={game.steps.slice(0, setupCount)}
+          step={step}
+          onStep={(i) => (i === 0 ? setNav({ step: 0, dir: -1, jump: true }) : go(i))}
+          onClose={() => setRecording(false)}
+        />
+      )}
 
       {started && (
         <>
