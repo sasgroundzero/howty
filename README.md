@@ -17,6 +17,8 @@ piece on a 3D table one step at a time, then plays a short first turn. 176 games
   follow the same guide on their own phone.
 - **Save it as a video.** Share has a "Save as video" button that records the setup as a short vertical
   clip with the steps as captions. It is made in your browser, so nothing is uploaded.
+- **Embed a guide.** Share also gives a line of HTML that puts a game's interactive guide inside a blog
+  post, forum thread or campaign page (`/embed/azul`).
 - **Works offline.** After one visit every guide opens without a connection, and phones can add Howty to the
   home screen like an app. Handy in basements and cabins.
 - **Print a checklist.** Every game has a one-page setup checklist, on screen or on paper.

@@ -17,7 +17,7 @@ import { CATALOG } from './data/games/catalog'
 import { loadGame, loaded } from './data/games/load'
 import type { GameDef, GameInfo } from './engine/types'
 import { Recorder } from './ui/Recorder'
-import { ShareSheet } from './ui/ShareSheet'
+import { ShareSheet, embedCode } from './ui/ShareSheet'
 import { CustomGameModal } from './custom/CustomGameModal'
 import { SITE } from './site'
 import { Cover, PlayerPicker } from './ui/Cover'
@@ -431,7 +431,7 @@ export default function App() {
         </div>
       )}
       {adding && <CustomGameModal onClose={() => setAdding(false)} onCreate={addCustom} />}
-      {sharing && <ShareSheet url={window.location.href} title={def.meta.title} onVideo={record} onClose={() => setSharing(false)} />}
+      {sharing && <ShareSheet url={window.location.href} title={def.meta.title} embed={def.custom ? undefined : embedCode(gameId, def.meta.title, players !== def.meta.defaultPlayers ? players : undefined)} onVideo={record} onClose={() => setSharing(false)} />}
       {recording && started && (
         <Recorder
           host={host}

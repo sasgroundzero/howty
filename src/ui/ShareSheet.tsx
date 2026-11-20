@@ -27,8 +27,13 @@ function QR({ text }: { text: string }) {
   )
 }
 
-export function ShareSheet({ url, title, onVideo, onClose }: { url: string; title: string; /** records the setup as a vertical video */ onVideo?: () => void; onClose: () => void }) {
+/** HTML that shows a game's guide inside another page. */
+export const embedCode = (id: string, title: string, players?: number) =>
+  `<iframe src="${window.location.origin}/embed/${id}${players ? `?players=${players}` : ''}" title="How to set up ${title.replace(/"/g, '&quot;')}" width="100%" height="480" style="border:0;border-radius:16px;max-width:720px" loading="lazy"></iframe>`
+
+export function ShareSheet({ url, title, embed, onVideo, onClose }: { url: string; title: string; /** HTML for showing this guide on another site */ embed?: string; /** records the setup as a vertical video */ onVideo?: () => void; onClose: () => void }) {
   const [copied, setCopied] = useState(false)
+  const [embedded, setEmbedded] = useState(false)
   const done = (r: string) => {
     if (r !== 'copied') return
     setCopied(true)
@@ -68,6 +73,23 @@ export function ShareSheet({ url, title, onVideo, onClose }: { url: string; titl
                 Save as video
               </Button>
               <p className="text-center text-meta text-stone-500">A short vertical clip of the setup, made on this device. Good for a group chat, TikTok or Reels.</p>
+            </>
+          )}
+          {embed && (
+            <>
+              <Button
+                icon={embedded ? 'check' : 'link'}
+                onClick={() =>
+                  void copyText(embed).then((r) => {
+                    if (r !== 'copied') return
+                    setEmbedded(true)
+                    window.setTimeout(() => setEmbedded(false), 1600)
+                  })
+                }
+              >
+                {embedded ? 'Embed code copied' : 'Copy embed code'}
+              </Button>
+              <p className="text-center text-meta text-stone-500">Paste it into a blog, forum post or campaign page to show this guide there.</p>
             </>
           )}
         </div>

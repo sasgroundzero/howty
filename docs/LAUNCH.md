@@ -71,6 +71,9 @@ Check the subreddit's self-promotion rules first; some weeks it only allows this
 > public rules references, and 174 of the 176 have since been checked against the published rules; each
 > page is marked with the edition it was checked against. If your copy differs, each page has a link to
 > report it, which is where I'd value this community's help. https://howty.vercel.app
+>
+> Writing a review or a session report? Share, then Copy embed code puts the interactive guide right in
+> your post.
 
 ## Short post (X, Bluesky, Threads)
 

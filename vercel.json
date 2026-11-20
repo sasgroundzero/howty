@@ -7,6 +7,10 @@
       "destination": "/"
     },
     {
+      "source": "/embed/:id",
+      "destination": "/embed"
+    },
+    {
       "source": "/daily",
       "destination": "/"
     }

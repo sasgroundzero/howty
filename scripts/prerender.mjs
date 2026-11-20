@@ -87,6 +87,13 @@ writeFileSync(
     .replace(/(<meta property="og:description" content=")[^"]*/, `$1${dailyDesc}`)
     .replace('</head>', `    <link rel="canonical" href="${site}/daily" />\n  </head>`),
 )
+// the embed page: an empty shell kept out of search results (each guide's own page is the one to index)
+mkdirSync(resolve(dist, 'embed'), { recursive: true })
+writeFileSync(
+  resolve(dist, 'embed', 'index.html'),
+  shell
+    .replace('</head>', '    <meta name="robots" content="noindex" />\n    <style>html,body,#root{height:100%;margin:0;background:#f5f5f4}</style>\n  </head>'),
+)
 writeFileSync(resolve(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${['', 'daily', ...GAMES.map((g) => `g/${g.id}`)].map((p) => `  <url><loc>${site}/${p}</loc></url>`).join('\n')}\n</urlset>\n`)
 writeFileSync(resolve(dist, 'robots.txt'), `User-agent: *\nAllow: /\n${site ? `Sitemap: ${site}/sitemap.xml\n` : ''}`)
 // the offline worker: saves the app shell and every built file, under a version that changes with them
