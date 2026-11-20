@@ -17,6 +17,7 @@ import { CATALOG } from './data/games/catalog'
 import { loadGame, loaded } from './data/games/load'
 import type { GameDef, GameInfo } from './engine/types'
 import { Recorder } from './ui/Recorder'
+import { count } from './ui/count'
 import { ShareSheet, embedCode } from './ui/ShareSheet'
 import { CustomGameModal } from './custom/CustomGameModal'
 import { SITE } from './site'
@@ -237,6 +238,13 @@ export default function App() {
     if (!started) setRecording(false)
   }, [started])
 
+  /* Count a setup followed to its last step and a first turn watched to its end (anonymous, see ui/count.ts) */
+  useEffect(() => {
+    if (!started || recording) return
+    if (step === setupCount - 1) count('setup-done', gameId)
+    if (inSim && step === total - 1) count('turn-done', gameId)
+  }, [started, recording, step, setupCount, total, inSim, gameId])
+
   /* Narration */
   useEffect(() => {
     if (started && narrate) say()
@@ -432,12 +440,13 @@ export default function App() {
         </div>
       )}
       {adding && <CustomGameModal onClose={() => setAdding(false)} onCreate={addCustom} />}
-      {sharing && <ShareSheet url={window.location.href} title={def.meta.title} embed={def.custom ? undefined : embedCode(gameId, def.meta.title, players !== def.meta.defaultPlayers ? players : undefined)} onVideo={record} onClose={() => setSharing(false)} />}
+      {sharing && <ShareSheet url={window.location.href} title={def.meta.title} game={def.custom ? 'custom' : gameId} embed={def.custom ? undefined : embedCode(gameId, def.meta.title, players !== def.meta.defaultPlayers ? players : undefined)} onVideo={record} onClose={() => setSharing(false)} />}
       {recording && started && (
         <Recorder
           host={host}
           slot={setSlot}
           title={def.meta.title}
+          game={def.custom ? 'custom' : gameId}
           link={def.custom ? window.location.host : `${window.location.host}/g/${gameId}`}
           steps={game.steps.slice(0, setupCount)}
           step={step}

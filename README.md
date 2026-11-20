@@ -33,7 +33,8 @@ piece on a 3D table one step at a time, then plays a short first turn. 176 games
 - **A page per game** (`/g/azul`), with a link to any step (`/g/azul?step=3&players=4`). Each page carries its
   steps as plain text and its own preview image, so search engines and link previews show the real guide.
 - **Runs entirely in the browser.** No backend, no account, no API keys, no AI calls, no cookies. The only
-  measurement is Vercel Web Analytics' anonymous page counts.
+  measurement is Vercel Web Analytics' anonymous page counts, plus a few made-up pages such as
+  `/did/setup-done/azul` that count finished setups and shares the same anonymous way ([`src/ui/count.ts`](src/ui/count.ts)).
 - **Light.** Each game's 3D setup is its own small file, fetched when you open it.
 
 ## Run it

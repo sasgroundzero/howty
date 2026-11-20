@@ -5,6 +5,7 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import { recordAudio } from '../engine/audio'
+import { count } from './count'
 import { Button } from './kit'
 
 const W = 720
@@ -113,12 +114,14 @@ function paint(ctx: CanvasRenderingContext2D, src: HTMLCanvasElement, c: Caption
   ctx.restore()
 }
 
-export function Recorder({ host, slot, title, link, steps, step, onStep, onClose }: {
+export function Recorder({ host, slot, title, game, link, steps, step, onStep, onClose }: {
   /** the element holding the app's one 3D canvas */
   host: HTMLElement
   /** where that element should be mounted while recording */
   slot: (el: HTMLElement | null) => void
   title: string
+  /** which guide, for the anonymous counts */
+  game: string
   /** the address printed on the video */
   link: string
   steps: { title: string; instruction: string }[]
@@ -179,6 +182,7 @@ export function Recorder({ host, slot, title, link, steps, step, onStep, onClose
           const f = new File(chunks, `how-to-set-up-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.${kind.endsWith('mp4') ? 'mp4' : 'webm'}`, { type: kind })
           setFile({ file: f, url: URL.createObjectURL(f) })
           setPhase('done')
+          count('video-made', game)
         }
         r.start()
         recorder.current = r
@@ -214,6 +218,7 @@ export function Recorder({ host, slot, title, link, steps, step, onStep, onClose
   const canShareFile = !!file && typeof navigator.canShare === 'function' && navigator.canShare({ files: [file.file] })
   const download = () => {
     if (!file) return
+    count('video-shared', game)
     const a = Object.assign(document.createElement('a'), { href: file.url, download: file.file.name })
     a.click()
   }
@@ -232,7 +237,7 @@ export function Recorder({ host, slot, title, link, steps, step, onStep, onClose
           </p>
           <div className="flex gap-2">
             {canShareFile && (
-              <Button kind="accent" icon="share" className="flex-1" onClick={() => void navigator.share({ files: [file.file], title: `How to set up ${title}` }).catch(() => undefined)}>
+              <Button kind="accent" icon="share" className="flex-1" onClick={() => void navigator.share({ files: [file.file], title: `How to set up ${title}` }).then(() => count('video-shared', game), () => undefined)}>
                 Share
               </Button>
             )}

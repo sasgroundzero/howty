@@ -85,6 +85,26 @@ Check the subreddit's self-promotion rules first; some weeks it only allows this
 
 Attach `docs/demo.gif`, or a screen recording from a phone.
 
+## Is it working? The numbers to watch
+
+Vercel, then the project, then Analytics. Besides the real pages, the Pages list has made-up paths that
+count what people did (once per guide per visit, anonymously):
+
+| Path | Means |
+| --- | --- |
+| `/did/setup-done/<game>` | someone followed a setup to its last step |
+| `/did/turn-done/<game>` | and watched the first turn to the end |
+| `/did/share-opened`, `/did/link-shared`, `/did/link-copied` | opened Share, then sent or copied the link |
+| `/did/video-made`, `/did/video-shared` | recorded a video, then shared or downloaded it |
+| `/did/embed-copied` | copied the embed code |
+| `/embed/<game>` | a guide viewed inside someone else's site |
+
+**The one number:** finished setups per week (`/did/setup-done`). It shows the product doing its job.
+**The growth number:** shares per finished setup (`link-shared` + `video-shared` divided by
+`setup-done`). If it stays above about 1 in 10, each launch post keeps paying off after the spike.
+Filter the Pages view to `/did/` to see these alone; the total page-view figure includes them, so use the
+Visitors figure for audience size.
+
 ## Custom domain
 
 Nothing in the app names the address, so a domain is a settings change, not a code change.

@@ -3,9 +3,10 @@
  * the phone's share sheet, and a plain copy-link.
  */
 import qrcode from 'qrcode-generator'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Icon } from './icons'
 import { Button } from './kit'
+import { count } from './count'
 import { canRecord } from './Recorder'
 import { canShareNatively, copyText, shareLink } from './share'
 
@@ -31,10 +32,13 @@ function QR({ text }: { text: string }) {
 export const embedCode = (id: string, title: string, players?: number) =>
   `<iframe src="${window.location.origin}/embed/${id}${players ? `?players=${players}` : ''}" title="How to set up ${title.replace(/"/g, '&quot;')}" width="100%" height="520" style="border:0;border-radius:16px;max-width:720px" loading="lazy"></iframe>`
 
-export function ShareSheet({ url, title, embed, onVideo, onClose }: { url: string; title: string; /** HTML for showing this guide on another site */ embed?: string; /** records the setup as a vertical video */ onVideo?: () => void; onClose: () => void }) {
+export function ShareSheet({ url, title, game, embed, onVideo, onClose }: { url: string; title: string; /** which guide, for the anonymous counts */ game: string; /** HTML for showing this guide on another site */ embed?: string; /** records the setup as a vertical video */ onVideo?: () => void; onClose: () => void }) {
   const [copied, setCopied] = useState(false)
   const [embedded, setEmbedded] = useState(false)
+  useEffect(() => count('share-opened', game), [game])
   const done = (r: string) => {
+    if (r === 'shared') count('link-shared', game)
+    if (r === 'copied') count('link-copied', game)
     if (r !== 'copied') return
     setCopied(true)
     window.setTimeout(() => setCopied(false), 1600)
@@ -82,6 +86,7 @@ export function ShareSheet({ url, title, embed, onVideo, onClose }: { url: strin
                 onClick={() =>
                   void copyText(embed).then((r) => {
                     if (r !== 'copied') return
+                    count('embed-copied', game)
                     setEmbedded(true)
                     window.setTimeout(() => setEmbedded(false), 1600)
                   })
