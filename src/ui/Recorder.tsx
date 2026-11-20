@@ -180,7 +180,8 @@ export function Recorder({ host, slot, title, link, steps, step, onStep, onClose
           setFile({ file: f, url: URL.createObjectURL(f) })
           setPhase('done')
         }
-        r.start(1000)
+        // one piece at the end: Safari writes broken durations into MP4s recorded in timed chunks
+        r.start()
         recorder.current = r
         cap.current.since = performance.now()
         setPhase('run')
