@@ -120,6 +120,9 @@ honest checked/unchecked state on every page.
   with an expansion. Guides cover the base game at its common player counts.
 - **Firefox saves videos as WebM**, which some apps won't accept. Chrome and Safari save MP4.
   Converting in the browser would mean a much larger download, so the app says so instead.
+- **Safari saves videos without a length in the file.** They play and share normally, but Safari's own
+  preview shows them as a live broadcast with no seek bar. Writing the length in afterwards gave wrong
+  results, so the file is left as Safari makes it.
 - **Narration isn't in saved videos.** Speech uses the device's own voices, which browsers don't let
   pages record.
 - **"Add your own game" reads rulebook text with heuristics**, not AI, so it stays free and works offline.

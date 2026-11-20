@@ -113,48 +113,6 @@ function paint(ctx: CanvasRenderingContext2D, src: HTMLCanvasElement, c: Caption
   ctx.restore()
 }
 
-/**
- * Safari records MP4s with no length written in them, so players show them as a live broadcast with no
- * seek bar. This writes the length into the movie header, and into the fragment header when there is one.
- * Files that already carry a length, and anything that isn't an MP4, come back unchanged.
- */
-async function withLength(file: Blob, ms: number): Promise<Blob> {
-  if (!file.type.endsWith('mp4')) return file
-  const buf = new Uint8Array(await file.arrayBuffer())
-  const dv = new DataView(buf.buffer)
-  const size = (at: number) => dv.getUint32(at)
-  const kind = (at: number) => String.fromCharCode(buf[at + 4], buf[at + 5], buf[at + 6], buf[at + 7])
-  const find = (from: number, to: number, type: string) => {
-    for (let p = from; p + 8 <= to; p += size(p)) {
-      if (size(p) < 8) return -1
-      if (kind(p) === type) return p
-    }
-    return -1
-  }
-  const moov = find(0, buf.length, 'moov')
-  if (moov < 0) return file
-  const end = moov + size(moov)
-  const mvhd = find(moov + 8, end, 'mvhd')
-  if (mvhd < 0) return file
-  const v1 = buf[mvhd + 8] === 1
-  const at = mvhd + 12 + (v1 ? 16 : 8)
-  const length = Math.round((ms / 1000) * dv.getUint32(at))
-  if ((v1 ? Number(dv.getBigUint64(at + 4)) : dv.getUint32(at + 4)) > 0) return file
-  if (v1) dv.setBigUint64(at + 4, BigInt(length))
-  else dv.setUint32(at + 4, length)
-  const mvex = find(moov + 8, end, 'mvex')
-  if (mvex < 0 || find(mvex + 8, mvex + size(mvex), 'mehd') >= 0) return new Blob([buf], { type: file.type })
-  // a fragmented MP4 also wants a movie-extends header with the same length, as the first box in mvex
-  const mehd = new Uint8Array(16)
-  const m = new DataView(mehd.buffer)
-  m.setUint32(0, 16)
-  mehd.set([109, 101, 104, 100], 4)
-  m.setUint32(12, length)
-  dv.setUint32(moov, size(moov) + 16)
-  dv.setUint32(mvex, size(mvex) + 16)
-  return new Blob([buf.subarray(0, mvex + 8), mehd, buf.subarray(mvex + 8)], { type: file.type })
-}
-
 export function Recorder({ host, slot, title, link, steps, step, onStep, onClose }: {
   /** the element holding the app's one 3D canvas */
   host: HTMLElement
@@ -211,21 +169,17 @@ export function Recorder({ host, slot, title, link, steps, step, onStep, onClose
         const r = new MediaRecorder(stream, { mimeType: type, videoBitsPerSecond: 6_000_000 })
         r.ondataavailable = (e) => e.data.size && chunks.push(e.data)
         r.onerror = () => live && setPhase('failed')
-        r.onstop = async () => {
+        r.onstop = () => {
           r.stream.getTracks().forEach((k) => k.stop())
           video.getTracks().forEach((k) => k.stop())
           sound.current?.stop()
           sound.current = null
           if (!live) return
           const kind = type.split(';')[0]
-          const body = await withLength(new Blob(chunks, { type: kind }), performance.now() - began).catch(() => new Blob(chunks, { type: kind }))
-          if (!live) return
-          const f = new File([body], `how-to-set-up-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.${kind.endsWith('mp4') ? 'mp4' : 'webm'}`, { type: kind })
+          const f = new File(chunks, `how-to-set-up-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.${kind.endsWith('mp4') ? 'mp4' : 'webm'}`, { type: kind })
           setFile({ file: f, url: URL.createObjectURL(f) })
           setPhase('done')
         }
-        // one piece at the end: Safari writes broken durations into MP4s recorded in timed chunks
-        const began = performance.now()
         r.start()
         recorder.current = r
         cap.current.since = performance.now()
