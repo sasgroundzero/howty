@@ -17,7 +17,7 @@ const LIFT = 140
 /** With sound first; MP4 where the browser can make one, since every phone and app plays it. */
 const MIMES = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/mp4;codecs=avc1,opus', 'video/webm;codecs=vp9,opus', 'video/mp4;codecs=avc1.42E01E', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm']
 const INK = '#1c1917'
-const ACCENT = '#d97706'
+const ACCENT = '#b45309'
 const SANS = '"DM Sans", system-ui, sans-serif'
 const SERIF = 'Fraunces, Georgia, serif'
 

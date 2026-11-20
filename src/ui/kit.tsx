@@ -6,7 +6,7 @@ export const cx = (...a: (string | false | null | undefined)[]) => a.filter(Bool
 
 const KIND = {
   primary: 'bg-ink text-paper hover:bg-stone-700',
-  accent: 'bg-accent text-white hover:bg-amber-700',
+  accent: 'bg-accent text-white hover:bg-amber-800',
   secondary: 'border border-line bg-white text-ink hover:border-ink',
   quiet: 'text-stone-600 hover:bg-ink/5 hover:text-ink',
 }

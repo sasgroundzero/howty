@@ -10,7 +10,7 @@ export default {
         paper: '#ffffff', // page background: pure white
         mist: '#f5f5f4', // the quiet gray behind a 3D table panel
         line: 'rgba(28, 25, 23, 0.12)', // every border
-        accent: '#d97706', // used sparingly: progress, focus, the first-turn button
+        accent: '#b45309', // used sparingly: progress, focus, the first-turn button. White text on it is 5:1 (AA)
       },
       // Six sizes only. Hierarchy comes from weight and color before size.
       fontSize: {

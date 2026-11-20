@@ -66,6 +66,8 @@ Six sizes, and no arbitrary `text-[13px]`:
 - The page is pure white (`paper`, #FFFFFF) with neutral grays: `mist` behind a 3D table, `ink` text, `stone-*` grays, `line` borders.
 - `accent` (amber) appears only on: step progress, keyboard focus, the "Watch the first turn"
   button, the daily-table tile, and the tick on a correct answer. Never on headlines, backgrounds or plain links.
+- The accent is amber-700 (#B45309) so white text on it passes WCAG AA (5:1). The brighter amber-600
+  looked warmer but gave white button text only 3.2:1.
 - No gradients for decoration. The only strong color on a page belongs to the games themselves
   (their swatches and the 3D table), which is content, not chrome.
 

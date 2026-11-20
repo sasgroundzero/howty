@@ -99,7 +99,7 @@ export function Embed({ id }: { id: string }) {
               Back
             </Button>
             {last ? (
-              <a href={link} target="_blank" rel="noopener" className="inline-flex h-8 items-center gap-2 rounded-full bg-accent px-3 text-ui font-semibold text-white transition hover:bg-amber-700">
+              <a href={link} target="_blank" rel="noopener" className="inline-flex h-8 items-center gap-2 rounded-full bg-accent px-3 text-ui font-semibold text-white transition hover:bg-amber-800">
                 Full guide on {SITE.name}
                 <Icon name="arrow" size={16} />
               </a>

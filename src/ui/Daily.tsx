@@ -118,7 +118,7 @@ async function resultImage(number: number, won: boolean, streak: number): Promis
   x.fillStyle = '#57534e'
   ;['Can you name the game', 'from its setup?'].forEach((l, i) => x.fillText(l, 64, 290 + i * 40))
   if (streak > 1) {
-    x.fillStyle = '#d97706'
+    x.fillStyle = '#b45309'
     x.font = '600 28px "DM Sans", sans-serif'
     x.fillText(`${streak}-day streak`, 64, 400)
   }
