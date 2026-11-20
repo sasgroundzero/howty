@@ -184,6 +184,7 @@ export default function App() {
   }
   /** Save as video: the setup plays through once in a portrait frame while the browser records it. */
   const record = () => {
+    unlockAudio()
     hoverStore.clear()
     hush()
     voice.on = false

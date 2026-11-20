@@ -48,6 +48,9 @@ Deploying is covered in [DEPLOY.md](DEPLOY.md). To show the GitHub links in the 
 
 ## How it is built
 
+The full story, with the numbers, the rules-checking policy, how AI was used and the open trade-offs,
+is in [docs/BUILDING.md](docs/BUILDING.md).
+
 React, TypeScript, Tailwind and React Three Fiber. There are no image, model or sound files:
 every board, card face and sound is drawn or synthesised in code.
 

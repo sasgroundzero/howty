@@ -1,5 +1,5 @@
 /** Gift Trap: a grid of gift cards, give and get tokens, and two scoring tracks. */
-import { C, OnP, P, R, S, T, at, board, deck, discs, draw, f, ft, mv, tabletop } from '../compose'
+import { C, OnP, P, R, S, T, at, board, by, deck, discs, draw, f, ft, mv, tabletop } from '../compose'
 import { gridUV } from '../layouts'
 
 const GIFT = [ft('#f6e3ea', 'Gift', 'photo', '♛'), ft('#e3eef6', 'Gift', 'photo', '★'), ft('#e8f3df', 'Gift', 'photo', '◆'), ft('#f6efd6', 'Gift', 'photo', '⌂')]
@@ -31,9 +31,9 @@ export const giftTrap = tabletop('gift-trap', 'Gift Trap', [4, 8], 4, '45–60 m
   turn: [
     T('Deal the gifts', `The dealer picks a pack and deals gift cards onto the grid, starting at space 1: one more than the number of players, so ${n + 1} this round.`, 'grid',
       Array.from({ length: n + 1 }, (_, i) => draw('gifts', at('grid', ...cellAt(i)), GIFT[i % 4], `gift${i}`, 0.3 + i * 0.25))),
-    T('Give', 'In secret, everyone picks one gift for each other player and places the give token with that gift\'s number face down in front of them. You give gift 1 to the player on your left, and they give you gift 3. The scene shows each token beside its gift.', 'grid', [
-      mv('give.0', at('grid', ...cellAt(0, -SIDE))),
-      mv('give.0@1', at('grid', ...cellAt(2, -SIDE))),
+    T('Give', 'In secret, everyone picks one gift for each other player and places the give token with that gift\'s number face down in front of that player. You give gift 1 to the player on your left, and they give you gift 3.', 'all', [
+      mv('give.0', by('get@1', 1.25, 0)),
+      mv('give.0@1', by('get', 1.25, 0), 0.6),
     ]),
     T('Get', 'Once the giving is done, everyone rates the gifts for themselves by placing their get tokens face down on the grid. You put Great on the third gift and No Way on the second.', 'grid', [
       mv('get.0', at('grid', ...cellAt(2, SIDE))),

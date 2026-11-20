@@ -4,6 +4,7 @@
  * MediaRecorder turns that canvas into a file. Nothing is uploaded.
  */
 import { useEffect, useRef, useState } from 'react'
+import { recordAudio } from '../engine/audio'
 import { Button } from './kit'
 
 const W = 720
@@ -12,13 +13,15 @@ const H = 1280
 const SRC_H = 1480
 /** How far the table is raised in the video, in video pixels, counting the lift the step view already applies. */
 const LIFT = 140
-const MIMES = ['video/mp4;codecs=avc1.42E01E', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm']
+/** With sound first; MP4 where the browser can make one, since every phone and app plays it. */
+const MIMES = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/mp4;codecs=avc1,opus', 'video/webm;codecs=vp9,opus', 'video/mp4;codecs=avc1.42E01E', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm']
 const INK = '#1c1917'
 const ACCENT = '#d97706'
 const SANS = '"DM Sans", system-ui, sans-serif'
 const SERIF = 'Fraunces, Georgia, serif'
 
-const mime = () => (typeof MediaRecorder === 'undefined' ? undefined : MIMES.find((m) => MediaRecorder.isTypeSupported(m)))
+const mime = (sound = false) =>
+  typeof MediaRecorder === 'undefined' ? undefined : MIMES.filter((m) => sound || !/mp4a|opus/.test(m)).find((m) => MediaRecorder.isTypeSupported(m))
 export const canRecord = () => typeof HTMLCanvasElement !== 'undefined' && 'captureStream' in HTMLCanvasElement.prototype && !!mime()
 
 type Caption = { key: string; label: string; title: string; text: string; step: number; total: number; game: string; link: string }
@@ -128,6 +131,7 @@ export function Recorder({ host, slot, title, link, steps, step, onStep, onClose
   const [file, setFile] = useState<{ file: File; url: string } | null>(null)
   const view = useRef<HTMLCanvasElement>(null)
   const recorder = useRef<MediaRecorder | null>(null)
+  const sound = useRef<ReturnType<typeof recordAudio>>(null)
   const at = Math.min(step, steps.length - 1)
   const closing = phase === 'end' || phase === 'done'
   const caption: Caption = closing
@@ -158,12 +162,18 @@ export function Recorder({ host, slot, title, link, steps, step, onStep, onClose
       await fonts
       if (!live) return
       try {
-        const type = mime()!
-        const r = new MediaRecorder(canvas.captureStream(30), { mimeType: type, videoBitsPerSecond: 6_000_000 })
+        const video = canvas.captureStream(30)
+        sound.current = recordAudio()
+        const type = mime(!!sound.current)!
+        const stream = new MediaStream([...video.getVideoTracks(), ...(sound.current && /mp4a|opus/.test(type) ? [sound.current.track] : [])])
+        const r = new MediaRecorder(stream, { mimeType: type, videoBitsPerSecond: 6_000_000 })
         r.ondataavailable = (e) => e.data.size && chunks.push(e.data)
         r.onerror = () => live && setPhase('failed')
         r.onstop = () => {
           r.stream.getTracks().forEach((k) => k.stop())
+          video.getTracks().forEach((k) => k.stop())
+          sound.current?.stop()
+          sound.current = null
           if (!live) return
           const kind = type.split(';')[0]
           const f = new File(chunks, `how-to-set-up-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.${kind.endsWith('mp4') ? 'mp4' : 'webm'}`, { type: kind })
@@ -183,6 +193,7 @@ export function Recorder({ host, slot, title, link, steps, step, onStep, onClose
       cancelAnimationFrame(raf)
       window.clearTimeout(t)
       if (recorder.current && recorder.current.state !== 'inactive') recorder.current.stop()
+      sound.current?.stop()
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => () => void (file && URL.revokeObjectURL(file.url)), [file])

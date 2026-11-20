@@ -1,5 +1,5 @@
 /** Wasabi!: ingredient tiles on a shared grid, secret recipes, action cards and wasabi cubes. */
-import { C, L, P, R, S, T, at, board, box, deck, draw, f, ft, mv, pile, spawn, tabletop, tiles, zone } from '../compose'
+import { C, L, P, R, S, T, at, board, box, deck, discs, draw, f, ft, mv, pile, spawn, tabletop, tiles, zone } from '../compose'
 import { gridUV } from '../layouts'
 
 const ING = ['#f2a48f', '#f6f1e6', '#7fb069', '#f3c14b', '#d9534f', '#3f5d4a']
@@ -26,6 +26,7 @@ export const wasabi = tabletop('wasabi', 'Wasabi!', [2, 4], 3, '45 min', 'Easy',
         zone('done', 2.4, 1.4, 'Completed recipes', 'Recipes you finish are shown to everyone and kept here for scoring.'),
       ),
       P(box('screen', 3.4, 0.5, 0.2, '$', 'Screen', 'Hides your ingredient tiles and recipes from the other players.')),
+      P(discs('chal', 10, 0.17, '$', 'Challenge tokens', 'Your 10 tokens in your colour. One goes on each recipe you complete, and they set how many recipes of each length you may still complete. Use all 10 and you win at once.', { h: 0.05, gap: 0.03, label: '✓', ink: '#ffffff' })),
     ]),
     S('Starting ingredients', 'The starting player picks 3 ingredient tiles from the pantry for the player on their left, and so on round the table. Hide them behind your screen.', 'you', [
       P(tiles('ing', 3, 0.8, 0.8, [ingFace(0), ingFace(2), ingFace(1)], 'Ingredient tile', INGBODY)),
@@ -42,7 +43,8 @@ export const wasabi = tabletop('wasabi', 'Wasabi!', [2, 4], 3, '45 min', 'Easy',
       draw('menu@1', at('done@1', 0.3, 0.5), RECIPE),
     ]),
     T('Rewards', 'They lay the recipe face up with a matching challenge token on it and take an action card to use on a later turn. Completing a recipe of 3 or more ingredients in the printed order also earns wasabi cubes.', 'done@1', [
-      draw('actions', at('done@1', 0.75, 0.5)),
+      mv('chal.0@1', at('done@1', 0.3, 0.5, 0.03)),
+      draw('actions', at('done@1', 0.75, 0.5), undefined, undefined, 0.6),
     ]),
     T('How it ends', 'A player who uses all 10 challenge tokens wins at once. Otherwise the game ends when the board is full at the end of a turn: add your challenge token points to your wasabi cubes, and the highest total wins.', 'all'),
   ],

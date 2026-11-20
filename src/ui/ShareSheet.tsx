@@ -29,7 +29,7 @@ function QR({ text }: { text: string }) {
 
 /** HTML that shows a game's guide inside another page. */
 export const embedCode = (id: string, title: string, players?: number) =>
-  `<iframe src="${window.location.origin}/embed/${id}${players ? `?players=${players}` : ''}" title="How to set up ${title.replace(/"/g, '&quot;')}" width="100%" height="480" style="border:0;border-radius:16px;max-width:720px" loading="lazy"></iframe>`
+  `<iframe src="${window.location.origin}/embed/${id}${players ? `?players=${players}` : ''}" title="How to set up ${title.replace(/"/g, '&quot;')}" width="100%" height="520" style="border:0;border-radius:16px;max-width:720px" loading="lazy"></iframe>`
 
 export function ShareSheet({ url, title, embed, onVideo, onClose }: { url: string; title: string; /** HTML for showing this guide on another site */ embed?: string; /** records the setup as a vertical video */ onVideo?: () => void; onClose: () => void }) {
   const [copied, setCopied] = useState(false)

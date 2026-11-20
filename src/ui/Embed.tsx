@@ -82,7 +82,8 @@ export function Embed({ id }: { id: string }) {
           </Button>
         </div>
       ) : (
-        <div className={cx(panel, 'absolute inset-x-2 bottom-2 p-3 sm:inset-x-3 sm:bottom-3 sm:p-4')}>
+        // a narrow card in the corner on wider embeds, so most of the table stays in view
+        <div className={cx(panel, 'absolute inset-x-2 bottom-2 p-3 sm:inset-x-auto sm:bottom-3 sm:left-3 sm:w-[22rem]')}>
           <div className="flex gap-1" aria-hidden>
             {game.steps.map((_, i) => (
               <span key={i} className={cx('h-1 flex-1 rounded-full', i <= step ? (i >= setupCount ? 'bg-ink' : 'bg-accent') : 'bg-ink/10')} />
@@ -90,7 +91,7 @@ export function Embed({ id }: { id: string }) {
           </div>
           <p className="mt-2 text-meta font-semibold text-stone-500">{inTurn ? `First turn ${step - setupCount + 1} of ${total - setupCount}` : `Step ${step + 1} of ${setupCount}`}</p>
           <h1 className="font-display text-title font-bold">{s.title}</h1>
-          <p className="mt-1 line-clamp-3 text-ui text-stone-700" aria-live="polite">
+          <p className="mt-1 line-clamp-2 text-ui text-stone-700 sm:line-clamp-4" title={s.instruction} aria-live="polite">
             {s.instruction}
           </p>
           <div className="mt-3 flex items-center justify-end gap-2">

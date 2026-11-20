@@ -38,6 +38,8 @@ Best on a weekday morning, US Eastern time. The title has to be plain; the comme
 > the edition it was checked against. If you spot a mistake, every page has a one-tap "report a rules
 > error" link.
 >
+> How it was built and checked, including where AI helped: https://github.com/sasgroundzero/howty/blob/main/docs/BUILDING.md
+>
 > Code (MIT): https://github.com/sasgroundzero/howty
 
 ## r/boardgames

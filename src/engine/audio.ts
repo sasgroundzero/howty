@@ -3,6 +3,37 @@ export type Sfx = 'wood' | 'card' | 'dice'
 
 export const audio = { ctx: null as AudioContext | null, muted: false, last: {} as Record<string, number> }
 
+/** Every sound goes through one master node, so a recording can listen in as well as the speakers. */
+let master: GainNode | null = null
+const out = (ctx: AudioContext) => {
+  if (!master || master.context !== ctx) {
+    master = ctx.createGain()
+    master.connect(ctx.destination)
+  }
+  return master
+}
+
+/** A live copy of the table's sounds, for a video recording. Call the returned stop() when done. */
+export function recordAudio(): { track: MediaStreamTrack; stop: () => void } | null {
+  const ctx = audio.ctx
+  if (!ctx || typeof ctx.createMediaStreamDestination !== 'function') return null
+  const tap = ctx.createMediaStreamDestination()
+  out(ctx).connect(tap)
+  const muted = audio.muted
+  audio.muted = false
+  return {
+    track: tap.stream.getAudioTracks()[0],
+    stop: () => {
+      audio.muted = muted
+      try {
+        out(ctx).disconnect(tap)
+      } catch {
+        /* already gone */
+      }
+    },
+  }
+}
+
 export function unlockAudio() {
   try {
     if (!audio.ctx) audio.ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)()
@@ -27,7 +58,7 @@ function burst(ctx: AudioContext, at: number, freq: number, q: number, gain: num
   const g = ctx.createGain()
   g.gain.setValueAtTime(gain, at)
   g.gain.exponentialRampToValueAtTime(0.001, at + dur)
-  noise.connect(band).connect(g).connect(ctx.destination)
+  noise.connect(band).connect(g).connect(out(ctx))
   noise.start(at)
   if (body) {
     const osc = ctx.createOscillator()
@@ -37,7 +68,7 @@ function burst(ctx: AudioContext, at: number, freq: number, q: number, gain: num
     const og = ctx.createGain()
     og.gain.setValueAtTime(gain * 0.55, at)
     og.gain.exponentialRampToValueAtTime(0.001, at + dur * 1.6)
-    osc.connect(og).connect(ctx.destination)
+    osc.connect(og).connect(out(ctx))
     osc.start(at)
     osc.stop(at + dur * 1.7)
   }
